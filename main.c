@@ -6,11 +6,23 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 17:35:46 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 19:33:45 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	show_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		printf("tab[%d] = %s\n", i, tab[i]);
+		i++;
+	}
+}
 
 int	main(int argc, char **argv , char **envp)
 {
@@ -26,6 +38,7 @@ int	main(int argc, char **argv , char **envp)
 		if (!data.input)
 			break ;
 		data.args = ft_split(data.input, ' ');
+		// show_tab(data.args);
 		if (case_redirection(&data, envp) == 1)
 		{
 			// printf("on va rentrer dans parsing car on trouve pas >\n");

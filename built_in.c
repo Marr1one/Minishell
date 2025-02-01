@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 18:01:18 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 19:45:32 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,17 @@ void ft_echo(t_data data)
 
 int	check_builtin(t_data data)
 {
-	if (ft_strcmp(data.args[0], "exit") == 0)
+	if (ft_strlcmp(data.args[0], "exit") == 0 ||ft_strlcmp(data.args[0], "\"exit\"") == 0)
 	{
 		ft_exit();
 		return (1);
 	}
-	if (ft_strcmp(data.args[0], "echo") == 0)
+	if (ft_strlcmp(data.args[0], "echo") == 0 ||ft_strlcmp(data.args[0], "\"echo\"") == 0)
 	{
 		ft_echo(data);
 		return (1);
 	}
-	if (ft_strcmp(data.args[0], "cd") == 0)
+	if (ft_strlcmp(data.args[0], "cd") == 0 ||ft_strlcmp(data.args[0], "\"cd\"") == 0)
 	{
 		ft_cd(data);
 		return (1);

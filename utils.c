@@ -6,11 +6,65 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 17:24:36 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 22:26:30 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*remove_utils(char *str)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+	
+	new_str = malloc(sizeof(char) * ft_strlen(str));
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] != '"')
+		{
+			new_str[j] = str[i];
+			j++;
+		}
+		i++;
+	}
+	new_str[j] = '\0';
+	return (new_str);
+	
+}
+
+char	*remove_quotes(char *str)
+{
+	int		len;
+	char	*new_str;
+	
+	len = ft_strlen(str);
+	// printf("str[0] == %c et str[len - 1] == %c\n", str[0], str[len - 1]);
+	if (str[0] == '"' && str[len - 1] == '"')
+	{
+		new_str = remove_utils(str);
+		free(str);
+		return (new_str);
+	}
+	return (str);
+}
+
+void	remove_quotes_all(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->args[i])
+	{
+		data->args[i] = remove_quotes(data->args[i]);
+		i++;
+	}
+		
+}
 
 int	ft_strlen(char *str)
 {

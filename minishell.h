@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 17:35:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 22:05:46 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,6 @@ int		test_commands(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strlcmp(char *s1, char *s2);
 void	sigint_handler(int signum);
+void	remove_quotes_all(t_data *data);
+void	show_tab(char **tab);
 #endif
