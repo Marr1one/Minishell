@@ -4,7 +4,8 @@ SRC		=	main.c \
 			parsing.c \
 			split.c \
 			utils.c \
-			add_slash.c
+			add_slash.c \
+			built_in.c
 
 CC		=	cc
 

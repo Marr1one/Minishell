@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/01/29 17:25:25 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 13:56:53 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@ int	main(int argc, char **argv , char **envp)
 	while (1)
 	{
 		input = readline("\033[0;32mminishell$\033[0m ");
-		data.input = input;
 		if (!input)
 			break ;
-		parsing(input, envp, &data);
+		data.input = input;
+		data.args = ft_split(input, ' ');
+		if (check_builtin(data) == 0)
+			parsing(input, envp, &data);
 		add_history(input);
 		free(input);								
 	}
