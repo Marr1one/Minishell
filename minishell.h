@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 13:38:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 15:36:56 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 typedef struct s_data
 {
@@ -28,6 +29,7 @@ typedef struct s_data
 	char	*input;
 	char	*command_path;
 	char	**args;
+	char	**cmd_args;
 }	t_data;
 
 void	parsing(char *input, char **env, t_data *data);
@@ -39,6 +41,8 @@ char	*get_path_env(char **envp);
 char	**add_slash_all(char **tab);
 char	*add_slash(char	*str);
 int		ft_strncmp(char *s1, char *s2, int n);
-int	check_builtin(t_data data);
+int		check_builtin(t_data data);
+int		case_redirection(t_data *data, char **envp);
+int		test_commands(t_data *data);
 
 #endif

@@ -1,0 +1,17 @@
+Makefile
+add_slash.c
+add_slash.o
+built_in.c
+built_in.o
+main.c
+main.o
+minishell
+minishell.h
+out
+parsing.c
+parsing.o
+salut
+split.c
+split.o
+utils.c
+utils.o
