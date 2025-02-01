@@ -5,7 +5,8 @@ SRC		=	main.c \
 			split.c \
 			utils.c \
 			add_slash.c \
-			built_in.c
+			built_in.c \
+			signals.c
 
 CC		=	cc
 

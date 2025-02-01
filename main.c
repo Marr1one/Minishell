@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 15:52:48 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 17:35:46 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,19 @@ int	main(int argc, char **argv , char **envp)
 	t_data data;
 
 	ft_memset(&data, 0, sizeof(t_data));
-	char	*input;
-
+	signal(SIGINT, sigint_handler);
 	while (1)
 	{
-		input = readline("\033[0;32mminishell$\033[0m ");
-		if (!input)
+		data.input = readline("\033[0;32mminishell$\033[0m ");
+		if (!data.input)
 			break ;
-		data.input = input;
-		data.args = ft_split(input, ' ');
+		data.args = ft_split(data.input, ' ');
 		if (case_redirection(&data, envp) == 1)
-			parsing(input, envp, &data);
-		add_history(input);
-		free(input);								
+		{
+			// printf("on va rentrer dans parsing car on trouve pas >\n");
+			parsing(data.input, envp, &data);
+		}
+		add_history(data.input);								
 	}
 	return (0);
 }

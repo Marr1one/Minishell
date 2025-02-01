@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 13:54:34 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 18:01:18 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 void ft_cd(t_data data)
 {
 	if (chdir(data.args[1]) != 0 )
-	{
-		printf("chdir == 1\n");
 		perror("cd");
-	}
 }
 
 void	ft_exit(void)
@@ -33,7 +30,7 @@ void ft_echo(t_data data)
 	
 	i = 1;
 	n = 0;
-	if (ft_strncmp(data.args[1], "-n", ft_strlen(data.args[1])) == 0)
+	if (ft_strlcmp(data.args[1], "-n") == 0)
 	{
 		n = 1;
 		i++;
@@ -51,17 +48,17 @@ void ft_echo(t_data data)
 
 int	check_builtin(t_data data)
 {
-	if (ft_strncmp(data.args[0], "exit", ft_strlen(data.args[0])) == 0)
+	if (ft_strcmp(data.args[0], "exit") == 0)
 	{
 		ft_exit();
 		return (1);
 	}
-	if (ft_strncmp(data.args[0], "echo", ft_strlen(data.args[0])) == 0)
+	if (ft_strcmp(data.args[0], "echo") == 0)
 	{
 		ft_echo(data);
 		return (1);
 	}
-	if (ft_strncmp(data.args[0], "cd", ft_strlen(data.args[0])) == 0)
+	if (ft_strcmp(data.args[0], "cd") == 0)
 	{
 		ft_cd(data);
 		return (1);

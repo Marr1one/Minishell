@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 15:36:56 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 17:35:43 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <signal.h>
 
 typedef struct s_data
 {
@@ -44,5 +45,7 @@ int		ft_strncmp(char *s1, char *s2, int n);
 int		check_builtin(t_data data);
 int		case_redirection(t_data *data, char **envp);
 int		test_commands(t_data *data);
-
+int		ft_strcmp(char *s1, char *s2);
+int		ft_strlcmp(char *s1, char *s2);
+void	sigint_handler(int signum);
 #endif

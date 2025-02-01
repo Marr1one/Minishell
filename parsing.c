@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 15:51:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 18:15:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ int	case_redirection(t_data *data, char **envp)
 	i = 0;
 	while (data->args[i])
 	{
-		if (ft_strncmp(data->args[i], ">", ft_strlen(data->args[i])) == 0)
+		if (ft_strcmp(data->args[i], ">") == 0)
 		{
+			printf("on trouve >\n");
 			if (!data->args[i + 1])
 			{
 				printf("Nul part ou rediriger!\n");
@@ -78,12 +79,28 @@ int	case_redirection(t_data *data, char **envp)
 	return (1);
 }
 
+int	only_space(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] != ' ')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	test_commands(t_data *data)
 {
 	int	i;
 	char *path_test;
 	
 	i = 0;
+	if (only_space(data->input) == 0)
+		return (1);
 	while (data->path[i])
 	{
 		path_test = ft_join(data->path[i], data->args[0]);
@@ -101,10 +118,21 @@ void	parsing(char *input, char **envp, t_data *data)
 {
 	pid_t	pid;
 	int		status;
+	
 	if (check_builtin(*data) != 0)
 		return;
-	if (access(input, F_OK | X_OK) == 0)
+	if (input[0] == '/' || (input[0] == '.' && input[1] == '/'))
 	{
+		if (access(input, F_OK) != 0)
+		{
+            printf("minishell: %s: No such file or directory\n", input);
+            return;
+        }
+        if (access(input, X_OK) != 0)
+        {
+            printf("minishell: %s: Permission denied\n", input);
+            return;
+        }
 		pid = fork();
 		if (pid == 0)
 		{
@@ -113,12 +141,13 @@ void	parsing(char *input, char **envp, t_data *data)
 			exit(1);
 		}
 		waitpid(pid, &status, 0);
-		return;
+		return ;
 	}
 	data->path = ft_split(get_path_env(envp), ':');
 	data->path = add_slash_all(data->path);
 	if (test_commands(data) == 0)
 	{
+		// printf("on a trouver un chemin qui marche !\n");
 		pid = fork();
 		if (pid == 0)
 		{
@@ -129,5 +158,7 @@ void	parsing(char *input, char **envp, t_data *data)
 		waitpid(pid, &status, 0);
 		return;
 	}
-	printf("%s: command not found\n", input);
+	if (only_space(data->input) == 0)
+		return ;
+	printf("minishell: %s: command not found\n", input);
 }

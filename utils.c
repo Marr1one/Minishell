@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 13:21:59 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/01 17:24:36 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,56 @@ int	ft_strncmp(char *s1, char *s2, int n)
 	if (!s1 || !s2 || n < 0)
 		return (-1);
 	while (s1[i] && s2[i] && i < n)
+	{
+		if (s1[i] != s2[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	check_len(char *s1, char *s2)
+{
+	int len_s1;
+	int	len_s2;
+	
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	if (len_s1 != len_s2)
+		return (1);
+	return (0);
+}
+
+int	ft_strlcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	if (!s1 || !s2)
+		return (-1);
+	if (!(*s1) || !(*s2))
+		return (1);
+	if (check_len(s1, s2) != 0)
+		return (1);
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	if (!s1 || !s2)
+		return (-1);
+	if (!(*s1) || !(*s2))
+		return (1);
+	while (s1[i] && s2[i])
 	{
 		if (s1[i] != s2[i])
 			return (1);
