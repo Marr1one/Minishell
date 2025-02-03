@@ -1,22 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   env_var.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/01 17:33:34 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/03 19:17:14 by maissat          ###   ########.fr       */
+/*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
+/*   Updated: 2025/02/03 19:39:59 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	sigint_handler(int signum)
-{
-	(void)signum;
-	write(1, "\n", 1); 
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}

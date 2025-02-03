@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/03 16:39:39 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/03 18:40:52 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	only_space(char *input)
 {
 	int	i;
 
-	i = 0;
+	i = 0;	
 	while (input[i])
 	{
 		if (input[i] != ' ')
@@ -114,6 +114,24 @@ int	test_commands(t_data *data)
 	return (1);
 }
 
+int		check_empty(t_data data)
+{
+	int	i;
+
+	i = 0;
+	while (data.args[i])
+	{
+		//printf("charactere testE par check empty : %c\n", data.args[i][0]);
+		if (data.args[i][0] == '\0')
+		{
+			//printf("in\n");
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 void	parsing(char *input, char **envp, t_data *data)
 {
 	pid_t	pid;
@@ -121,6 +139,11 @@ void	parsing(char *input, char **envp, t_data *data)
 	
 	// show_tab(data->args);
 	remove_quotes_all(data);
+	if (check_empty(*data) == 1)
+	{
+		printf("minishell: %s: command not found\n", data->args[0]);
+		return ;
+	}
 	//printf("after remove\n");
 	//show_tab(data->args);
 	if (check_builtin(*data) != 0)

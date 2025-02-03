@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/03 17:26:55 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/03 18:35:59 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*remove_quotes(char *str)
 	char	*new_str;
 	
 	len = ft_strlen(str);
-	// printf("str[0] == %c et str[len - 1] == %c\n", str[0], str[len - 1]);
+	//printf("str[0] == %c et str[len - 1] == %c\n", str[0], str[len - 1]);
 	if (str[0] == '"' && str[len - 1] == '"')
 	{
 		new_str = remove_utils(str);

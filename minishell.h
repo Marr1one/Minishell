@@ -6,14 +6,16 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/03 18:15:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/03 19:18:18 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef	MINISHELL_H
 
 #define	MINISHELL_H
+//#define _XOPEN_SOURCE 700
 
+#include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdio.h>
@@ -22,9 +24,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-#include <signal.h>
 
-typedef enum e_token_type
+typedef enum e_type
 {
 	WORD,
 	REDIRECTION,
@@ -65,6 +66,8 @@ int		ft_strlcmp(char *s1, char *s2);
 void	sigint_handler(int signum);
 void	remove_quotes_all(t_data *data);
 void	show_tab(char **tab);
-void	add_chained_list(t_data *data);
+t_token	*add_chained_list(t_data *data);
 char	*ft_strdup(char	*str);
+void	sigquit_handler(int signum);
+
 #endif
