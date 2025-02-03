@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 22:23:42 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/03 16:39:39 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	case_redirection(t_data *data, char **envp)
 	{
 		if (ft_strcmp(data->args[i], ">") == 0)
 		{
-			printf("on trouve >\n");
+			//printf("on trouve >\n");
 			if (!data->args[i + 1])
 			{
 				printf("Nul part ou rediriger!\n");
@@ -121,8 +121,8 @@ void	parsing(char *input, char **envp, t_data *data)
 	
 	// show_tab(data->args);
 	remove_quotes_all(data);
-	printf("after remove\n");
-	show_tab(data->args);
+	//printf("after remove\n");
+	//show_tab(data->args);
 	if (check_builtin(*data) != 0)
 		return;
 	if (input[0] == '/' || (input[0] == '.' && input[1] == '/'))

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 19:33:45 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/03 18:14:20 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	main(int argc, char **argv , char **envp)
 		if (!data.input)
 			break ;
 		data.args = ft_split(data.input, ' ');
-		// show_tab(data.args);
+		//show_tab(data.args);
+		add_chained_list(&data);
 		if (case_redirection(&data, envp) == 1)
 		{
 			// printf("on va rentrer dans parsing car on trouve pas >\n");

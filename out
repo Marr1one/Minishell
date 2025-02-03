@@ -1,12 +1,13 @@
-Makefile
-a.out
 add_slash.c
 add_slash.o
+a.out
 built_in.c
 built_in.o
-coucou
+chaining.c
+chaining.o
 main.c
 main.o
+Makefile
 minishell
 minishell.h
 out

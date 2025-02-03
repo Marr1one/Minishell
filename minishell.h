@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 22:05:46 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/03 18:15:02 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,23 @@
 #include <fcntl.h>
 #include <signal.h>
 
+typedef enum e_token_type
+{
+	WORD,
+	REDIRECTION,
+}   t_type;
+
+typedef struct s_token
+{
+	t_type			type;
+	char			*content;
+	int				index;
+	struct	s_token	*next;
+}	t_token;
+
 typedef struct s_data
 {
+	t_token	*list;
 	char 	**path;
 	char	*input;
 	char	*command_path;
@@ -50,4 +65,6 @@ int		ft_strlcmp(char *s1, char *s2);
 void	sigint_handler(int signum);
 void	remove_quotes_all(t_data *data);
 void	show_tab(char **tab);
+void	add_chained_list(t_data *data);
+char	*ft_strdup(char	*str);
 #endif

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/01 22:26:30 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/03 17:26:55 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,22 @@ void	*ft_memset(void *b, int c, size_t len)
 		len--;
 	}
 	return (b);
+}
+
+char	*ft_strdup(char	*str)
+{
+	int		i;
+	char	*dup;
+
+	i = 0;
+	dup = malloc(sizeof(char) * ft_strlen(str));
+	while (str[i])
+	{
+		dup[i] = str[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
 }
 
 char	*ft_join(char *str, char *add)
