@@ -6,14 +6,13 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/03 19:18:18 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/03 19:58:23 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef	MINISHELL_H
 
 #define	MINISHELL_H
-//#define _XOPEN_SOURCE 700
 
 #include <signal.h>
 #include <readline/readline.h>
@@ -24,6 +23,13 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 typedef enum e_type
 {
@@ -68,6 +74,6 @@ void	remove_quotes_all(t_data *data);
 void	show_tab(char **tab);
 t_token	*add_chained_list(t_data *data);
 char	*ft_strdup(char	*str);
-void	sigquit_handler(int signum);
+int		check_env_var(t_data *data);
 
 #endif

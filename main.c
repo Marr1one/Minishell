@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/03 19:17:08 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/03 19:54:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ int	main(int argc, char **argv , char **envp)
 		data.input = readline("\033[0;32mminishell$\033[0m ");
 		if (!data.input)
 			break ;
+		if (check_env_var(&data) == 0)
+			printf("Good format\n");
+		else
+			printf("Bad format\n");
 		data.args = ft_split(data.input, ' ');
 		//show_tab(data.args);
 		data.list = add_chained_list(&data);
