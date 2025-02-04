@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/03 19:54:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/04 20:18:54 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,24 @@ int	main(int argc, char **argv , char **envp)
 	t_data data;
 
 	ft_memset(&data, 0, sizeof(t_data));
+	data.envp = envp;
+	data.env_var = NULL;
+	printf("Avant export: env_var = %p\n", (void *)data.env_var);
 	signal(SIGINT, sigint_handler);
 	while (1)
 	{
 		data.input = readline("\033[0;32mminishell$\033[0m ");
 		if (!data.input)
 			break ;
-		if (check_env_var(&data) == 0)
-			printf("Good format\n");
-		else
-			printf("Bad format\n");
 		data.args = ft_split(data.input, ' ');
-		//show_tab(data.args);
+			//show_tab(data.args);
 		data.list = add_chained_list(&data);
 		if (case_redirection(&data, envp) == 1)
 		{
-			// printf("on va rentrer dans parsing car on trouve pas >\n");
+			// printf("on  va rentrer dans parsing car on trouve pas >\n");
 			parsing(data.input, envp, &data);
 		}
-		add_history(data.input);								
+		add_history(data.input);						
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/03 19:58:23 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/04 20:16:11 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ typedef struct s_token
 typedef struct s_data
 {
 	t_token	*list;
+	t_env	*env_var;
+	char	**envp;
 	char 	**path;
 	char	*input;
 	char	*command_path;
@@ -60,6 +62,7 @@ char	**ft_split(char *str, char c);
 int		ft_strlen(char *str);
 void	*ft_memset(void *b, int c, size_t len);
 char	*ft_join(char *str, char *add);
+int 	handle_env(t_data *data, char *str);
 char	*get_path_env(char **envp);
 char	**add_slash_all(char **tab);
 char	*add_slash(char	*str);
@@ -71,6 +74,7 @@ int		ft_strcmp(char *s1, char *s2);
 int		ft_strlcmp(char *s1, char *s2);
 void	sigint_handler(int signum);
 void	remove_quotes_all(t_data *data);
+t_token	*findlast(t_token	*list);
 void	show_tab(char **tab);
 t_token	*add_chained_list(t_data *data);
 char	*ft_strdup(char	*str);
