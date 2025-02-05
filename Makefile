@@ -8,8 +8,8 @@ SRC		=	main.c \
 			built_in.c \
 			signals.c \
 			chaining.c \
-			env_var.c
-
+			env_var.c \
+			export.c
 CC		=	cc
 
 CFLAGS	=	-Wall -Werror -Wextra

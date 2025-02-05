@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/04 19:42:54 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/05 19:30:45 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void	parsing(char *input, char **envp, t_data *data)
 	}
 	//printf("after remove\n");
 	//show_tab(data->args);
-	if (check_builtin(*data) != 0)
+	if (check_builtin(data) != 0)
 		return;
 	if (input[0] == '/' || (input[0] == '.' && input[1] == '/'))
 	{

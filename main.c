@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/04 20:18:54 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/05 19:24:17 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	show_tab(char **tab)
 	i = 0;
 	while (tab[i])
 	{
-		printf("tab[%d] = %s\n", i, tab[i]);
+		printf("%s\n", tab[i]);
 		i++;
 	}
 }
@@ -32,7 +32,7 @@ int	main(int argc, char **argv , char **envp)
 	t_data data;
 
 	ft_memset(&data, 0, sizeof(t_data));
-	data.envp = envp;
+	data.envp = copy_env(envp);
 	data.env_var = NULL;
 	printf("Avant export: env_var = %p\n", (void *)data.env_var);
 	signal(SIGINT, sigint_handler);

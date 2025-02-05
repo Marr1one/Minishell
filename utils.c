@@ -6,11 +6,30 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/04 20:17:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/05 18:34:28 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	**copy_env(char **envp)
+{
+	int	i;
+	char	**new_env;
+
+	i = 0;
+	while(envp[i])
+		i++;
+	new_env = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (envp[i])
+	{
+		new_env[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	new_env[i] = NULL;
+	return (new_env);
+}
 
 char	*remove_utils(char *str)
 {
