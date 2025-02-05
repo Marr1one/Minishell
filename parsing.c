@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/05 19:30:45 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 00:24:27 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	case_redirection(t_data *data, char **envp)
 	i = 0;
 	while (data->args[i])
 	{
-		if (ft_strcmp(data->args[i], ">") == 0)
+		if (ft_strlcmp(data->args[i], ">") == 0)
 		{
 			//printf("on trouve >\n");
 			if (!data->args[i + 1])

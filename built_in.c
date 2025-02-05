@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/05 19:49:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 00:28:02 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ void ft_echo(t_data data)
 		printf("\n");
 }
 
-t_env	*find_last_node(t_env	*list)
-{
-	if (!list)
-		return (NULL);
-	while (list->next != NULL)
-		list = list->next;	
-	return (list);
-}
+// t_env	*find_last_node(t_env	*list)
+// {
+// 	if (!list)
+// 		return (NULL);
+// 	while (list->next != NULL)
+// 		list = list->next;	
+// 	return (list);
+// }
 
 void	show_list(t_env *list)
 {
@@ -215,31 +215,31 @@ void	add_node_queue(t_env	*list)
 	new_node->value = NULL;
 }
 
-void	fill_env(t_data *data)
-{
-	int	i;
-	t_env *new_node;
-	t_env *list;
+// void	fill_env(t_data *data)
+// {
+// 	int	i;
+// 	t_env *new_node;
+// 	t_env *list;
 
-	list = data->env_var;
-	i = 0;
-	while(data->envp[i])
-	{
-		new_node = malloc(sizeof(t_env));
-		if (!new_node)
-			return ;
-		new_node->name = get_name(data->envp[i]);
-		new_node->value = get_value(data->envp[i]);
-		new_node->next = NULL;
-		if (!list)
-			list = new_node;
-		else
-			find_last_node(list)->next = new_node;
-		i++;
-	}
-	data->env_var = list;
-	//show_list(data->env_var);
-}
+// 	list = data->env_var;
+// 	i = 0;
+// 	while(data->envp[i])
+// 	{
+// 		new_node = malloc(sizeof(t_env));
+// 		if (!new_node)
+// 			return ;
+// 		new_node->name = get_name(data->envp[i]);
+// 		new_node->value = get_value(data->envp[i]);
+// 		new_node->next = NULL;
+// 		if (!list)
+// 			list = new_node;
+// 		else
+// 			find_last_node(list)->next = new_node;
+// 		i++;
+// 	}
+// 	data->env_var = list;
+// 	//show_list(data->env_var);
+// }
 
 char	**add_export(t_data *data, char *str)
 {

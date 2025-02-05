@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:45:04 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/03 18:18:37 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 00:22:01 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	show_content(t_token *token)
 	}
 }
 
-t_token	*findlast(t_token	*list)
+t_token	*findlast_token(t_token	*list)
 {
 	if (!list)
 		return (NULL);
@@ -66,7 +66,7 @@ t_token	*add_chained_list(t_data *data)
 		if (!list)
 			list = new_node;
 		else	
-			findlast(list)->next = new_node;
+			findlast_token(list)->next = new_node;
 		i++;
 	}
 	//show_content(list);
