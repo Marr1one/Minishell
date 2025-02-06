@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/05 19:35:54 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 20:26:43 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int		ft_strncmp(char *s1, char *s2, int n);
 int		check_builtin(t_data *data);
 int		case_redirection(t_data *data, char **envp);
 int		test_commands(t_data *data);
+int		ft_strncmp(char *s1, char *s2, int n);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strlcmp(char *s1, char *s2);
 void	sigint_handler(int signum);

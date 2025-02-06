@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 00:28:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 20:18:38 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,14 @@ void ft_echo(t_data data)
 // 	return (list);
 // }
 
-void	show_list(t_env *list)
-{
-	while (list)
-	{
-		printf("%s=%s\n", list->name, list->value);
-		list = list->next;
-	}
-}
+//void	show_list(t_env *list)
+//{
+//	while (list)
+//	{
+//		printf("%s=%s\n", list->name, list->value);
+//		list = list->next;
+//	}
+//}
 
 //int handle_env(t_data *data, char *str)
 //{

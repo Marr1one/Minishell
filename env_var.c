@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/04 20:46:57 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 20:42:26 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,33 @@ int	is_alpha(char c)
 		return (0);
 	else
 		return (1);
+}
+
+int	check_env(t_data *data, char *str)
+{
+	int	i;
+	int	len;
+
+	i = 0;
+	len = ft_strlen(str);
+	while (data->envp[i])
+	{
+		if (ft_strncmp(data->envp[i], str, len) == 0)
+		i++;
+	}
+}
+
+int	check_dollar(t_data *data)
+{
+	t_token *list;
+
+	list = data->list;
+	while (list != NULL)
+	{
+		if (list->content[0] == '$')
+			check_env(data, list->content);
+		list = list->next;
+	}	
 }
 
 //char	*ft_strdupenv(char	*str, int start, int	i)

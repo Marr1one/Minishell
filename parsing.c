@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 18:59:45 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 20:16:06 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,34 @@ char	**create_cmd_args(t_data *data, int i)
 	}
 	res[j] = NULL;
 	return (res);
+}
+
+void	handle_append(t_data *data, int i)
+{
+	int fd;
+	pid_t pid;
+
+	data->path = ft_split(get_path_env(data->envp), ':');
+	data->path = add_slash_all(data->path);
+	if (test_commands(data) == 0)
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			fd = open(data->args[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd == -1)
+			{
+				perror("open");
+				exit(1);
+			}
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
+			execve(data->command_path, data->cmd_args, data->envp);
+			perror("execve");
+			exit(1);
+		}
+		waitpid(pid, NULL, 0);	
+	}
 }
 
 void		handle_back(t_data *data, int i)
@@ -114,6 +142,20 @@ int	case_redirection(t_data *data, char **envp)
 			}
 			data->cmd_args = create_cmd_args(data, list->index);
 			handle_back(data, list->index);
+			//printf("ICI!\n");
+			return (0);	
+		}
+		else if (ft_strlcmp(list->content, ">>") == 0)
+		{
+			//printf("in < case\n");
+			//printf("on trouve >\n");
+			if (!list->next || !(*list->next->content))
+			{
+				printf(" Rien apres le >>!\n");
+				return (0);
+			}
+			data->cmd_args = create_cmd_args(data, list->index);
+			handle_append(data, list->index);
 			//printf("ICI!\n");
 			return (0);	
 		}

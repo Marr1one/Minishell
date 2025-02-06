@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 19:00:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 20:20:10 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,15 @@ void	cut_empty(char **tab, t_data *data)
 	}
 }
 
+void	show_list(t_token *list)
+{
+	while(list)
+	{
+		printf("noeud %d : {%s}\n", list->index, list->content);
+		list = list->next;
+	}
+}
+
 int	main(int argc, char **argv , char **envp)
 {
 	
@@ -79,6 +88,8 @@ int	main(int argc, char **argv , char **envp)
 		//show_tab(data.args);
 			//show_tab(data.args);
 		data.list = add_chained_list(&data);
+		check_env(data);
+		show_list(data.list);
 		if (case_redirection(&data, data.envp) == 1)
 		{
 			// printf("on  va rentrer dans parsing car on trouve pas >\n");

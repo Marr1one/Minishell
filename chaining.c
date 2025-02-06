@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:45:04 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 00:22:01 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 20:18:26 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@
 //	return (i);
 //}
 
-void	show_content(t_token *token)
-{
-	t_token *current;
+//void	show_content(t_token *token)
+//{
+//	t_token *current;
 
-	current = token;
-	while (current != NULL)
-	{
-		printf("token %d content : %s, type ;%d\n", current->index,current->content, current->type);
-		current = current->next;
-	}
-}
+//	current = token;
+//	while (current != NULL)
+//	{
+//		printf("token %d content : %s, type ;%d\n", current->index,current->content, current->type);
+//		current = current->next;
+//	}
+//}
 
 t_token	*findlast_token(t_token	*list)
 {
