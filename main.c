@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 00:27:19 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 19:00:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,40 @@ void	show_tab(char **tab)
 	while (tab[i])
 	{
 		printf("%s\n", tab[i]);
+		i++;
+	}
+}
+
+char	**cut_last(char **tab, int	i)
+{
+	char	**new_tab;
+	int		j;
+	
+	j = 0;
+	new_tab = malloc(sizeof(char *) * (i + 1));
+	if (!new_tab)
+		return (NULL);
+	while (j < i)
+	{
+		new_tab[j] = tab[j];
+		j++;
+	}
+	new_tab[j] = NULL;
+	return (new_tab);
+}
+
+void	cut_empty(char **tab, t_data *data)
+{
+	int		i;
+	
+	i = 0;
+	while (tab[i])
+	{
+		if (tab[i + 1] == NULL)
+		{
+			if (tab[i][0] == '\0')
+				data->args = cut_last(tab, i);
+		}
 		i++;
 	}
 }
@@ -41,6 +75,8 @@ int	main(int argc, char **argv , char **envp)
 		if (!data.input)
 			break ;
 		data.args = ft_split(data.input, ' ');
+		cut_empty(data.args, &data);
+		//show_tab(data.args);
 			//show_tab(data.args);
 		data.list = add_chained_list(&data);
 		if (case_redirection(&data, data.envp) == 1)

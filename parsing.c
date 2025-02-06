@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 00:24:27 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/06 18:59:45 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	handle_redirect(t_data *data, int	i, char **envp)
 			perror("execve");
 			exit(1);
 		}
+		waitpid(pid, NULL, 0);
 	}
 }
 
@@ -55,26 +56,68 @@ char	**create_cmd_args(t_data *data, int i)
 	return (res);
 }
 
+void		handle_back(t_data *data, int i)
+{
+	int fd;
+	pid_t pid;
+
+	data->path = ft_split(get_path_env(data->envp), ':');
+	data->path = add_slash_all(data->path);
+	if (test_commands(data) == 0)
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			fd = open(data->args[i + 1], O_RDONLY);
+			if (fd == -1)
+			{
+				perror("open");
+				exit(1);
+			}
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+			execve(data->command_path, data->cmd_args, data->envp);
+			perror("execve");
+			exit(1);
+		}
+		waitpid(pid, NULL, 0);	
+	}
+}
+
 int	case_redirection(t_data *data, char **envp)
 {
-	int	i;
+	t_token	*list;
 	
-	i = 0;
-	while (data->args[i])
+	list = data->list;
+	while (list != NULL)
 	{
-		if (ft_strlcmp(data->args[i], ">") == 0)
+		if (ft_strlcmp(list->content, ">") == 0)
 		{
 			//printf("on trouve >\n");
-			if (!data->args[i + 1])
+			if (!list->next || !(*list->next->content))
 			{
 				printf("Nul part ou rediriger!\n");
 				return (0);
 			}
-			data->cmd_args = create_cmd_args(data, i);
-			handle_redirect(data, i, envp);
+			data->cmd_args = create_cmd_args(data, list->index);
+			handle_redirect(data, list->index, envp);
 			return (0);	
 		}
-		i++;
+		else if (ft_strlcmp(list->content, "<") == 0)
+		{
+			//printf("in < case\n");
+			//printf("on trouve >\n");
+			if (!list->next || !(*list->next->content))
+			{
+				printf(" Rien apres le <!\n");
+				return (0);
+			}
+			data->cmd_args = create_cmd_args(data, list->index);
+			handle_back(data, list->index);
+			//printf("ICI!\n");
+			return (0);	
+		}
+		list = list->next;
 	}
 	return (1);
 }
@@ -119,16 +162,16 @@ int		check_empty(t_data data)
 	int	i;
 
 	i = 0;
-	while (data.args[i])
-	{
-		//printf("charactere testE par check empty : %c\n", data.args[i][0]);
-		if (data.args[i][0] == '\0')
+	//while (data.args[i])
+	//{
+	//	//printf("charactere testE par check empty : %c\n", data.args[i][0]);
+		if (data.args[0][0] == '\0')
 		{
 			//printf("in\n");
 			return (1);
 		}
-		i++;
-	}
+	//	i++;
+	//}
 	return (0);
 }
 
@@ -141,7 +184,8 @@ void	parsing(char *input, char **envp, t_data *data)
 	remove_quotes_all(data);
 	if (check_empty(*data) == 1)
 	{
-		printf("minishell: %s: command not found\n", data->args[0]);
+		//printf("dans ce cas la\n");
+		//printf("minishell: %s: command not found\n", data->args[0]);
 		return ;
 	}
 	//printf("after remove\n");
@@ -174,6 +218,8 @@ void	parsing(char *input, char **envp, t_data *data)
 	data->path = add_slash_all(data->path);
 	if (test_commands(data) == 0)
 	{
+		//printf("dans ce cas la \n");
+		//show_tab(data->args);
 		// printf("on a trouver un chemin qui marche !\n");
 		pid = fork();
 		if (pid == 0)
@@ -187,5 +233,6 @@ void	parsing(char *input, char **envp, t_data *data)
 	}
 	if (only_space(data->input) == 0)
 		return ;
+	//printf("on est ici donc test command == 1\n");
 	printf("minishell: %s: command not found\n", input);
 }

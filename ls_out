@@ -5,6 +5,7 @@ built_in.c
 built_in.o
 chaining.c
 chaining.o
+coucou
 env_var.c
 env_var.o
 export.c
@@ -16,6 +17,7 @@ Makefile
 minishell
 minishell.h
 out
+outls
 parsing.c
 parsing.o
 salut
