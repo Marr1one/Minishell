@@ -9,7 +9,8 @@ SRC		=	main.c \
 			signals.c \
 			chaining.c \
 			env_var.c \
-			export.c
+			export.c \
+			echo.c
 CC		=	cc
 
 CFLAGS	=	-Wall -Werror -Wextra

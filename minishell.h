@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 01:21:05 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/07 19:02:52 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ char	**ft_split(char *str, char c);
 int		ft_strlen(char *str);
 void	*ft_memset(void *b, int c, size_t len);
 char	*ft_join(char *str, char *add);
-int 	handle_env(t_data *data, char *str);
+// int 	handle_env(t_data *data, char *str);
+void 	ft_echo(t_data data);
 char	*get_path_env(char **envp);
 char	**add_slash_all(char **tab);
 char	*add_slash(char	*str);
@@ -77,9 +78,10 @@ int		ft_strlcmp(char *s1, char *s2);
 void	sigint_handler(int signum);
 void	remove_quotes_all(t_data *data);
 int		is_alpha(char c);
-t_token	*findlast(t_token	*list);
+// t_token	*findlast(t_token	*list);
 void	show_tab(char **tab);
 t_token	*add_chained_list(t_data *data);
+char	*ft_joinegal(char *str);
 char	*ft_strdup(char	*str);
 void		check_dollar(t_data *data);
 int		check_export_compatibility(char *str);

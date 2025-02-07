@@ -1,39 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/05 19:31:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 18:59:39 by maissat          ###   ########.fr       */
+/*   Created: 2025/02/07 18:48:42 by maissat           #+#    #+#             */
+/*   Updated: 2025/02/07 18:49:19 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_export_compatibility(char *str)
+void ft_echo(t_data data)
 {
-	int	i;
-	int	quote;
+	int		n;
+	t_token	*list;
 	
-	i = 0;
-	quote = 0;
-	while (is_alpha(str[i]) == 0)
-		i++;
-	if (str[i] == '=')
-		i++;
-	else
-		return (1);
-	if (str[i] == '"')
-		quote = 1;
-	i++;
-	while (is_alpha(str[i]) == 0)
-		i++;
-	if (str[i] == '\0')
-		return (0);
-	else if ((quote == 1 && str[i] == '"'))
-		return (0);
-	else
-		return (1);
+	list = data.list->next;
+	n = 0;
+	if (ft_strlcmp(list->content, "-n") == 0)
+	{
+		n = 1;
+		list = list->next;
+	} 	
+	while (list != NULL)
+	{
+		printf("%s", list->content);
+		// if (data.args[i + 1] != NULL)
+		// 	printf(" ");
+		// i++;
+		list = list->next;
+	}
+	if (n == 0)
+		printf("\n");
 }

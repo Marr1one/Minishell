@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 14:58:48 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/07 19:44:00 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,224 +23,81 @@ void	ft_exit(void)
 	exit(0);
 }
 
-void ft_echo(t_data data)
-{
-	int		n;
-	t_token	*list;
-	
-	list = data.list->next;
-	n = 0;
-	if (ft_strlcmp(list->content, "-n") == 0)
-	{
-		n = 1;
-		list = list->next;
-	} 	
-	while (list != NULL)
-	{
-		printf("%s", list->content);
-		// if (data.args[i + 1] != NULL)
-		// 	printf(" ");
-		// i++;
-		list = list->next;
-	}
-	if (n == 0)
-		printf("\n");
-}
 
-// t_env	*find_last_node(t_env	*list)
+// char	*ft_strdupenv(char	*str, int start, int	i)
 // {
-// 	if (!list)
-// 		return (NULL);
-// 	while (list->next != NULL)
-// 		list = list->next;	
-// 	return (list);
-// }
+// 	int		k;
+// 	char	*dup;
 
-//void	show_list(t_env *list)
-//{
-//	while (list)
-//	{
-//		printf("%s=%s\n", list->name, list->value);
-//		list = list->next;
-//	}
-//}
-
-//int handle_env(t_data *data, char *str)
-//{
-//	int		i;
-//	int		save;
-//	int		quote;
-	
-//	i = 0;
-//	quote = 0;
-//	if (!data->env_var)
-//	{
-//		data->env_var = malloc(sizeof(t_env));
-//		if (!data->env_var)
-//			return (1);
-//		data->env_var->name = NULL;
-//		data->env_var->value = NULL;
-//	}
-    	
-//	while (is_alpha(str[i]) == 0)
-//		i++;
-//	if (str[i] == '=')
-//	{
-//		data->env_var->name = ft_strdupenv(str, 0, i);
-//		i++;
-//		save = i;
-//	} //ici il faut juste que jajoute ce quil ya dans jusqua i dans une case ; NAME
-//	else 
-//		return (1);
-//	if (str[save] == '"')
-//		quote = 1;
-//	i++;
-//	while (is_alpha(str[i]) == 0)
-//		i++;
-//	if (str[i] == '\0')
-//	{
-//		printf("in!\n");
-//		data->env_var->value = ft_strdupenv(str, save, i);
-//		return (0);
-//	}
-//	else if ((quote == 1 && str[i] == '"'))
-//	{
-//		printf("in guillemet!\n");
-//		data->env_var->value = ft_strdupenv(str, save + 1, i);
-//		return (0);
-//	}
-//	//ici il faut juste que jajoute ce quil ya entre = et \0 dans une varaible VALUE
-//	else 
-//		return (1);
-//}
-
-char	*ft_strdupenv(char	*str, int start, int	i)
-{
-	int		k;
-	char	*dup;
-
-	k = 0;
-	//printf("str[start] = %c, et str[i] (fin) = %c\n", str[start], str[i]);
-	dup = malloc(sizeof(char) * (i - start) + 1);
-	if (!dup)
-    	return (NULL);
-	while (start < i)
-	{
-		dup[k] = str[start];
-		k++;
-		start++;
-	}
-	dup[k] = '\0';
-	return (dup);
-}
-
-char	*get_name(char	*str)
-{
-	int	i;
-	char *name;
-
-	i = 0;
-	while(str[i] !=  '=')
-		i++;
-	name = ft_strdupenv(str, 0, i);
-	return (name);
-}
-
-char	*get_value(char	*str)
-{
-	int		i;
-	int		save;
-	char	*value;
-
-	i = 0;
-	while (str[i] != '=')
-		i++;
-	i ++;
-	save = i;
-	while(str[i] !=  '\0')
-		i++;
-	value = ft_strdupenv(str, save, i);
-	return (value);
-}
-
-int	fill_export(t_env *var,char	*str)
-{
-	int		i;
-	int		save;
-	int		quote;
-	
-	i = 0;
-	quote = 0;
-	while (is_alpha(str[i]) == 0)
-		i++;
-	if (str[i] == '=')
-	{
-		var->name = ft_strdupenv(str, 0, i);
-		i++;
-		save = i;
-	}
-	else 
-		return (1);
-	if (str[save] == '"')
-		quote = 1;
-	i++;
-	while (is_alpha(str[i]) == 0)
-		i++;
-	if (str[i] == '\0')
-	{
-		printf("in!\n");
-		var->value = ft_strdupenv(str, save, i);
-		return (0);
-	}
-	else if ((quote == 1 && str[i] == '"'))
-	{
-		printf("in guillemet!\n");
-		var->value = ft_strdupenv(str, save + 1, i);
-		return (0);
-	}
-	else 
-		return (1);
-}
-
-void	add_node_queue(t_env	*list)
-{
-	t_env	*new_node;
-	
-	while(list->next != NULL)
-		list = list->next;
-	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-		return;
-	new_node->name = NULL;
-	new_node->next = NULL;
-	new_node->value = NULL;
-}
-
-// void	fill_env(t_data *data)
-// {
-// 	int	i;
-// 	t_env *new_node;
-// 	t_env *list;
-
-// 	list = data->env_var;
-// 	i = 0;
-// 	while(data->envp[i])
+// 	k = 0;
+// 	//printf("str[start] = %c, et str[i] (fin) = %c\n", str[start], str[i]);
+// 	dup = malloc(sizeof(char) * (i - start) + 1);
+// 	if (!dup)
+//     	return (NULL);
+// 	while (start < i)
 // 	{
-// 		new_node = malloc(sizeof(t_env));
-// 		if (!new_node)
-// 			return ;
-// 		new_node->name = get_name(data->envp[i]);
-// 		new_node->value = get_value(data->envp[i]);
-// 		new_node->next = NULL;
-// 		if (!list)
-// 			list = new_node;
-// 		else
-// 			find_last_node(list)->next = new_node;
-// 		i++;
+// 		dup[k] = str[start];
+// 		k++;
+// 		start++;
 // 	}
-// 	data->env_var = list;
-// 	//show_list(data->env_var);
+// 	dup[k] = '\0';
+// 	return (dup);
 // }
+
+// int	fill_export(t_env *var,char	*str)
+// {
+// 	int		i;
+// 	int		save;
+// 	int		quote;
+	
+// 	i = 0;
+// 	quote = 0;
+// 	while (is_alpha(str[i]) == 0)
+// 		i++;
+// 	if (str[i] == '=')
+// 	{
+// 		var->name = ft_strdupenv(str, 0, i);
+// 		i++;
+// 		save = i;
+// 	}
+// 	else 
+// 		return (1);
+// 	if (str[save] == '"')
+// 		quote = 1;
+// 	i++;
+// 	while (is_alpha(str[i]) == 0)
+// 		i++;
+// 	if (str[i] == '\0')
+// 	{
+// 		printf("in!\n");
+// 		var->value = ft_strdupenv(str, save, i);
+// 		return (0);
+// 	}
+// 	else if ((quote == 1 && str[i] == '"'))
+// 	{
+// 		printf("in guillemet!\n");
+// 		var->value = ft_strdupenv(str, save + 1, i);
+// 		return (0);
+// 	}
+// 	else 
+// 		return (1);
+// }
+
+// void	add_node_queue(t_env	*list)
+// {
+// 	t_env	*new_node;
+	
+// 	while(list->next != NULL)
+// 		list = list->next;
+// 	new_node = malloc(sizeof(t_env));
+// 	if (!new_node)
+// 		return;
+// 	new_node->name = NULL;
+// 	new_node->next = NULL;
+// 	new_node->value = NULL;
+// }
+
+
 
 char	**add_export(t_data *data, char *str)
 {
@@ -263,9 +120,96 @@ char	**add_export(t_data *data, char *str)
 	return (new_env);
 }
 
+char	**ft_unset(t_data *data, int	save)
+{
+	int		i;
+	int		j;
+	char	**new_env;
+
+	i = 0;
+	while (data->envp[i])
+		i++;
+	new_env = malloc(sizeof(char *) * i);
+	if (!new_env)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while(data->envp[i])
+	{
+		if (i != save)
+		{
+			new_env[j] = ft_strdup(data->envp[i]);
+			j++;
+		}
+		i++;
+	}
+	new_env[j] = NULL;
+	i = 0;
+	while (data->envp[i])
+		free(data->envp[i++]);
+	free(data->envp);
+	// printf("nouvelle env ;\n");
+	// show_tab(new_env);
+	return (new_env);
+}
+
+
+char	*ft_joinunset(char *str)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*join;
+
+	len = ft_strlen(str);
+	i = 0;
+	j = 0;
+	join = malloc(sizeof(char) * (len + 2));
+	if (!join)
+		return (NULL);
+	while (str[i])
+	{
+		join[j] = str[i];	
+		j++;
+		i++;
+	}
+	join[j] = '=';
+	j++;
+	join[j] = '\0';
+	return (join);
+}
+
+void	check_unset(t_data *data, char	*str)
+{
+	int		i;
+	char	*join_eg;
+	
+	i = 0;
+	join_eg = ft_joinunset(str);
+	// printf("joineg = {%s}\n", join_eg);
+	while (data->envp[i])
+	{
+		if (ft_strncmp(data->envp[i], join_eg, ft_strlen(join_eg)) == 0)
+		{
+			// printf("FOUNDED");
+			data->envp = ft_unset(data, i);
+			break;
+		}
+		i++;
+	}
+	free(join_eg);
+}
+
 int	check_builtin(t_data *data)
 {
-	//t_env	*last;
+	if (ft_strlcmp(data->list->content, "unset") == 0 ||ft_strlcmp(data->list->content, "\"unset\"") == 0)
+	{
+		// printf("in unset!\n");
+		data->list = data->list->next;
+		check_unset(data, data->list->content);	
+		// ft_unset(*data);
+		return (1);
+	}
 	if (ft_strlcmp(data->args[0], "exit") == 0 ||ft_strlcmp(data->args[0], "\"exit\"") == 0)
 	{
 		ft_exit();
@@ -294,9 +238,12 @@ int	check_builtin(t_data *data)
 		data->list = data->list->next;
 		while(data->list != NULL)
 		{
-			printf("{%s}\n", data->list->content);
+			// printf("{%s}\n", data->list->content);
 			if (check_export_compatibility(data->list->content) == 0)
+			{
+				printf("Good format!\n");
 				data->envp = add_export(data, data->list->content);
+			}
 			else
 				printf("Bad format!\n");
 			data->list = data->list->next;
