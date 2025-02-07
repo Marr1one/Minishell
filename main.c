@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 20:20:10 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/07 01:47:51 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	main(int argc, char **argv , char **envp)
 		//show_tab(data.args);
 			//show_tab(data.args);
 		data.list = add_chained_list(&data);
-		check_env(data);
+		check_dollar(&data);
 		show_list(data.list);
 		if (case_redirection(&data, data.envp) == 1)
 		{

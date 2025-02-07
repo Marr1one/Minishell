@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 20:26:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/07 01:21:05 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_token	*findlast(t_token	*list);
 void	show_tab(char **tab);
 t_token	*add_chained_list(t_data *data);
 char	*ft_strdup(char	*str);
-int		check_env_var(t_data *data);
+void		check_dollar(t_data *data);
 int		check_export_compatibility(char *str);
 
 #endif

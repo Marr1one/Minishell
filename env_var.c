@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 20:42:26 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/07 01:57:35 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,107 @@ int	is_alpha(char c)
 		return (1);
 }
 
-int	check_env(t_data *data, char *str)
+char	*take_after(char *str)
+{
+	int		i;
+	int		len;
+	int		save;
+	char	*res;
+
+	i = 0;
+	while(str[i] != '=')
+		i++;
+	save = i;
+	len = 0;
+	while (str[i])
+	{
+		i++;
+		len++;
+	}
+	res = malloc(sizeof(char) * (len + 1));
+	if (!res)
+		return (NULL);
+	save++;
+	i = 0;
+	while(str[save])
+	{
+		res[i] = str[save];
+		save++;
+		i++;
+	}
+	return (res);
+}
+
+char	*ft_joinegal(char *str)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*join;
+
+	len = ft_strlen(str);
+	i = 1;
+	j = 0;
+	join = malloc(sizeof(char) * (len + 1));
+	if (!join)
+		return (NULL);
+	while (str[i])
+	{
+		join[j] = str[i];
+		j++;
+		i++;
+	}
+	join[j] = '=';
+	i++;
+	join[j] = '\0';
+	return (join);
+}
+
+int	index_match(t_data *data, char *str)
 {
 	int	i;
 	int	len;
-
+	
 	i = 0;
-	len = ft_strlen(str);
+	len = ft_strlen(str) + 1;
 	while (data->envp[i])
 	{
-		if (ft_strncmp(data->envp[i], str, len) == 0)
+		if (ft_strncmp(data->envp[i], ft_joinegal(str), len) == 0)
+		{
+			printf("dans index ; data.envp trouve = %s\n", data->envp[i]);
+			return (i);
+		}
+		i++;
+	}
+	return (-1);
+}
+
+void	check_env(t_data *data, char *str, t_token *current)
+{
+	int	i;
+	int	len;
+	int	index;
+	
+	i = 0;
+	index = 0;
+	len = ft_strlen(str) + 1;
+	// printf("str = %s\n", str);
+	while (data->envp[i])
+	{
+		if (ft_strncmp(data->envp[i], ft_joinegal(str), len) == 0)
+		{
+			printf("FOUNDED\n");
+			printf("data.envp trouve = %s\n", data->envp[i]);
+			index = index_match(data, str);
+			printf("data.envp[index] = %s\n", data->envp[index]);
+			current->content = ft_strdup(take_after(data->envp[index]));
+			return ;
+		}
 		i++;
 	}
 }
 
-int	check_dollar(t_data *data)
+void	check_dollar(t_data *data)
 {
 	t_token *list;
 
@@ -42,7 +128,9 @@ int	check_dollar(t_data *data)
 	while (list != NULL)
 	{
 		if (list->content[0] == '$')
-			check_env(data, list->content);
+		{
+			check_env(data, list->content, list);
+		}
 		list = list->next;
 	}	
 }

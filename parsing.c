@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 20:16:06 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/07 01:05:14 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,9 +201,9 @@ int	test_commands(t_data *data)
 
 int		check_empty(t_data data)
 {
-	int	i;
+	// int	i;
 
-	i = 0;
+	// i = 0;
 	//while (data.args[i])
 	//{
 	//	//printf("charactere testE par check empty : %c\n", data.args[i][0]);
