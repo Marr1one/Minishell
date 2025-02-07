@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 02:00:08 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/07 14:58:48 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,23 @@ void	ft_exit(void)
 
 void ft_echo(t_data data)
 {
-	int	i;
-	int	n;
+	int		n;
+	t_token	*list;
 	
-	i = 1;
+	list = data.list->next;
 	n = 0;
-	if (ft_strlcmp(data.args[1], "-n") == 0)
+	if (ft_strlcmp(list->content, "-n") == 0)
 	{
 		n = 1;
-		i++;
-	}
-	while (data.args[i])
+		list = list->next;
+	} 	
+	while (list != NULL)
 	{
-		printf("%s", data.args[i]);
-		if (data.args[i + 1] != NULL)
-			printf(" ");
-		i++;
+		printf("%s", list->content);
+		// if (data.args[i + 1] != NULL)
+		// 	printf(" ");
+		// i++;
+		list = list->next;
 	}
 	if (n == 0)
 		printf("\n");
@@ -270,7 +271,7 @@ int	check_builtin(t_data *data)
 		ft_exit();
 		return (1);
 	}
-	if (ft_strlcmp(data->args[0], "echo") == 0 ||ft_strlcmp(data->args[0], "\"echo\"") == 0)
+	if (ft_strlcmp(data->list->content, "echo") == 0 ||ft_strlcmp(data->list->content, "\"echo\"") == 0)
 	{
 		ft_echo(*data);
 		return (1);

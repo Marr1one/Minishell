@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 01:57:35 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/07 14:45:55 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	index_match(t_data *data, char *str)
 	{
 		if (ft_strncmp(data->envp[i], ft_joinegal(str), len) == 0)
 		{
-			printf("dans index ; data.envp trouve = %s\n", data->envp[i]);
+			// printf("dans index ; data.envp trouve = %s\n", data->envp[i]);
 			return (i);
 		}
 		i++;
@@ -109,10 +109,10 @@ void	check_env(t_data *data, char *str, t_token *current)
 	{
 		if (ft_strncmp(data->envp[i], ft_joinegal(str), len) == 0)
 		{
-			printf("FOUNDED\n");
-			printf("data.envp trouve = %s\n", data->envp[i]);
+			// printf("FOUNDED\n");
+			// printf("data.envp trouve = %s\n", data->envp[i]);
 			index = index_match(data, str);
-			printf("data.envp[index] = %s\n", data->envp[index]);
+			// printf("data.envp[index] = %s\n", data->envp[index]);
 			current->content = ft_strdup(take_after(data->envp[index]));
 			return ;
 		}
