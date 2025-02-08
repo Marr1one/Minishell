@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/08 16:32:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/08 19:59:34 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ void	ft_pwd(void)
         perror("getcwd");
 }
 
+
 int	check_builtin(t_data *data)
 {
 	if (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0)
@@ -253,6 +254,11 @@ int	check_builtin(t_data *data)
 	if (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0)
 	{
 		printf("in export!\n");
+		printf("nombre de noeud : %d\n", get_nbr_node(data->list));
+		if (get_nbr_node(data->list) == 1)
+		{
+			show_tab(data->envp);
+		}
 		data->list = data->list->next;
 		while(data->list != NULL)
 		{
@@ -285,6 +291,7 @@ int	check_builtin(t_data *data)
 	}
 	return (0);
 }
+
 //if (check_env_var(&data) == 0)
 //		{
 //			printf("Good format\n");

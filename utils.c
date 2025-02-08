@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/08 17:23:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/08 19:56:16 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 int	get_nbr_node(t_token *list)
 {
 	int	i;
+	t_token *current;
 	
 	i = 0;
-	while (list != NULL)
+	current = list;
+	while (current != NULL)
 	{
 		i++;
-		list = list->next;
+		current = current->next;
 	}
 	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/08 17:37:14 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/08 20:00:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
+
+//IDEE = si on a un content avec genre >out, le coupe en deux, enfin isoler dans cas le >
 typedef struct s_env
 {
 	char			*name;

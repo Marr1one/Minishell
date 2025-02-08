@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 01:05:14 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/08 20:21:30 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,9 +207,10 @@ int		check_empty(t_data data)
 	//while (data.args[i])
 	//{
 	//	//printf("charactere testE par check empty : %c\n", data.args[i][0]);
-		if (data.args[0][0] == '\0')
+		printf("ici\n");
+		printf("list content = %s\n", data.list->content);
+		if (data.list->content == NULL)
 		{
-			//printf("in\n");
 			return (1);
 		}
 	//	i++;
@@ -230,6 +231,7 @@ void	parsing(char *input, char **envp, t_data *data)
 		//printf("minishell: %s: command not found\n", data->args[0]);
 		return ;
 	}
+	printf("after removequotes\n");
 	//printf("after remove\n");
 	//show_tab(data->args);
 	if (check_builtin(data) != 0)
