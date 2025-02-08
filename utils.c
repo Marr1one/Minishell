@@ -6,11 +6,24 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 19:42:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/08 17:23:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	get_nbr_node(t_token *list)
+{
+	int	i;
+	
+	i = 0;
+	while (list != NULL)
+	{
+		i++;
+		list = list->next;
+	}
+	return (i);
+}
 
 char	**copy_env(char **envp)
 {
@@ -44,15 +57,20 @@ char	*remove_utils(char *str)
 	j = 0;
 	while (str[i])
 	{
-		if (str[i] != '"')
+		if (str[i] == '"' || str[i] == '\'')
+		{
+			i++;
+		}
+		else
 		{
 			new_str[j] = str[i];
+			i++;
 			j++;
 		}
-		i++;
 	}
 	new_str[j] = '\0';
-	return (new_str);
+	//printf("new_str = {%s}\n", new_str);
+	return (new_str);	
 	
 }
 
@@ -60,11 +78,12 @@ char	*remove_quotes(char *str)
 {
 	int		len;
 	char	*new_str;
-	
+
 	len = ft_strlen(str);
 	//printf("str[0] == %c et str[len - 1] == %c\n", str[0], str[len - 1]);
-	if (str[0] == '"' && str[len - 1] == '"')
+	if ((str[0] == '"' && str[len - 1] == '"') || (str[0] == '\'' && str[len - 1] == '\''))
 	{
+		//printf("in\n");
 		new_str = remove_utils(str);
 		free(str);
 		return (new_str);

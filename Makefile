@@ -13,11 +13,13 @@ SRC		=	main.c \
 			echo.c
 CC		=	cc
 
+OBJ_DIR	=	obj
+
 CFLAGS	=	-Wall -Werror -Wextra
 
 LDFLAGS	=	-lreadline
 
-OBJ		=	$(SRC:.c=.o)
+OBJ		=	$(SRC:%.c=$(OBJ_DIR)/%.o)
 
 all:		$(NAME)
 
@@ -28,8 +30,11 @@ $(NAME):	$(OBJ)
 			@echo "*----------------------*"
 
 
-%.o: %.c
+$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 			$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+			mkdir -p $(OBJ_DIR)
 
 clean:
 			rm -f $(OBJ)

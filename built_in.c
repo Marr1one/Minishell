@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 19:44:00 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/08 16:32:51 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,8 +200,26 @@ void	check_unset(t_data *data, char	*str)
 	free(join_eg);
 }
 
+void	ft_pwd(void)
+{
+	char path[1024];
+
+    if (getcwd(path, sizeof(path)) != NULL)
+        printf("%s\n", path);
+    else
+        perror("getcwd");
+}
+
 int	check_builtin(t_data *data)
 {
+	if (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0)
+	{
+		printf("ici dans pwd built_in\n");
+		if (get_nbr_node(data->list) > 1)
+			return (printf("pwd: too many arguments\n"), 1);
+		ft_pwd();
+		return (1);
+	}
 	if (ft_strlcmp(data->list->content, "unset") == 0 ||ft_strlcmp(data->list->content, "\"unset\"") == 0)
 	{
 		// printf("in unset!\n");
@@ -210,7 +228,7 @@ int	check_builtin(t_data *data)
 		// ft_unset(*data);
 		return (1);
 	}
-	if (ft_strlcmp(data->args[0], "exit") == 0 ||ft_strlcmp(data->args[0], "\"exit\"") == 0)
+	if (ft_strlcmp(data->list->content, "exit") == 0 ||ft_strlcmp(data->list->content, "\"exit\"") == 0)
 	{
 		ft_exit();
 		return (1);

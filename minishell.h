@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 19:02:52 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/08 17:37:14 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_data
 	t_env	*env_var;
 	char	**envp;
 	char 	**path;
+	int		pipe[2];
 	char	*input;
 	char	*command_path;
 	char	**args;
@@ -85,5 +86,6 @@ char	*ft_joinegal(char *str);
 char	*ft_strdup(char	*str);
 void		check_dollar(t_data *data);
 int		check_export_compatibility(char *str);
+int		get_nbr_node(t_token *list);
 
 #endif
