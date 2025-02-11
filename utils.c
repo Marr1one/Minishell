@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/11 17:18:23 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/11 20:01:05 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*remove_utils(char *str)
 	
 }
 
-char	*remove_quotes(char *str)
+char	*remove_quotes(t_data *data,char *str)
 {
 	int		len;
 	char	*new_str;
@@ -86,6 +86,7 @@ char	*remove_quotes(char *str)
 	if ((str[0] == '"' && str[len - 1] == '"') || (str[0] == '\'' && str[len - 1] == '\''))
 	{
 		//printf("in\n");
+		data->quotes = 1;
 		new_str = remove_utils(str);
 		free(str);
 		return (new_str);
@@ -100,10 +101,9 @@ void	remove_quotes_all(t_data *data)
 	list = data->list;
 	while (list)
 	{
-		list->content = remove_quotes(list->content);
+		list->content = remove_quotes(data, list->content);
 		list = list->next;
-	}
-		
+	}		
 }
 
 int	ft_strlen(char *str)
@@ -261,3 +261,36 @@ char	*ft_join(char *str, char *add)
 	return (join);
 }
 
+char	*ft_itoa(int	n)
+{
+	char	*res;
+	int		tmp;
+	int		len;
+
+	len = 0;
+	tmp = n;
+	if (n == 0)
+    {
+        res = malloc(sizeof(char) * 2);
+        if (!res)
+            return (NULL);
+        res[0] = '0';
+        res[1] = '\0';
+        return (res);
+    }
+	while (tmp)
+	{
+		tmp = tmp / 10;
+		len++;
+	}
+	res = malloc(sizeof(char) * 2);
+	if (!res)
+		return (NULL);
+	//res[len] = '\0'
+	while(len --)
+	{
+		res[len] = '0' + (n % 10);
+		n = n / 10;
+	}
+	return (res);
+}

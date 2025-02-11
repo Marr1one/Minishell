@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/11 18:14:12 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/11 20:04:17 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-
 
 //IDEE = si on a un content avec genre >out, le coupe en deux, enfin isoler dans cas le >
 typedef struct s_env
@@ -58,7 +57,11 @@ typedef struct s_data
 	char	*command_path;
 	char	**args;
 	char	**cmd_args;
+	int		quotes;
+	int		exit_status;
 }	t_data;
+
+
 
 void	parsing(char *input, char **env, t_data *data);
 char	**copy_env(char **envp);
@@ -68,6 +71,7 @@ void	*ft_memset(void *b, int c, size_t len);
 char	*ft_join(char *str, char *add);
 // int 	handle_env(t_data *data, char *str);
 void 	ft_echo(t_data data);
+void	check_exit_status(t_data *data);
 char	*get_path_env(char **envp);
 char	**add_slash_all(char **tab);
 char	*add_slash(char	*str);
@@ -76,6 +80,7 @@ int		check_builtin(t_data *data);
 int		case_redirection(t_data *data, char **envp);
 int		test_commands(t_data *data);
 int		ft_strncmp(char *s1, char *s2, int n);
+char	*ft_itoa(int n);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strlcmp(char *s1, char *s2);
 void	sigint_handler(int signum);
@@ -85,6 +90,7 @@ int		is_alpha(char c);
 // t_token	*findlast(t_token	*list);
 void	show_tab(char **tab);
 t_token	*add_chained_list(t_data *data);
+void	show_list(t_token *list);
 char	*ft_joinegal(char *str);
 char	*ft_strdup(char	*str);
 void		check_dollar(t_data *data);

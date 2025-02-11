@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/11 18:14:26 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/11 20:04:27 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,17 +215,20 @@ void	parsing(char *input, char **envp, t_data *data)
 	pid_t	pid;
 	int		status;
 	
-	//show_tab(data->args);
+	//printf("in parsing\n");
 	if (check_unclosed(data))
 	{
 		printf("minishell: unclosed quote detected\n");
 		return ;
 	}
 	remove_quotes_all(data);
+	//show_list(data->list);
 	if (check_empty(*data) == 1)
 	{
 		//printf("dans ce cas la\n");
 		//printf("minishell: %s: command not found\n", data->args[0]);
+		if (data->quotes == 1)
+			printf("minishell: : command not found\n");
 		return ;
 	}
 	//printf("after remove\n");
@@ -249,10 +252,15 @@ void	parsing(char *input, char **envp, t_data *data)
 		{
 			execve(input, data->args, envp);
 			perror("execve");
-			exit(1);
+			data->exit_status = 127;
+			exit(127);
 		}
 		waitpid(pid, &status, 0);
-		return ;
+		if (WIFEXITED(status))
+			data->exit_status = WEXITSTATUS(status);
+		else
+        	data->exit_status = 128;
+		return;
 	}
 	data->path = ft_split(get_path_env(envp), ':');
 	data->path = add_slash_all(data->path);
@@ -266,13 +274,19 @@ void	parsing(char *input, char **envp, t_data *data)
 		{
 			execve(data->command_path, data->args, envp);
 			perror("execve");
-			exit(1);
+			data->exit_status = 127;
+			exit(127);
 		}
 		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			data->exit_status = WEXITSTATUS(status);
+		else
+        	data->exit_status = 128;
 		return;
 	}
 	if (only_space(data->input) == 0)
 		return ;
 	//printf("on est ici donc test command == 1\n");
-	printf("minishell: %s: command not found\n", input);
+	check_exit_status(data);
+	printf("minishell: %s: command not found\n", data->list->content);
 }
