@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/09 02:19:27 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/11 18:13:25 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,22 @@ void	show_list(t_token *list)
 	}
 }
 
+int	check_unclosed(t_data *data)
+{
+	t_token	*list;
+	int		len;
+	
+	list = data->list;
+	while (list)
+	{
+		len = ft_strlen(data->list->content);
+		if (data->list->content[0] == '"' && data->list->content[len - 1])
+			return (1);
+		list = list->next;
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv , char **envp)
 {
 	
@@ -88,7 +104,7 @@ int	main(int argc, char **argv , char **envp)
 		
 		cut_empty(data.args, &data);
 		
-		show_tab(data.args);
+		//show_tab(data.args);
 			//show_tab(data.args);
 		data.list = add_chained_list(&data);
 		check_dollar(&data);

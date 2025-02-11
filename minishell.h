@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/08 20:00:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/11 18:14:12 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int		ft_strncmp(char *s1, char *s2, int n);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strlcmp(char *s1, char *s2);
 void	sigint_handler(int signum);
+int	check_unclosed(t_data *data);
 void	remove_quotes_all(t_data *data);
 int		is_alpha(char c);
 // t_token	*findlast(t_token	*list);

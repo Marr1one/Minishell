@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/09 02:19:13 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/11 18:14:26 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ int	test_commands(t_data *data)
 		return (1);
 	while (data->path[i])
 	{
-		path_test = ft_join(data->path[i], data->args[0]);
+		path_test = ft_join(data->path[i], data->list->content);
 		if (access(path_test, F_OK | X_OK) == 0)
 		{
 			data->command_path = path_test;
@@ -215,7 +215,12 @@ void	parsing(char *input, char **envp, t_data *data)
 	pid_t	pid;
 	int		status;
 	
-	// show_tab(data->args);
+	//show_tab(data->args);
+	if (check_unclosed(data))
+	{
+		printf("minishell: unclosed quote detected\n");
+		return ;
+	}
 	remove_quotes_all(data);
 	if (check_empty(*data) == 1)
 	{
