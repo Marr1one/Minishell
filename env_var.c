@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/07 14:45:55 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/11 17:26:50 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,12 +123,20 @@ void	check_env(t_data *data, char *str, t_token *current)
 void	check_dollar(t_data *data)
 {
 	t_token *list;
-
+	int		len;
+	
 	list = data->list;
 	while (list != NULL)
 	{
+		len = ft_strlen(list->content);
 		if (list->content[0] == '$')
 		{
+			check_env(data, list->content, list);
+		}
+		else if ((list->content[0] == '"' && list->content[len - 1] == '"') && list->content[1] == '$')
+		{
+			printf("in this case\n");
+			remove_quotes_all(data);
 			check_env(data, list->content, list);
 		}
 		list = list->next;

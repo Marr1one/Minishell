@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/08 19:56:16 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/11 17:18:23 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,13 @@ char	*remove_quotes(char *str)
 
 void	remove_quotes_all(t_data *data)
 {
-	int	i;
+	t_token	*list;
 
-	i = 0;
-	while (data->args[i])
+	list = data->list;
+	while (list)
 	{
-		data->args[i] = remove_quotes(data->args[i]);
-		i++;
+		list->content = remove_quotes(list->content);
+		list = list->next;
 	}
 		
 }
