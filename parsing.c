@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/11 20:04:27 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/12 18:22:18 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,7 @@ void	parsing(char *input, char **envp, t_data *data)
 	//printf("in parsing\n");
 	if (check_unclosed(data))
 	{
+		data->exit_status = 127;
 		printf("minishell: unclosed quote detected\n");
 		return ;
 	}
@@ -228,9 +229,17 @@ void	parsing(char *input, char **envp, t_data *data)
 		//printf("dans ce cas la\n");
 		//printf("minishell: %s: command not found\n", data->args[0]);
 		if (data->quotes == 1)
+		{
+			data->exit_status = 127;
 			printf("minishell: : command not found\n");
+		}
 		return ;
 	}
+	//if (return_exit_status(data) == 1)
+	//{
+	//	printf("minishell: %s: command not found\n", data->list->content);
+	//	return;
+	//}
 	//printf("after remove\n");
 	//show_tab(data->args);
 	if (check_builtin(data) != 0)
@@ -244,6 +253,7 @@ void	parsing(char *input, char **envp, t_data *data)
         }
         if (access(input, X_OK) != 0)
         {
+			data->exit_status = 126;
             printf("minishell: %s: Permission denied\n", input);
             return;
         }
@@ -252,41 +262,60 @@ void	parsing(char *input, char **envp, t_data *data)
 		{
 			execve(input, data->args, envp);
 			perror("execve");
-			data->exit_status = 127;
+			//data->exit_status = 127;
+			//check_exit_status(data);
 			exit(127);
 		}
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
+		{
 			data->exit_status = WEXITSTATUS(status);
+			//check_exit_status(data);
+		}
 		else
+		{
         	data->exit_status = 128;
+			//check_exit_status(data);
+		}
 		return;
 	}
 	data->path = ft_split(get_path_env(envp), ':');
 	data->path = add_slash_all(data->path);
 	if (test_commands(data) == 0)
 	{
-		//printf("dans ce cas la \n");
+		printf("dans ce cas la \n");
 		//show_tab(data->args);
 		// printf("on a trouver un chemin qui marche !\n");
 		pid = fork();
 		if (pid == 0)
 		{
+			//data->exit_status = 0;
 			execve(data->command_path, data->args, envp);
 			perror("execve");
-			data->exit_status = 127;
+			//check_exit_status(data);
 			exit(127);
 		}
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
+		{
 			data->exit_status = WEXITSTATUS(status);
+			//check_exit_status(data);
+		}
 		else
+		{
         	data->exit_status = 128;
+			//check_exit_status(data);
+		}
 		return;
 	}
-	if (only_space(data->input) == 0)
-		return ;
-	//printf("on est ici donc test command == 1\n");
-	check_exit_status(data);
-	printf("minishell: %s: command not found\n", data->list->content);
+	else
+	{
+		printf("dans le else\n");
+		data->exit_status = 127;
+		//check_exit_status(data);
+		printf("minishell: %s: command not found\n", data->list->content);
+	}
+	//if (only_space(data->input) == 0)
+	//	return ;
+	
 }

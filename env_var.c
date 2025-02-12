@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/11 17:26:50 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/12 17:27:32 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ void	check_dollar(t_data *data)
 		len = ft_strlen(list->content);
 		if (list->content[0] == '$')
 		{
+			printf("on trouve un $\n");
 			check_env(data, list->content, list);
 		}
 		else if ((list->content[0] == '"' && list->content[len - 1] == '"') && list->content[1] == '$')

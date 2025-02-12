@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/11 20:04:17 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/12 17:47:13 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int		ft_strncmp(char *s1, char *s2, int n);
 char	*ft_itoa(int n);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strlcmp(char *s1, char *s2);
+int		return_exit_status(t_data *data);
 void	sigint_handler(int signum);
 int	check_unclosed(t_data *data);
 void	remove_quotes_all(t_data *data);
@@ -96,5 +97,6 @@ char	*ft_strdup(char	*str);
 void		check_dollar(t_data *data);
 int		check_export_compatibility(char *str);
 int		get_nbr_node(t_token *list);
+int		ft_atoi(char	*str);
 
 #endif

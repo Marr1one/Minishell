@@ -6,21 +6,35 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/08 19:59:34 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/12 18:51:11 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_cd(t_data data)
+void ft_cd(t_data *data)
 {
-	if (chdir(data.args[1]) != 0 )
+	if (chdir(data->args[1]) != 0 )
+	{
+		data->exit_status = 1;
 		perror("cd");
+	}
+	else
+		data->exit_status = 0;
 }
 
-void	ft_exit(void)
+void	ft_exit(t_data *data)
 {
-	exit(0);
+	int	status;
+
+	status = 0;
+	if (data->args[1])
+	{
+		status = ft_atoi(data->args[1]);
+		if (status < 0 || status > 255)
+			status = status % 256;
+	}
+	exit(status);
 }
 
 
@@ -193,6 +207,7 @@ void	check_unset(t_data *data, char	*str)
 		{
 			// printf("FOUNDED");
 			data->envp = ft_unset(data, i);
+			data->exit_status = 0;
 			break;
 		}
 		i++;
@@ -200,14 +215,20 @@ void	check_unset(t_data *data, char	*str)
 	free(join_eg);
 }
 
-void	ft_pwd(void)
+void	ft_pwd(t_data *data)
 {
 	char path[1024];
 
     if (getcwd(path, sizeof(path)) != NULL)
+	{
+		data->exit_status = 0;
         printf("%s\n", path);
+	}
     else
+	{
+		data->exit_status = 1;
         perror("getcwd");
+	}
 }
 
 
@@ -218,7 +239,7 @@ int	check_builtin(t_data *data)
 		printf("ici dans pwd built_in\n");
 		if (get_nbr_node(data->list) > 1)
 			return (printf("pwd: too many arguments\n"), 1);
-		ft_pwd();
+		ft_pwd(data);
 		return (1);
 	}
 	if (ft_strlcmp(data->list->content, "unset") == 0 ||ft_strlcmp(data->list->content, "\"unset\"") == 0)
@@ -231,7 +252,7 @@ int	check_builtin(t_data *data)
 	}
 	if (ft_strlcmp(data->list->content, "exit") == 0 ||ft_strlcmp(data->list->content, "\"exit\"") == 0)
 	{
-		ft_exit();
+		ft_exit(data);
 		return (1);
 	}
 	if (ft_strlcmp(data->list->content, "echo") == 0 ||ft_strlcmp(data->list->content, "\"echo\"") == 0)
@@ -241,7 +262,7 @@ int	check_builtin(t_data *data)
 	}
 	if (ft_strlcmp(data->args[0], "cd") == 0 ||ft_strlcmp(data->args[0], "\"cd\"") == 0)
 	{
-		ft_cd(*data);
+		ft_cd(data);
 		return (1);
 	}
 	if (ft_strlcmp(data->args[0], "env") == 0 ||ft_strlcmp(data->args[0], "\"env\"") == 0)
@@ -249,6 +270,7 @@ int	check_builtin(t_data *data)
 		//if(!data.env_var)
 		//	fill_env(&data);
 		show_tab(data->envp);
+		//data->exit_status = 0;
 		return (1);
 	}
 	if (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0)

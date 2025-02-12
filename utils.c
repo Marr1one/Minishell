@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/11 20:01:05 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/12 17:50:11 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,4 +293,19 @@ char	*ft_itoa(int	n)
 		n = n / 10;
 	}
 	return (res);
+}
+
+int	ft_atoi(char	*str)
+{
+	int	n;
+	int	i;
+	
+	n = 0;
+	i = 0;
+	while (str[i])
+	{
+		n = n * 10 + (str[i] - '0');
+		i++;
+	}
+	return (n);
 }

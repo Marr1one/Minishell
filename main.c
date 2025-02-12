@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/11 20:03:45 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/12 18:10:17 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,38 @@ void	check_exit_status(t_data *data)
 	{
 		if (ft_strlcmp(list->content, "$?") == 0)
 		{
-			printf("$? trouvE!\n");
-			printf("list content = {%s}\n", list->content);
-			printf("data.exit_status = {%d}\n", data->exit_status);
+			//printf("$? trouvE!\n");
+			//printf("before : list content = {%s}\n", list->content);
+			//printf("data.exit_status = {%d}\n", data->exit_status);
 			list->content = ft_strdup(ft_itoa(data->exit_status));
-			printf("after ; list.content = {%s}\n", list->content);
+			//printf("after ; list.content = {%s}\n", list->content);
 		}
 		list = list->next;
 	}
 }
+
+int	return_exit_status(t_data *data)
+{
+	t_token	*list;
+
+	list = data->list;
+	while (list)
+	{
+		if (ft_strlcmp(list->content, "$?") == 0)
+		{
+			//printf("$? trouvE!\n");
+			//printf("before : list content = {%s}\n", list->content);
+			//printf("data.exit_status = {%d}\n", data->exit_status);
+			list->content = ft_strdup(ft_itoa(data->exit_status));
+			//printf("after ; list.content = {%s}\n", list->content);
+			return (1);
+		}
+		list = list->next;
+	}
+	return (0);
+}
+
+
 
 int	main(int argc, char **argv , char **envp)
 {
@@ -126,6 +149,7 @@ int	main(int argc, char **argv , char **envp)
 		//show_tab(data.args);
 			//show_tab(data.args);
 		data.list = add_chained_list(&data);
+		check_exit_status(&data);
 		//check_exit_status(&data);
 		check_dollar(&data);
 		//show_list(data.list);
