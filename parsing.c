@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/12 18:22:18 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/14 16:24:41 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,8 @@ int	test_commands(t_data *data)
 	
 	i = 0;
 	if (only_space(data->input) == 0)
+		return (1);
+	if (data->path == NULL)
 		return (1);
 	while (data->path[i])
 	{
