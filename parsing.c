@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/14 17:20:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/14 17:53:27 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,13 +271,20 @@ void	parsing(char *input, char **envp, t_data *data)
 			exit(127);
 		}
 		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status))
+        {
+			printf("in signaled !\n");
+            data->exit_status = 128 + WTERMSIG(status);
+        }
 		if (WIFEXITED(status))
 		{
+			printf("in wifexited !\n");
 			data->exit_status = WEXITSTATUS(status);
 			//check_exit_status(data);
 		}
 		else
 		{
+			printf("in else case of sign\n");
         	data->exit_status = 128;
 			//check_exit_status(data);
 		}
@@ -302,8 +309,18 @@ void	parsing(char *input, char **envp, t_data *data)
 		}	
 		//signal(SIGINT, SIG_IGN);
 		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status))
+        {
+			printf("in signaled !\n");
+			int signal_number = WTERMSIG(status);
+    		printf("Process terminated by signal: %d\n", signal_number);
+            data->exit_status = 128 + signal_number;
+			printf("data.exitstatus after signal ; %d\n", data->exit_status);
+			//if (WTERMSIG(status) == SIGINT)
+            //    data->exit_status = 130;
+        }
 		//signal(SIGINT, sigint_handler);
-		if (WIFEXITED(status))
+		else if (WIFEXITED(status))
 		{
 			data->exit_status = WEXITSTATUS(status);
 			//check_exit_status(data);
