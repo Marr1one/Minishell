@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/14 16:24:41 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/14 17:20:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,11 +193,13 @@ int	test_commands(t_data *data)
 		path_test = ft_join(data->path[i], data->list->content);
 		if (access(path_test, F_OK | X_OK) == 0)
 		{
-			data->command_path = path_test;
+			data->command_path = ft_strdup(path_test);
+			free(path_test);
 			return (0);
 		}
 		i++;
 	}
+	free(path_test);
 	return (1);
 }
 
@@ -218,7 +220,7 @@ void	parsing(char *input, char **envp, t_data *data)
 	int		status;
 	
 	//printf("in parsing\n");
-	if (check_unclosed(data))
+	if (check_unclosed(data) == 1)
 	{
 		data->exit_status = 127;
 		printf("minishell: unclosed quote detected\n");
@@ -292,12 +294,15 @@ void	parsing(char *input, char **envp, t_data *data)
 		if (pid == 0)
 		{
 			//data->exit_status = 0;
+			signal(SIGINT, SIG_DFL);
 			execve(data->command_path, data->args, envp);
 			perror("execve");
 			//check_exit_status(data);
 			exit(127);
-		}
+		}	
+		//signal(SIGINT, SIG_IGN);
 		waitpid(pid, &status, 0);
+		//signal(SIGINT, sigint_handler);
 		if (WIFEXITED(status))
 		{
 			data->exit_status = WEXITSTATUS(status);

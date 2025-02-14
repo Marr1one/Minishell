@@ -11,7 +11,7 @@ SRC		=	main.c \
 			env_var.c \
 			export.c \
 			echo.c
-CC		=	cc
+CC		=	cc -g3
 
 OBJ_DIR	=	obj
 

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/12 18:10:17 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/14 17:11:18 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	check_unclosed(t_data *data)
 	while (list)
 	{
 		len = ft_strlen(data->list->content);
-		if (data->list->content[0] == '"' && data->list->content[len - 1])
+		if (data->list->content[0] == '"' && data->list->content[len - 1] != '"')
 			return (1);
 		list = list->next;
 	}
@@ -136,6 +136,7 @@ int	main(int argc, char **argv , char **envp)
 	ft_memset(&data, 0, sizeof(t_data));
 	data.envp = copy_env(envp);
 	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		data.input = readline("\033[0;32mminishell$\033[0m ");
