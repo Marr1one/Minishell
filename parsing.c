@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/15 17:28:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 17:35:56 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,6 +307,48 @@ int	check_redirect(t_data *data)
 	return (0);
 }
 
+void	exec_command(t_data *data)
+{
+	printf("dans execcommand!\n");
+	pid_t	pid;
+	int		status;
+	
+	pid = fork();
+	if (pid == 0)
+	{
+		//data->exit_status = 0;
+		signal(SIGINT, SIG_DFL);
+		execve(data->command_path, data->args, data->envp);
+		perror("execve");
+		//check_exit_status(data);
+		exit(127);
+	}	
+	//signal(SIGINT, SIG_IGN);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status))
+	{
+		printf("in signaled !\n");
+		int signal_number = WTERMSIG(status);
+		printf("Process terminated by signal: %d\n", signal_number);
+		data->exit_status = 128 + signal_number;
+		printf("data.exitstatus after signal ; %d\n", data->exit_status);
+		//if (WTERMSIG(status) == SIGINT)
+		//    data->exit_status = 130;
+	}
+	//signal(SIGINT, sigint_handler);
+	else if (WIFEXITED(status))
+	{
+		data->exit_status = WEXITSTATUS(status);
+		//check_exit_status(data);
+	}
+	else
+	{
+		data->exit_status = 128;
+		//check_exit_status(data);
+	}
+	return;
+}
+
 void	parsing(char *input, char **envp, t_data *data)
 {
 	pid_t	pid;
@@ -389,42 +431,7 @@ void	parsing(char *input, char **envp, t_data *data)
 		return ;
 	if (test_commands(data) == 0)
 	{
-		//printf("dans ce cas la \n");
-		//show_tab(data->args);
-		// printf("on a trouver un chemin qui marche !\n");
-		pid = fork();
-		if (pid == 0)
-		{
-			//data->exit_status = 0;
-			signal(SIGINT, SIG_DFL);
-			execve(data->command_path, data->args, envp);
-			perror("execve");
-			//check_exit_status(data);
-			exit(127);
-		}	
-		//signal(SIGINT, SIG_IGN);
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status))
-        {
-			printf("in signaled !\n");
-			int signal_number = WTERMSIG(status);
-    		printf("Process terminated by signal: %d\n", signal_number);
-            data->exit_status = 128 + signal_number;
-			printf("data.exitstatus after signal ; %d\n", data->exit_status);
-			//if (WTERMSIG(status) == SIGINT)
-            //    data->exit_status = 130;
-        }
-		//signal(SIGINT, sigint_handler);
-		else if (WIFEXITED(status))
-		{
-			data->exit_status = WEXITSTATUS(status);
-			//check_exit_status(data);
-		}
-		else
-		{
-        	data->exit_status = 128;
-			//check_exit_status(data);
-		}
+		exec_command(data);
 		return;
 	}
 	else
