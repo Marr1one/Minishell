@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/15 17:28:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 18:54:38 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,9 @@ int	main(int argc, char **argv , char **envp)
 		data.input = readline("\033[0;32mminishell$\033[0m ");
 		if (!data.input)
 			break ;
+		//printf("input before : %s\n", data.input);
 		check_redirect(&data);
+		//printf("input after : %s\n", data.input);
 		// printf("input = {%s}\n", data.input);
 		data.args = ft_split(data.input, ' ');
 		

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/15 17:26:19 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 18:38:53 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*add_slash(char	*str);
 int		ft_strncmp(char *s1, char *s2, int n);
 int		check_builtin(t_data *data);
 void	ft_redirect(t_data *data, int i);
-int		check_redirect(t_data *data);
+void		check_redirect(t_data *data);
 int		case_redirection(t_data *data, char **envp);
 int		test_commands(t_data *data);
 char	*take_after(char *str, char c);
@@ -102,5 +102,6 @@ void	check_dollar(t_data *data);
 int		check_export_compatibility(char *str);
 int		get_nbr_node(t_token *list);
 int		ft_atoi(char	*str);
+int	count_word2(char *str);
 
 #endif

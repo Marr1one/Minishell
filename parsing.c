@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/15 17:35:56 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 18:54:20 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,21 +290,113 @@ void	ft_redirect(t_data *data, int i)
 	}
 }
 
-int	check_redirect(t_data *data)
+int	count_word2(char *str)
 {
 	int	i;
+	int	count;
+	int	in_word;
+	
+	i = 0;
+	in_word = 0;
+	count = 0;
+	while (str[i])
+	{
+		if(str[i] != '>')
+		{
+			if (in_word == 0)
+			{
+			in_word = 1;
+			count++;
+			}
+			
+		}
+		else
+		{
+			count++;
+			in_word = 0;
+		}
+		i++;
+	}
+	return (count);
+}
+
+int	count_redirect(t_data *data)
+{
+	int	i;
+	int	count;
 
 	i = 0;
+	count = 0;
+	while (data->input[i])
+	{
+		if (data->input[i] == '>')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+void	ft_clean_input(t_data *data)
+{
+	char	*new_input;
+	int		i;
+	int		j;
+	
+	i = 0;
+	j = 0;
+	new_input = malloc(ft_strlen(data->input) + (2 * count_redirect(data) + 1));
+	if (!new_input)
+		return ;
+	while (data->input[i])
+	{
+		if (data->input[i] == '>')
+		{
+			if (i > 0 && data->input[i - 1] != ' ')
+			{
+				new_input[j] = ' ';
+				j++;
+			}
+			new_input[j] = '>';
+			j++;
+			if (data->input[i + 1] && data->input[i + 1] != ' ')
+			{
+				new_input[j] = ' ';
+				j++;
+			}
+		}
+		else
+		{
+			new_input[j] = data->input[i];
+			j++;
+		}
+		i++;
+	}
+	new_input[j] = '\0';
+	free(data->input);
+	data->input = new_input;
+}
+
+
+
+void	check_redirect(t_data *data)
+{
+	int		i;
+	int		j;
+	int		len;
+	//char	**tab;
+
+	len = count_word2(data->input);
+	//tab = malloc(sizeof(char *) * (len + 1));
+	i = 0;
+	j = 0;
 	while (data->input[i])
 	{
 		if(data->input[i] == '>')
 		{
-			ft_redirect(data, i);
-			return (1);
+			ft_clean_input(data);
 		}
 		i++;
 	}
-	return (0);
 }
 
 void	exec_command(t_data *data)
@@ -427,8 +519,8 @@ void	parsing(char *input, char **envp, t_data *data)
 	}
 	data->path = ft_split(get_path_env(envp), ':');
 	data->path = add_slash_all(data->path);
-	if (check_redirect(data) != 0)
-		return ;
+	//if (check_redirect(data) != 0)
+	//	return ;
 	if (test_commands(data) == 0)
 	{
 		exec_command(data);
