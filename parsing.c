@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/15 18:54:20 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 19:06:18 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,6 +358,12 @@ void	ft_clean_input(t_data *data)
 			}
 			new_input[j] = '>';
 			j++;
+			if (data->input[i + 1] == '>')
+			{
+				i++;
+				new_input[j] = '>';
+				j++;
+			}
 			if (data->input[i + 1] && data->input[i + 1] != ' ')
 			{
 				new_input[j] = ' ';
