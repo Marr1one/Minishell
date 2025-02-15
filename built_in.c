@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/12 18:51:11 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 19:46:45 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,25 @@
 
 void ft_cd(t_data *data)
 {
-	if (chdir(data->args[1]) != 0 )
+	char	*old_pwd;
+
+	old_pwd = getenv("OLDPWD");
+	printf("old_pwd = %s\n", old_pwd);
+	if (data->args[1] && ft_strlcmp(data->args[1], "-") == 0)
+	{
+		if (!old_pwd)
+		{
+			printf("minishell: cd: OLDPWD not set\n");
+			data->exit_status = 1;
+			return ;
+		}
+		printf("%s\n", old_pwd);
+		if (chdir(old_pwd) != 0)
+			perror("cd");
+		data->exit_status = 0;
+		return;
+	}
+	else if (data->args[1] && chdir(data->args[1]) != 0)
 	{
 		data->exit_status = 1;
 		perror("cd");
@@ -260,7 +278,7 @@ int	check_builtin(t_data *data)
 		ft_echo(*data);
 		return (1);
 	}
-	if (ft_strlcmp(data->args[0], "cd") == 0 ||ft_strlcmp(data->args[0], "\"cd\"") == 0)
+	if (ft_strlcmp(data->list->content, "cd") == 0 ||ft_strlcmp(data->list->content, "\"cd\"") == 0)
 	{
 		ft_cd(data);
 		return (1);
