@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/12 17:27:32 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 17:00:45 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_alpha(char c)
 		return (1);
 }
 
-char	*take_after(char *str)
+char	*take_after(char *str, char c)
 {
 	int		i;
 	int		len;
@@ -28,7 +28,7 @@ char	*take_after(char *str)
 	char	*res;
 
 	i = 0;
-	while(str[i] != '=')
+	while(str[i] != c)
 		i++;
 	save = i;
 	len = 0;
@@ -51,7 +51,7 @@ char	*take_after(char *str)
 	return (res);
 }
 
-char	*ft_joinegal(char *str)
+char	*ft_joinchar(char *str, char c)
 {
 	int		i;
 	int		j;
@@ -70,7 +70,7 @@ char	*ft_joinegal(char *str)
 		j++;
 		i++;
 	}
-	join[j] = '=';
+	join[j] = c;
 	i++;
 	join[j] = '\0';
 	return (join);
@@ -85,7 +85,7 @@ int	index_match(t_data *data, char *str)
 	len = ft_strlen(str) + 1;
 	while (data->envp[i])
 	{
-		if (ft_strncmp(data->envp[i], ft_joinegal(str), len) == 0)
+		if (ft_strncmp(data->envp[i], ft_joinchar(str, '='), len) == 0)
 		{
 			// printf("dans index ; data.envp trouve = %s\n", data->envp[i]);
 			return (i);
@@ -107,13 +107,13 @@ void	check_env(t_data *data, char *str, t_token *current)
 	// printf("str = %s\n", str);
 	while (data->envp[i])
 	{
-		if (ft_strncmp(data->envp[i], ft_joinegal(str), len) == 0)
+		if (ft_strncmp(data->envp[i], ft_joinchar(str, '='), len) == 0)
 		{
 			// printf("FOUNDED\n");
 			// printf("data.envp trouve = %s\n", data->envp[i]);
 			index = index_match(data, str);
 			// printf("data.envp[index] = %s\n", data->envp[index]);
-			current->content = ft_strdup(take_after(data->envp[index]));
+			current->content = ft_strdup(take_after(data->envp[index], '='));
 			return ;
 		}
 		i++;

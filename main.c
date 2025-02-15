@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/14 17:51:17 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 17:28:04 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,16 +142,19 @@ int	main(int argc, char **argv , char **envp)
 		data.input = readline("\033[0;32mminishell$\033[0m ");
 		if (!data.input)
 			break ;
+		check_redirect(&data);
 		// printf("input = {%s}\n", data.input);
 		data.args = ft_split(data.input, ' ');
 		
 		cut_empty(data.args, &data);
 		
+		//printf("tab juste apres le split de input :\n");
 		//show_tab(data.args);
 			//show_tab(data.args);
 		data.list = add_chained_list(&data);
+		//printf("list juste apres sa creation :\n");
+		//show_list(data.list);
 		check_exit_status(&data);
-		//check_exit_status(&data);
 		check_dollar(&data);
 		//show_list(data.list);
 		if (case_redirection(&data, data.envp) == 1)

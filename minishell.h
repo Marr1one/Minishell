@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/14 17:18:41 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 17:26:19 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,11 @@ char	**add_slash_all(char **tab);
 char	*add_slash(char	*str);
 int		ft_strncmp(char *s1, char *s2, int n);
 int		check_builtin(t_data *data);
+void	ft_redirect(t_data *data, int i);
+int		check_redirect(t_data *data);
 int		case_redirection(t_data *data, char **envp);
 int		test_commands(t_data *data);
+char	*take_after(char *str, char c);
 int		ft_strncmp(char *s1, char *s2, int n);
 char	*ft_itoa(int n);
 int		ft_strcmp(char *s1, char *s2);
@@ -93,9 +96,9 @@ int		is_alpha(char c);
 void	show_tab(char **tab);
 t_token	*add_chained_list(t_data *data);
 void	show_list(t_token *list);
-char	*ft_joinegal(char *str);
+char	*ft_joinchar(char *str, char c);
 char	*ft_strdup(char	*str);
-void		check_dollar(t_data *data);
+void	check_dollar(t_data *data);
 int		check_export_compatibility(char *str);
 int		get_nbr_node(t_token *list);
 int		ft_atoi(char	*str);

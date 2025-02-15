@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/14 17:53:27 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/15 17:28:51 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,32 @@ int	only_space(char *input)
 	return (0);
 }
 
+
+int	test_commands2(t_data *data, char *str)
+{
+	int	i;
+	char *path_test;
+	
+	i = 0;
+	if (only_space(data->input) == 0)
+		return (1);
+	if (data->path == NULL)
+		return (1);
+	while (data->path[i])
+	{
+		path_test = ft_join(data->path[i], str);
+		if (access(path_test, F_OK | X_OK) == 0)
+		{
+			data->command_path = ft_strdup(path_test);
+			free(path_test);
+			return (0);
+		}
+		i++;
+	}
+	free(path_test);
+	return (1);
+}
+
 int	test_commands(t_data *data)
 {
 	int	i;
@@ -210,6 +236,73 @@ int		check_empty(t_data data)
 	if (data.list->content[0] == '\0')
 	{
 		return (1);
+	}
+	return (0);
+}
+char	*take_before(char *str, char c)
+{
+	char	*res;
+	int		i;
+	int		len;
+	
+	i = 0;
+	while(str[i] != c)
+		i++;
+	len = i;
+	res = malloc(sizeof(char) * (len + 1));
+	i = 0;
+	while (i < len)
+	{
+		res[i] = str[i];
+		i++;
+	}
+	res[i] = '\0';
+	return (res);
+	
+}
+
+void	ft_redirect(t_data *data, int i)
+{
+	(void)i;
+	pid_t	pid;
+	int		fd;
+	char	*before;
+
+	before = take_before(data->input, '>');
+	if (test_commands2(data, before) == 0)
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			fd = open(take_after(data->input, '>'), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd == -1)
+			{
+				perror("open");
+				exit(1);
+			}
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
+			execve(data->command_path, data->cmd_args, data->envp);
+			perror("execve");
+			exit(1);
+		}
+		waitpid(pid, NULL, 0);
+	}
+}
+
+int	check_redirect(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->input[i])
+	{
+		if(data->input[i] == '>')
+		{
+			ft_redirect(data, i);
+			return (1);
+		}
+		i++;
 	}
 	return (0);
 }
@@ -292,9 +385,11 @@ void	parsing(char *input, char **envp, t_data *data)
 	}
 	data->path = ft_split(get_path_env(envp), ':');
 	data->path = add_slash_all(data->path);
+	if (check_redirect(data) != 0)
+		return ;
 	if (test_commands(data) == 0)
 	{
-		printf("dans ce cas la \n");
+		//printf("dans ce cas la \n");
 		//show_tab(data->args);
 		// printf("on a trouver un chemin qui marche !\n");
 		pid = fork();

@@ -21,7 +21,6 @@ obj
 out
 outls
 parsing.c
-pipi
 salut
 signals.c
 split.c
