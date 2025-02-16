@@ -6,51 +6,95 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/16 23:25:19 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/16 23:48:55 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**update_oldpwd(t_data *data, char *pwd)
+void	update_oldpwd(t_data *data, char *pwd)
 {
 	int	i;
-	char	**new_env;
+	// char	**new_env;
 	
 
-	i = 0;
-	while (data->envp[i])
-		i++;
-	new_env = malloc(sizeof(char *) * (i + 1));
+	// i = 0;
+	// while (data->envp[i])
+	// 	i++;
+	// new_env = malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	while(data->envp[i])
 	{
 		if (ft_strncmp(data->envp[i], "OLDPWD=", 7) == 0)
 		{
-			new_env[i] = ft_join("OLDPWD=", pwd);
+			free(data->envp[i]);
+			data->envp[i] = ft_join("OLDPWD=", pwd);
 		}
-		new_env[i] = ft_strdup(data->envp[i]);
+		// new_env[i] = ft_strdup(data->envp[i]);
 		i++;
 	}
-	new_env[i] = NULL;
-	return (new_env);
+	// new_env[i] = NULL;
+	// return (new_env);
+}
+
+void	update_pwd(t_data *data, char *pwd)
+{
+	int	i;
+	// char	**new_env;
+	
+
+	// i = 0;
+	// while (data->envp[i])
+	// 	i++;
+	// new_env = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while(data->envp[i])
+	{
+		if (ft_strncmp(data->envp[i], "PWD=", 7) == 0)
+		{
+			free(data->envp[i]);
+			data->envp[i] = ft_join("PWD=", pwd);
+		}
+		// new_env[i] = ft_strdup(data->envp[i]);
+		i++;
+	}
+	// new_env[i] = NULL;
+	// return (new_env);
+}
+
+char	*search_oldpwd(t_data *data)
+{
+	int		i;
+	char	*res;
+
+	i = 0;
+	while (data->envp[i])
+	{
+		if (ft_strncmp(data->envp[i], "OLDPWD=", 7) == 0)
+		{
+			res = take_after(data->envp[i], '=');
+			return (res);
+		}
+		i++;
+	}
+	return (NULL);
 }
 
 void ft_cd(t_data *data)
 {
 	char	*old_pwd;
 	char	current_pwd[1024];
+	char	pwd_after[1024];
 
 	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
 	{
 		perror("getcwd");
 	}
 	// printf("current pwd = %s\n", current_pwd);
-	old_pwd = getenv("OLDPWD");
+	old_pwd = search_oldpwd(data);
 	// printf("old_pwd = %s\n", old_pwd);
 	if (data->args[1] && ft_strlcmp(data->args[1], "-") == 0)
 	{
-		printf("dans ce cas la\n");
 		if (!old_pwd)
 		{
 			printf("minishell: cd: OLDPWD not set\n");
@@ -62,6 +106,7 @@ void ft_cd(t_data *data)
 			perror("cd");
 			data->exit_status = 1;	
 		}
+		printf("%s\n", old_pwd);
 		data->exit_status = 0;
 	}
 	else if (data->args[1] && chdir(data->args[1]) != 0)
@@ -71,5 +116,10 @@ void ft_cd(t_data *data)
 	}
 	else
 		data->exit_status = 0;
-	data->envp = update_oldpwd(data, current_pwd);
+	update_oldpwd(data, current_pwd);
+	if (getcwd(pwd_after, sizeof(pwd_after)) == NULL)
+	{
+		perror("getcwd");
+	}
+	update_pwd(data, pwd_after);
 }
