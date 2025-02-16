@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/15 19:46:45 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/16 19:21:33 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,14 @@
 void ft_cd(t_data *data)
 {
 	char	*old_pwd;
+	char	current_pwd[1024];
 
+	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
+	{
+		perror("getcwd");
+	}
 	old_pwd = getenv("OLDPWD");
-	printf("old_pwd = %s\n", old_pwd);
+	//printf("old_pwd = %s\n", old_pwd);
 	if (data->args[1] && ft_strlcmp(data->args[1], "-") == 0)
 	{
 		if (!old_pwd)
