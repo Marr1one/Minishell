@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/15 19:06:18 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/16 23:12:07 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,14 +387,14 @@ void	ft_clean_input(t_data *data)
 void	check_redirect(t_data *data)
 {
 	int		i;
-	int		j;
-	int		len;
+	// int		j;
+	// int		len;
 	//char	**tab;
 
-	len = count_word2(data->input);
+	// len = count_word2(data->input);
 	//tab = malloc(sizeof(char *) * (len + 1));
 	i = 0;
-	j = 0;
+	// j = 0;
 	while (data->input[i])
 	{
 		if(data->input[i] == '>')

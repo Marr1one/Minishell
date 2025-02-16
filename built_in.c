@@ -6,45 +6,45 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/16 19:21:33 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/16 23:12:31 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_cd(t_data *data)
-{
-	char	*old_pwd;
-	char	current_pwd[1024];
+// void ft_cd(t_data *data)
+// {
+// 	char	*old_pwd;
+// 	char	current_pwd[1024];
 
-	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
-	{
-		perror("getcwd");
-	}
-	old_pwd = getenv("OLDPWD");
-	//printf("old_pwd = %s\n", old_pwd);
-	if (data->args[1] && ft_strlcmp(data->args[1], "-") == 0)
-	{
-		if (!old_pwd)
-		{
-			printf("minishell: cd: OLDPWD not set\n");
-			data->exit_status = 1;
-			return ;
-		}
-		printf("%s\n", old_pwd);
-		if (chdir(old_pwd) != 0)
-			perror("cd");
-		data->exit_status = 0;
-		return;
-	}
-	else if (data->args[1] && chdir(data->args[1]) != 0)
-	{
-		data->exit_status = 1;
-		perror("cd");
-	}
-	else
-		data->exit_status = 0;
-}
+// 	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
+// 	{
+// 		perror("getcwd");
+// 	}
+// 	old_pwd = getenv("OLDPWD");
+// 	//printf("old_pwd = %s\n", old_pwd);
+// 	if (data->args[1] && ft_strlcmp(data->args[1], "-") == 0)
+// 	{
+// 		if (!old_pwd)
+// 		{
+// 			printf("minishell: cd: OLDPWD not set\n");
+// 			data->exit_status = 1;
+// 			return ;
+// 		}
+// 		printf("%s\n", old_pwd);
+// 		if (chdir(old_pwd) != 0)
+// 			perror("cd");
+// 		data->exit_status = 0;
+// 		return;
+// 	}
+// 	else if (data->args[1] && chdir(data->args[1]) != 0)
+// 	{
+// 		data->exit_status = 1;
+// 		perror("cd");
+// 	}
+// 	else
+// 		data->exit_status = 0;
+// }
 
 void	ft_exit(t_data *data)
 {

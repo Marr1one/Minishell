@@ -10,7 +10,8 @@ SRC		=	main.c \
 			chaining.c \
 			env_var.c \
 			export.c \
-			echo.c
+			echo.c \
+			ft_cd.c
 CC		=	cc -g3
 
 OBJ_DIR	=	obj
