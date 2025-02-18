@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/18 17:26:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/18 19:59:15 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,21 @@ void	show_list(t_token *list)
 	}
 }
 
-int	check_unclosed(t_data *data)
-{
-	t_token	*list;
-	int		len;
+//int	check_unclosed(t_data *data)
+//{
+//	t_token	*list;
+//	int		len;
 	
-	list = data->list;
-	while (list)
-	{
-		len = ft_strlen(data->list->content);
-		if (data->list->content[0] == '"' && data->list->content[len - 1] != '"')
-			return (1);
-		list = list->next;
-	}
-	return (0);
-}
+//	list = data->list;
+//	while (list)
+//	{
+//		//len = ft_strlen(data->list->content);
+//		//if (data->list->content[0] == '"' && data->list->content[len - 1] != '"')
+//		//	return (1);
+//		list = list->next;
+//	}
+//	return (0);
+//}
 
 void	check_exit_status(t_data *data)
 {
@@ -152,8 +152,9 @@ int	main(int argc, char **argv , char **envp)
 		//show_tab(data.args);
 			//show_tab(data.args);
 		data.list = add_chained_list(&data);
-		//printf("list juste apres sa creation :\n");
-		//show_list(data.list);
+		
+		printf("list juste apres sa creation :\n");
+		show_list(data.list);
 		check_exit_status(&data);
 		check_dollar(&data);
 		//show_list(data.list);

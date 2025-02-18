@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/18 17:39:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/18 19:31:36 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void ft_cd(t_data *data)
 	}
 	// printf("current pwd = %s\n", current_pwd);
 	old_pwd = search_oldpwd(data);
-	printf("old_pwd = %s\n", old_pwd);
+	//printf("old_pwd = %s\n", old_pwd);
 	if (data->args[1] && ft_strlcmp(data->args[1], "-") == 0)
 	{
 		if (!old_pwd)

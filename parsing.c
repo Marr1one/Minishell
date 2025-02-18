@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/16 23:12:07 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/18 20:38:04 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -447,19 +447,83 @@ void	exec_command(t_data *data)
 	return;
 }
 
+char	*delete_quotes_str(char *str)
+{
+	int	i;
+	int	j;
+	int	count;
+	char	*res;
+
+	count = 0;
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] == '"')
+		{
+			count++;
+		}
+		i++;
+	}
+	res = malloc(sizeof(char) * (i - count + 1));
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] != '"')
+		{
+			res[j] = str[i];
+			i++;
+			j++;			
+		}
+		else
+		{
+			i++;
+		}
+	}
+	res[j] = '\0';
+	return (res);
+}
+
+void	delete_quotes(t_data *data)
+{
+	t_token	*list;
+
+	list = data->list;
+	while (list != NULL)
+	{
+		list->content = ft_strdup(delete_quotes_str(list->content));
+		list = list->next;
+	}
+}
+
 void	parsing(char *input, char **envp, t_data *data)
 {
 	pid_t	pid;
 	int		status;
 	
 	//printf("in parsing\n");
-	if (check_unclosed(data) == 1)
+	if (count_global_quotes(data) % 2 != 0)
 	{
 		data->exit_status = 127;
+		printf("nombre de guillemet : %d\n", count_global_quotes(data));
 		printf("minishell: unclosed quote detected\n");
 		return ;
 	}
-	remove_quotes_all(data);
+
+	delete_quotes(data);
+	printf("apres delete quotes\n");
+	show_list(data->list);
+	//idee ; si cest pair, aller dans chaque noeud et enlever toutes les guillemets!
+
+	
+	//if (check_unclosed(data) == 1)
+	//{
+	//	data->exit_status = 127;
+	//	printf("minishell: unclosed quote detected\n");
+	//	return ;
+	//}
+	//remove_quotes_all(data);
 	//show_list(data->list);
 	if (check_empty(*data) == 1)
 	{

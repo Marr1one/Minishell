@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/18 18:17:17 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/18 20:32:57 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,65 +46,117 @@ char	**copy_env(char **envp)
 	return (new_env);
 }
 
-char	*remove_utils(char *str)
+//char	*remove_utils(char *str)
+//{
+//	int		i;
+//	int		j;
+//	char	*new_str;
+	
+//	new_str = malloc(sizeof(char) * ft_strlen(str));
+//	if (!new_str)
+//		return (NULL);
+//	i = 0;
+//	j = 0;
+//	while (str[i])
+//	{
+//		if (str[i] == '"' || str[i] == '\'')
+//		{
+//			i++;
+//		}
+//		else
+//		{
+//			new_str[j] = str[i];
+//			i++;
+//			j++;
+//		}
+//	}
+//	new_str[j] = '\0';
+//	//printf("new_str = {%s}\n", new_str);
+//	return (new_str);	
+	
+//}
+
+int	count_global_quotes(t_data *data)
 {
 	int		i;
-	int		j;
-	char	*new_str;
-	
-	new_str = malloc(sizeof(char) * ft_strlen(str));
-	if (!new_str)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] == '"' || str[i] == '\'')
-		{
-			i++;
-		}
-		else
-		{
-			new_str[j] = str[i];
-			i++;
-			j++;
-		}
-	}
-	new_str[j] = '\0';
-	//printf("new_str = {%s}\n", new_str);
-	return (new_str);	
-	
-}
-
-char	*remove_quotes(t_data *data,char *str)
-{
-	int		len;
-	char	*new_str;
-
-	len = ft_strlen(str);
-	//printf("str[0] == %c et str[len - 1] == %c\n", str[0], str[len - 1]);
-	if ((str[0] == '"' && str[len - 1] == '"') || (str[0] == '\'' && str[len - 1] == '\''))
-	{
-		//printf("in\n");
-		data->quotes = 1;
-		new_str = remove_utils(str);
-		free(str);
-		return (new_str);
-	}
-	return (str);
-}
-
-void	remove_quotes_all(t_data *data)
-{
 	t_token	*list;
+	int		count;
 
+	count = 0;
 	list = data->list;
-	while (list)
+	while (list != NULL)
 	{
-		list->content = remove_quotes(data, list->content);
+		i = 0;
+		while (list->content[i])
+		{
+			if (list->content[i] == '"')
+				count++;
+			i++;
+		}
 		list = list->next;
-	}		
+	}
+	return (count);
 }
+
+//void	remove_empty_quotes(t_data *data)
+//{
+//	int		i;
+//    int 	j;
+//	char	**args;
+
+//	args = data->args;
+//    while (args[i])
+//    {
+
+//        if (ft_strcmp(args[i], "\"\"") == 0)
+//        {
+//            // Si c'est une paire de guillemets vides, supprime cet argument
+//            free(args[i]);
+//            // Décale les éléments suivants
+//            while (args[i + 1])
+//            {
+//                args[i] = args[i + 1];
+//                i++;
+//            }
+//            args[i] = NULL;
+//        }
+//        else
+//        {
+//            i++;
+//        }
+//    }
+//}
+
+//char	*remove_quotes(t_data *data,char *str)
+//{
+//	int		len;
+//	char	*new_str;
+
+//	len = ft_strlen(str);
+//	//printf("str[0] == %c et str[len - 1] == %c\n", str[0], str[len - 1]);
+//	if ((str[0] == '"' && str[len - 1] == '"') || (str[0] == '\'' && str[len - 1] == '\''))
+//	{
+//		//printf("in\n");
+//		data->quotes = 1;
+//		new_str = remove_utils(str);
+//		free(str);
+//		return (new_str);
+//	}
+//	//remove_empty_quotes(data);
+//	return (str);
+//}
+
+//void	remove_quotes_all(t_data *data)
+//{
+//	t_token	*list;
+
+//	list = data->list;
+//	while (list)
+//	{
+//		list->content = remove_quotes(data, list->content);
+//		list = list->next;
+//	}		
+//}
 
 int	ft_strlen(char *str)
 {

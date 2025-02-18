@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 18:48:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/18 18:32:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/18 19:35:18 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void ft_echo(t_data data)
 			break;
 		n = 1;
 		list = list->next;
-	} 	
+	}
 	while (list != NULL)
 	{
 		if (list->next == NULL)

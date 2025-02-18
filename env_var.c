@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/18 17:41:12 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/18 20:34:07 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void	check_dollar(t_data *data)
 		else if ((list->content[0] == '"' && list->content[len - 1] == '"') && list->content[1] == '$')
 		{
 			printf("in this case\n");
-			remove_quotes_all(data);
+			//remove_quotes_all(data);
 			check_env(data, list->content, list);
 		}
 		list = list->next;
