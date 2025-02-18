@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/16 23:48:55 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/18 17:39:02 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	update_oldpwd(t_data *data, char *pwd)
 {
 	int	i;
-	// char	**new_env;
+	char	*new_oldpwd;
+
+	new_oldpwd = ft_join("OLDPWD=", pwd);
 	
 
 	// i = 0;
@@ -28,7 +30,7 @@ void	update_oldpwd(t_data *data, char *pwd)
 		if (ft_strncmp(data->envp[i], "OLDPWD=", 7) == 0)
 		{
 			free(data->envp[i]);
-			data->envp[i] = ft_join("OLDPWD=", pwd);
+			data->envp[i] = new_oldpwd;
 		}
 		// new_env[i] = ft_strdup(data->envp[i]);
 		i++;
@@ -40,9 +42,9 @@ void	update_oldpwd(t_data *data, char *pwd)
 void	update_pwd(t_data *data, char *pwd)
 {
 	int	i;
-	// char	**new_env;
+	char	*new_pwd;
 	
-
+	new_pwd = ft_join("PWD=", pwd);
 	// i = 0;
 	// while (data->envp[i])
 	// 	i++;
@@ -53,7 +55,7 @@ void	update_pwd(t_data *data, char *pwd)
 		if (ft_strncmp(data->envp[i], "PWD=", 7) == 0)
 		{
 			free(data->envp[i]);
-			data->envp[i] = ft_join("PWD=", pwd);
+			data->envp[i] = new_pwd;
 		}
 		// new_env[i] = ft_strdup(data->envp[i]);
 		i++;
@@ -92,7 +94,7 @@ void ft_cd(t_data *data)
 	}
 	// printf("current pwd = %s\n", current_pwd);
 	old_pwd = search_oldpwd(data);
-	// printf("old_pwd = %s\n", old_pwd);
+	printf("old_pwd = %s\n", old_pwd);
 	if (data->args[1] && ft_strlcmp(data->args[1], "-") == 0)
 	{
 		if (!old_pwd)

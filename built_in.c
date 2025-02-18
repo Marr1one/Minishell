@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/16 23:12:31 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/18 18:17:02 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,6 +242,7 @@ void	ft_pwd(t_data *data)
 {
 	char path[1024];
 
+
     if (getcwd(path, sizeof(path)) != NULL)
 	{
 		data->exit_status = 0;
@@ -280,6 +281,8 @@ int	check_builtin(t_data *data)
 	}
 	if (ft_strlcmp(data->list->content, "echo") == 0 ||ft_strlcmp(data->list->content, "\"echo\"") == 0)
 	{
+		if (get_nbr_node(data->list) == 1)
+			return (1);
 		ft_echo(*data);
 		return (1);
 	}
