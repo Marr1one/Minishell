@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/18 19:59:15 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/19 19:09:26 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	show_list(t_token *list)
 {
 	while(list)
 	{
-		printf("noeud %d : {%s}\n", list->index, list->content);
+		printf("noeud : {%s}\n", list->content);
 		list = list->next;
 	}
 }
@@ -123,7 +123,34 @@ int	return_exit_status(t_data *data)
 	return (0);
 }
 
-
+void	destroy_quotes(t_data *data)
+{
+	int		i;
+	int		j;
+	int		k;
+	char 	**args;
+	
+	args = data->args;
+	i = 0;
+	k = 0;
+	while (data->args[i])
+	{
+		j = 0;
+		while (data->args[i][j] == '"')
+			j++;
+		if (data->args[i][j] == '\0')
+		{
+			free(data->args[i]);
+		}
+		else
+		{
+			data->args[k] = data->args[i];
+			k++;
+		}
+		i++;
+	}
+	data->args[k] = NULL;
+}
 
 int	main(int argc, char **argv , char **envp)
 {
@@ -148,6 +175,11 @@ int	main(int argc, char **argv , char **envp)
 		// printf("input = {%s}\n", data.input);
 		data.args = ft_split(data.input, ' ');
 		cut_empty(data.args, &data);
+		//printf("args avant destroy\n");
+		//show_tab(data.args);
+		//destroy_quotes(&data);
+		//printf("args apres destroy\n");
+		//show_tab(data.args);
 		//printf("tab juste apres le split de input :\n");
 		//show_tab(data.args);
 			//show_tab(data.args);

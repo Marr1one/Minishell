@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/18 20:38:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/19 19:21:38 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,12 +204,24 @@ int	test_commands2(t_data *data, char *str)
 	return (1);
 }
 
+int	ft_empty(t_data *data)
+{
+	if (data->list->content[0] == '\0')
+		return (1);
+	return (0);
+}
+
 int	test_commands(t_data *data)
 {
+	printf("in test command!\n");
 	int	i;
 	char *path_test;
 	
 	i = 0;
+	if (ft_empty(data) == 1)
+	{
+		return (1);
+	}
 	if (only_space(data->input) == 0)
 		return (1);
 	if (data->path == NULL)
@@ -407,7 +419,7 @@ void	check_redirect(t_data *data)
 
 void	exec_command(t_data *data)
 {
-	printf("dans execcommand!\n");
+	//printf("dans execcommand!\n");
 	pid_t	pid;
 	int		status;
 	
@@ -485,7 +497,7 @@ char	*delete_quotes_str(char *str)
 	return (res);
 }
 
-void	delete_quotes(t_data *data)
+void	delete_quotes_hard(t_data *data)
 {
 	t_token	*list;
 
@@ -493,6 +505,28 @@ void	delete_quotes(t_data *data)
 	while (list != NULL)
 	{
 		list->content = ft_strdup(delete_quotes_str(list->content));
+		list = list->next;
+	}
+}
+
+void	delete_quotes(t_data *data)
+{
+	t_token	*list;
+	int		i;
+
+	i = 0;
+	list = data->list;
+	while (list != NULL)
+	{
+		i = 0;
+		while (list->content[i] == '"')
+			i++;
+		if (list->content[i] != '\0')
+		{
+			printf("dans ce cas la\n");
+			printf("%s\n", list->content);
+			list->content = ft_strdup(delete_quotes_str(list->content));
+		}
 		list = list->next;
 	}
 }
@@ -510,7 +544,7 @@ void	parsing(char *input, char **envp, t_data *data)
 		printf("minishell: unclosed quote detected\n");
 		return ;
 	}
-
+	
 	delete_quotes(data);
 	printf("apres delete quotes\n");
 	show_list(data->list);
@@ -527,7 +561,7 @@ void	parsing(char *input, char **envp, t_data *data)
 	//show_list(data->list);
 	if (check_empty(*data) == 1)
 	{
-		//printf("dans ce cas la\n");
+		printf("in empty\n");
 		//printf("minishell: %s: command not found\n", data->args[0]);
 		if (data->quotes == 1)
 		{
@@ -545,6 +579,9 @@ void	parsing(char *input, char **envp, t_data *data)
 	//show_tab(data->args);
 	if (check_builtin(data) != 0)
 		return;
+	delete_quotes_hard(data);
+	printf("apres delete quotes hard\n");
+	show_list(data->list);
 	if (input[0] == '/' || (input[0] == '.' && input[1] == '/'))
 	{
 		if (access(input, F_OK) != 0)
