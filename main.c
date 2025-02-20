@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/20 16:40:42 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/20 16:52:53 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,30 +225,15 @@ int	main(int argc, char **argv , char **envp)
 		data.input = readline("\033[0;32mminishell$\033[0m ");
 		if (!data.input)
 			break ;
-		//printf("input before : %s\n", data.input);
 		check_redirect(&data);
-		//printf("input after : %s\n", data.input);
-		// printf("input = {%s}\n", data.input);
 		data.args = ft_split(data.input, ' ');
 		cut_empty(data.args, &data);
-		printf("args avant skip quotes\n");
-		show_tab(data.args);
 		data.args = skip_quotes(&data);
-		printf("args apres skip quotes\n");
-		show_tab(data.args);
-		//printf("tab juste apres le split de input :\n");
-		//show_tab(data.args);
-			//show_tab(data.args);
 		data.list = add_chained_list(&data);
-		
-		printf("list juste apres sa creation :\n");
-		show_list(data.list);
 		check_exit_status(&data);
 		check_dollar(&data);
-		//show_list(data.list);
 		if (case_redirection(&data, data.envp) == 1)
 		{
-			// printf("on  va rentrer dans parsing car on trouve pas >\n");
 			parsing(data.input, data.envp, &data);
 		}
 		add_history(data.input);						

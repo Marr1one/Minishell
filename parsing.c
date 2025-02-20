@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/20 15:42:32 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/20 18:44:35 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,12 +243,15 @@ int	test_commands(t_data *data)
 
 int		check_empty(t_data data)
 {
-	if (!data.list)
+	int	i;
+
+	i = 0;	
+	if (!data.input)
 		return (1);
-	if (data.list->content[0] == '\0')
-	{
+	while(data.input[i] == ' ')
+		i++;
+	if (data.input[i] == '\0')
 		return (1);
-	}
 	return (0);
 }
 char	*take_before(char *str, char c)
@@ -423,6 +426,8 @@ void	exec_command(t_data *data)
 	pid_t	pid;
 	int		status;
 	
+	printf("data.args envoye a execve\n");
+	show_tab(data->args);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -523,7 +528,6 @@ void	delete_quotes_inside(t_data *data)
 			i++;
 		if (list->content[i] != '\0')
 		{
-			printf("dans ce cas la\n");
 			printf("%s\n", list->content);
 			list->content = ft_strdup(delete_quotes_str(list->content));
 		}
@@ -536,7 +540,6 @@ void	parsing(char *input, char **envp, t_data *data)
 	pid_t	pid;
 	int		status;
 	
-	//printf("in parsing\n");
 	if (count_global_quotes(data) % 2 != 0)
 	{
 		data->exit_status = 127;
@@ -544,25 +547,10 @@ void	parsing(char *input, char **envp, t_data *data)
 		printf("minishell: unclosed quote detected\n");
 		return ;
 	}
-	
 	delete_quotes_inside(data);
-	printf("apres delete quotes\n");
-	show_list(data->list);
-	//idee ; si cest pair, aller dans chaque noeud et enlever toutes les guillemets!
-
-	
-	//if (check_unclosed(data) == 1)
-	//{
-	//	data->exit_status = 127;
-	//	printf("minishell: unclosed quote detected\n");
-	//	return ;
-	//}
-	//remove_quotes_all(data);
-	//show_list(data->list);
 	if (check_empty(*data) == 1)
 	{
 		printf("in empty\n");
-		//printf("minishell: %s: command not found\n", data->args[0]);
 		if (data->quotes == 1)
 		{
 			data->exit_status = 127;
@@ -570,18 +558,9 @@ void	parsing(char *input, char **envp, t_data *data)
 		}
 		return ;
 	}
-	//if (return_exit_status(data) == 1)
-	//{
-	//	printf("minishell: %s: command not found\n", data->list->content);
-	//	return;
-	//}
-	//printf("after remove\n");
-	//show_tab(data->args);
 	if (check_builtin(data) != 0)
 		return;
 	delete_quotes_hard(data);
-	printf("apres delete quotes hard\n");
-	show_list(data->list);
 	if (input[0] == '/' || (input[0] == '.' && input[1] == '/'))
 	{
 		if (access(input, F_OK) != 0)
@@ -626,8 +605,6 @@ void	parsing(char *input, char **envp, t_data *data)
 	}
 	data->path = ft_split(get_path_env(envp), ':');
 	data->path = add_slash_all(data->path);
-	//if (check_redirect(data) != 0)
-	//	return ;
 	if (test_commands(data) == 0)
 	{
 		exec_command(data);
@@ -640,7 +617,4 @@ void	parsing(char *input, char **envp, t_data *data)
 		//check_exit_status(data);
 		printf("minishell: %s: command not found\n", data->list->content);
 	}
-	//if (only_space(data->input) == 0)
-	//	return ;
-	
 }
