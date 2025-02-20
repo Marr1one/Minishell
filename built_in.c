@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/20 15:57:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/20 19:23:38 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,45 @@
 // 		data->exit_status = 0;
 // }
 
+int	is_numeric(char	*str)
+{
+	int	i;
+
+	i = 0;
+	if (str[0] == '\0')
+		return (0);
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	ft_exit(t_data *data)
 {
 	int	status;
 
 	status = 0;
+	printf("exit\n");
+	//if (count_args(data->args) > 2)
+	//{
+	//	printf("bash: exit: too many arguments\n");
+	//	return ;	
+	//}
 	if (data->args[1])
 	{
 		status = ft_atoi(data->args[1]);
 		if (status < 0 || status > 255)
 			status = status % 256;
+		if (is_numeric(data->args[1]) == 0)
+			printf("minishell: exit: %s: numeric argument required\n", data->args[1]);
+		else if (count_args(data->args) > 2)
+		{
+			printf("minishell: exit: too many arguments\n");
+			return ;	
+		}
 	}
 	exit(status);
 }
@@ -258,7 +287,7 @@ void	ft_pwd(t_data *data)
 
 void	destroy_node_quotes(t_data *data)
 {
-	printf("in destroy node quotes\n");
+	//printf("in destroy node quotes\n");
 	t_token	*prev;
 	t_token	*current;
 	t_token	*tmp;
@@ -290,13 +319,23 @@ void	destroy_node_quotes(t_data *data)
 	}
 }
 
+int	count_args(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+		i++;
+	return (i);
+}
+
 int	check_builtin(t_data *data)
 {
 	//destroy_node_quotes(data);
 	if (data->list && (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0))
 	{
 		destroy_node_quotes(data);
-		printf("ici dans pwd built_in\n");
+		//printf("ici dans pwd built_in\n");
 		if (get_nbr_node(data->list) > 1)
 			return (printf("pwd: too many arguments\n"), 1);
 		ft_pwd(data);
@@ -312,6 +351,7 @@ int	check_builtin(t_data *data)
 	}
 	if (data->list && (ft_strlcmp(data->list->content, "exit") == 0 ||ft_strlcmp(data->list->content, "\"exit\"") == 0))
 	{
+		
 		ft_exit(data);
 		return (1);
 	}

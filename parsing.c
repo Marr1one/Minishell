@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/20 18:44:35 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/20 18:56:10 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,9 +213,8 @@ int	ft_empty(t_data *data)
 
 int	test_commands(t_data *data)
 {
-	printf("in test command!\n");
-	int	i;
-	char *path_test;
+	int		i;
+	char	*path_test;
 	
 	i = 0;
 	if (ft_empty(data) == 1)
@@ -426,8 +425,8 @@ void	exec_command(t_data *data)
 	pid_t	pid;
 	int		status;
 	
-	printf("data.args envoye a execve\n");
-	show_tab(data->args);
+	//printf("data.args envoye a execve\n");
+	//show_tab(data->args);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -528,7 +527,7 @@ void	delete_quotes_inside(t_data *data)
 			i++;
 		if (list->content[i] != '\0')
 		{
-			printf("%s\n", list->content);
+			//printf("%s\n", list->content);
 			list->content = ft_strdup(delete_quotes_str(list->content));
 		}
 		list = list->next;
@@ -543,14 +542,14 @@ void	parsing(char *input, char **envp, t_data *data)
 	if (count_global_quotes(data) % 2 != 0)
 	{
 		data->exit_status = 127;
-		printf("nombre de guillemet : %d\n", count_global_quotes(data));
+		//printf("nombre de guillemet : %d\n", count_global_quotes(data));
 		printf("minishell: unclosed quote detected\n");
 		return ;
 	}
 	delete_quotes_inside(data);
 	if (check_empty(*data) == 1)
 	{
-		printf("in empty\n");
+		//printf("in empty\n");
 		if (data->quotes == 1)
 		{
 			data->exit_status = 127;
@@ -612,7 +611,7 @@ void	parsing(char *input, char **envp, t_data *data)
 	}
 	else
 	{
-		printf("dans le else\n");
+		//printf("dans le else\n");
 		data->exit_status = 127;
 		//check_exit_status(data);
 		printf("minishell: %s: command not found\n", data->list->content);

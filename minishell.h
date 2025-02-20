@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/19 18:47:07 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/20 19:17:44 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	check_dollar(t_data *data);
 int		check_export_compatibility(char *str);
 int		get_nbr_node(t_token *list);
 int		ft_atoi(char	*str);
-int	count_word2(char *str);
+int		count_word2(char *str);
+int		count_args(char **args);
 
 #endif
