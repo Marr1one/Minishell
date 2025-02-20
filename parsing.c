@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/19 19:21:38 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/20 15:42:32 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -509,7 +509,7 @@ void	delete_quotes_hard(t_data *data)
 	}
 }
 
-void	delete_quotes(t_data *data)
+void	delete_quotes_inside(t_data *data)
 {
 	t_token	*list;
 	int		i;
@@ -545,7 +545,7 @@ void	parsing(char *input, char **envp, t_data *data)
 		return ;
 	}
 	
-	delete_quotes(data);
+	delete_quotes_inside(data);
 	printf("apres delete quotes\n");
 	show_list(data->list);
 	//idee ; si cest pair, aller dans chaque noeud et enlever toutes les guillemets!

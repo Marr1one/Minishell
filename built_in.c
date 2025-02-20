@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/19 19:09:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/20 15:57:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,8 +271,6 @@ void	destroy_node_quotes(t_data *data)
 		i = 0;
 		while (current->content[i] == '"')
 			i++;
-		if (current->next == NULL)
-			return ;
 		if (current->content[i] == '\0')
 		{
 			tmp = current;
@@ -297,7 +295,7 @@ int	check_builtin(t_data *data)
 	//destroy_node_quotes(data);
 	if (data->list && (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0))
 	{
-		
+		destroy_node_quotes(data);
 		printf("ici dans pwd built_in\n");
 		if (get_nbr_node(data->list) > 1)
 			return (printf("pwd: too many arguments\n"), 1);

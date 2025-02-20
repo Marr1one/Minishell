@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/19 19:09:26 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/20 16:40:42 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,34 +123,90 @@ int	return_exit_status(t_data *data)
 	return (0);
 }
 
-void	destroy_quotes(t_data *data)
+int	len_without_quotes(char *str)
 {
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] != '"')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+char	**skip_quotes(t_data *data)
+{	
+	char 	**new_args;
 	int		i;
 	int		j;
+	int		len;
 	int		k;
-	char 	**args;
-	
-	args = data->args;
+
 	i = 0;
+	j = 0;
 	k = 0;
+	while (data->args[i])
+		i++;
+	new_args = malloc(sizeof(char *) * (i + 1));
+	i = 0;
 	while (data->args[i])
 	{
 		j = 0;
-		while (data->args[i][j] == '"')
-			j++;
-		if (data->args[i][j] == '\0')
+		k = 0;
+		len = len_without_quotes(data->args[i]);
+		new_args[i] = malloc(sizeof(char) * (len + 1));
+		while (data->args[i][j])
 		{
-			free(data->args[i]);
+			if(data->args[i][j] == '"')
+				j++;
+			else
+			{
+				new_args[i][k] = data->args[i][j];
+				k++;
+				j++;
+			}
 		}
-		else
-		{
-			data->args[k] = data->args[i];
-			k++;
-		}
+		new_args[i][k] = '\0';
 		i++;
 	}
-	data->args[k] = NULL;
+	new_args[i] = NULL;
+	free(data->args);
+	return (new_args);
 }
+
+//void	destroy_quotes(t_data *data)
+//{
+//	int		i;
+//	int		j;
+//	int		k;
+//	char 	**args;
+	
+//	args = data->args;
+//	i = 0;
+//	k = 0;
+//	while (data->args[i])
+//	{
+//		j = 0;
+//		while (data->args[i][j] == '"')
+//			j++;
+//		if (data->args[i][j] == '\0')
+//		{
+//			free(data->args[i]);
+//		}
+//		else
+//		{
+//			data->args[k] = data->args[i];
+//			k++;
+//		}
+//		i++;
+//	}
+//	data->args[k] = NULL;
+//}
 
 int	main(int argc, char **argv , char **envp)
 {
@@ -175,11 +231,11 @@ int	main(int argc, char **argv , char **envp)
 		// printf("input = {%s}\n", data.input);
 		data.args = ft_split(data.input, ' ');
 		cut_empty(data.args, &data);
-		//printf("args avant destroy\n");
-		//show_tab(data.args);
-		//destroy_quotes(&data);
-		//printf("args apres destroy\n");
-		//show_tab(data.args);
+		printf("args avant skip quotes\n");
+		show_tab(data.args);
+		data.args = skip_quotes(&data);
+		printf("args apres skip quotes\n");
+		show_tab(data.args);
 		//printf("tab juste apres le split de input :\n");
 		//show_tab(data.args);
 			//show_tab(data.args);
