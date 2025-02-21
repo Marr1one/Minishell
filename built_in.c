@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/20 19:23:38 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/21 19:57:27 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,13 +329,13 @@ int	count_args(char **args)
 	return (i);
 }
 
+
+//la on verifie le premier argument, si cest parmis un builtin on lance la fonction adequates.
 int	check_builtin(t_data *data)
 {
-	//destroy_node_quotes(data);
 	if (data->list && (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0))
 	{
-		destroy_node_quotes(data);
-		//printf("ici dans pwd built_in\n");
+		destroy_node_quotes(data); //detruit les noeuds ou ya juste des guillemets ; pwd "" devient pwd.
 		if (get_nbr_node(data->list) > 1)
 			return (printf("pwd: too many arguments\n"), 1);
 		ft_pwd(data);
@@ -343,22 +343,17 @@ int	check_builtin(t_data *data)
 	}
 	if (data->list && (ft_strlcmp(data->list->content, "unset") == 0 ||ft_strlcmp(data->list->content, "\"unset\"") == 0))
 	{
-		// printf("in unset!\n");
 		data->list = data->list->next;
 		check_unset(data, data->list->content);	
-		// ft_unset(*data);
 		return (1);
 	}
 	if (data->list && (ft_strlcmp(data->list->content, "exit") == 0 ||ft_strlcmp(data->list->content, "\"exit\"") == 0))
 	{
-		
 		ft_exit(data);
 		return (1);
 	}
 	if (data->list && (ft_strlcmp(data->list->content, "echo") == 0 ||ft_strlcmp(data->list->content, "\"echo\"") == 0))
 	{
-		//if (get_nbr_node(data->list) == 1)
-		//	return (1);
 		ft_echo(*data);
 		return (1);
 	}
@@ -369,63 +364,29 @@ int	check_builtin(t_data *data)
 	}
 	if (data->list && (ft_strlcmp(data->args[0], "env") == 0 ||ft_strlcmp(data->args[0], "\"env\"") == 0))
 	{
-		//if(!data.env_var)
-		//	fill_env(&data);
 		show_tab(data->envp);
-		//data->exit_status = 0;
 		return (1);
 	}
 	if (data->list && (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0))
 	{
-		printf("in export!\n");
-		printf("nombre de noeud : %d\n", get_nbr_node(data->list));
 		if (get_nbr_node(data->list) == 1)
-		{
 			show_tab(data->envp);
-		}
-		data->list = data->list->next;
-		while(data->list != NULL)
+		else
 		{
-			// printf("{%s}\n", data->list->content);
-			if (check_export_compatibility(data->list->content) == 0)
-			{
-				printf("Good format!\n");
-				data->envp = add_export(data, data->list->content);
-			}
-			else
-				printf("Bad format!\n");
 			data->list = data->list->next;
+			while(data->list != NULL)
+			{
+				if (check_export_compatibility(data->list->content) == 0)
+				{
+					printf("Good format!\n");
+					data->envp = add_export(data, data->list->content);
+				}
+				else
+					printf("Bad format!\n");
+				data->list = data->list->next;
+			}
 		}
-		////show_tab(data.args);
-		//fill_env(&data);
-		//if (data.args[1])
-		//{
-		//printf("IN\n");
-		// add_node_queue(data.env_var);
-		// last = find_last_node(data.env_var);
-		// if (fill_export(last, data.args[1]) == 1)
-		// 	printf("Bad format\n");
-		//else
-		//{
-		//	printf("Good format!\n");
-		//	show_list(data.env_var);
-		//}
-		//}
 		return (1);
 	}
 	return (0);
 }
-
-//if (check_env_var(&data) == 0)
-//		{
-//			printf("Good format\n");
-//			printf("NAME = %s\n", data.env_var->name);
-//			printf("VALUE = %s\n", data.env_var->value);
-//		}
-//		else
-//		{
-//			{
-//				printf("Bad format\n");
-//				printf("NAME = %s\n", data.env_var->name);
-//				printf("VALUE = %s\n", data.env_var->value);
-//			}

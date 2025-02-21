@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/20 18:56:10 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/21 19:53:42 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,10 @@ void		handle_back(t_data *data, int i)
 	}
 }
 
+
+// on va verifier si on une redirect, laquelle et on redirige dans la bonne fonction
+// toutes les fonctions de handle font la meme chose, il font comme pipex, il redirige la sortie de stdout vers ce quil ya apres la redirection
+// note : ls > out out2 doit marcher, actuellement on peut juste rediriger vers un fichier!
 int	case_redirection(t_data *data, char **envp)
 {
 	t_token	*list;
@@ -121,7 +125,6 @@ int	case_redirection(t_data *data, char **envp)
 	{
 		if (ft_strlcmp(list->content, ">") == 0)
 		{
-			//printf("on trouve >\n");
 			if (!list->next || !(*list->next->content))
 			{
 				printf("Nul part ou rediriger!\n");
@@ -133,8 +136,6 @@ int	case_redirection(t_data *data, char **envp)
 		}
 		else if (ft_strlcmp(list->content, "<") == 0)
 		{
-			//printf("in < case\n");
-			//printf("on trouve >\n");
 			if (!list->next || !(*list->next->content))
 			{
 				printf(" Rien apres le <!\n");
@@ -142,13 +143,10 @@ int	case_redirection(t_data *data, char **envp)
 			}
 			data->cmd_args = create_cmd_args(data, list->index);
 			handle_back(data, list->index);
-			//printf("ICI!\n");
 			return (0);	
 		}
 		else if (ft_strlcmp(list->content, ">>") == 0)
 		{
-			//printf("in < case\n");
-			//printf("on trouve >\n");
 			if (!list->next || !(*list->next->content))
 			{
 				printf(" Rien apres le >>!\n");
@@ -156,7 +154,6 @@ int	case_redirection(t_data *data, char **envp)
 			}
 			data->cmd_args = create_cmd_args(data, list->index);
 			handle_append(data, list->index);
-			//printf("ICI!\n");
 			return (0);	
 		}
 		list = list->next;
@@ -218,9 +215,7 @@ int	test_commands(t_data *data)
 	
 	i = 0;
 	if (ft_empty(data) == 1)
-	{
 		return (1);
-	}
 	if (only_space(data->input) == 0)
 		return (1);
 	if (data->path == NULL)
@@ -412,50 +407,38 @@ void	check_redirect(t_data *data)
 	while (data->input[i])
 	{
 		if(data->input[i] == '>')
-		{
 			ft_clean_input(data);
-		}
 		i++;
 	}
 }
 
 void	exec_command(t_data *data)
 {
-	//printf("dans execcommand!\n");
 	pid_t	pid;
 	int		status;
 	
-	//printf("data.args envoye a execve\n");
-	//show_tab(data->args);
 	pid = fork();
 	if (pid == 0)
 	{
-		//data->exit_status = 0;
 		signal(SIGINT, SIG_DFL);
 		execve(data->command_path, data->args, data->envp);
 		perror("execve");
-		//check_exit_status(data);
 		exit(127);
 	}	
-	//signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status))
+	if (WIFSIGNALED(status)) // cas ou on a fait ctrl +c pendant la commande (par ex un sleep), la ca a pas vraiment
+	// dinteret cest juste pour faire comme bash
 	{
-		printf("in signaled !\n");
 		int signal_number = WTERMSIG(status);
 		printf("Process terminated by signal: %d\n", signal_number);
 		data->exit_status = 128 + signal_number;
-		printf("data.exitstatus after signal ; %d\n", data->exit_status);
-		//if (WTERMSIG(status) == SIGINT)
-		//    data->exit_status = 130;
 	}
-	//signal(SIGINT, sigint_handler);
-	else if (WIFEXITED(status))
+	else if (WIFEXITED(status)) //cas ou tout se passe bien
 	{
 		data->exit_status = WEXITSTATUS(status);
 		//check_exit_status(data);
 	}
-	else
+	else //securite au cas ou yai un truc innatendu, afin que exit status ai pas une valeur random
 	{
 		data->exit_status = 128;
 		//check_exit_status(data);
@@ -501,66 +484,61 @@ char	*delete_quotes_str(char *str)
 	return (res);
 }
 
-void	delete_quotes_hard(t_data *data)
-{
-	t_token	*list;
+// void	delete_quotes_hard(t_data *data)
+// {
+// 	t_token	*list;
 
-	list = data->list;
-	while (list != NULL)
-	{
-		list->content = ft_strdup(delete_quotes_str(list->content));
-		list = list->next;
-	}
-}
+// 	list = data->list;
+// 	while (list != NULL)
+// 	{
+// 		list->content = ft_strdup(delete_quotes_str(list->content));
+// 		list = list->next;
+// 	}
+// }
 
-void	delete_quotes_inside(t_data *data)
-{
-	t_token	*list;
-	int		i;
+// void	delete_quotes_inside(t_data *data)
+// {
+// 	t_token	*list;
+// 	int		i;
 
-	i = 0;
-	list = data->list;
-	while (list != NULL)
-	{
-		i = 0;
-		while (list->content[i] == '"')
-			i++;
-		if (list->content[i] != '\0')
-		{
-			//printf("%s\n", list->content);
-			list->content = ft_strdup(delete_quotes_str(list->content));
-		}
-		list = list->next;
-	}
-}
+// 	i = 0;
+// 	list = data->list;
+// 	while (list != NULL)
+// 	{
+// 		i = 0;
+// 		while (list->content[i] == '"')
+// 			i++;
+// 		if (list->content[i] != '\0')
+// 		{
+// 			//printf("%s\n", list->content);
+// 			list->content = ft_strdup(delete_quotes_str(list->content));
+// 		}
+// 		list = list->next;
+// 	}
+// }
 
 void	parsing(char *input, char **envp, t_data *data)
 {
 	pid_t	pid;
 	int		status;
 	
-	if (count_global_quotes(data) % 2 != 0)
+	if (count_global_quotes(data) % 2 != 0) // permet de gerer le cas de quotes non fermees
 	{
 		data->exit_status = 127;
 		//printf("nombre de guillemet : %d\n", count_global_quotes(data));
 		printf("minishell: unclosed quote detected\n");
 		return ;
 	}
-	delete_quotes_inside(data);
-	if (check_empty(*data) == 1)
+	// delete_quotes_inside(data); //tout ce que jai mis en comm je laisse au cas ou
+	if (check_empty(*data) == 1) // cas ou on appuie juste sur entree
 	{
-		//printf("in empty\n");
-		if (data->quotes == 1)
-		{
-			data->exit_status = 127;
-			printf("minishell: : command not found\n");
-		}
 		return ;
 	}
-	if (check_builtin(data) != 0)
+	if (check_builtin(data) != 0) //la on verifie si ya on est dans le cas dun built in
 		return;
-	delete_quotes_hard(data);
-	if (input[0] == '/' || (input[0] == '.' && input[1] == '/'))
+	// delete_quotes_hard(data);
+	if (input[0] == '/' || (input[0] == '.' && input[1] == '/')) //ce cas la est pas demande dans le sujet, donc on pourra enlever
+	//je pense mais pour linstant je le garde au cas ou mais tu peux passer
 	{
 		if (access(input, F_OK) != 0)
 		{
@@ -598,22 +576,19 @@ void	parsing(char *input, char **envp, t_data *data)
 		{
 			printf("in else case of sign\n");
         	data->exit_status = 128;
-			//check_exit_status(data);
 		}
 		return;
 	}
-	data->path = ft_split(get_path_env(envp), ':');
+	data->path = ft_split(get_path_env(envp), ':');//a partir de la cest comme pipex finalement
 	data->path = add_slash_all(data->path);
-	if (test_commands(data) == 0)
+	if (test_commands(data) == 0)// cas ou on trouve la commande avec access
 	{
-		exec_command(data);
+		exec_command(data); //execute la commande.
 		return;
 	}
-	else
+	else //cas ou on trouve pas
 	{
-		//printf("dans le else\n");
 		data->exit_status = 127;
-		//check_exit_status(data);
 		printf("minishell: %s: command not found\n", data->list->content);
 	}
 }
