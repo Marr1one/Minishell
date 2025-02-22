@@ -11,7 +11,10 @@ SRC		=	main.c \
 			env_var.c \
 			export.c \
 			echo.c \
-			ft_cd.c
+			ft_cd.c \
+			ft_quotes.c \
+			exit.c
+
 CC		=	cc -g3
 
 OBJ_DIR	=	obj

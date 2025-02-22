@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 16:36:10 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/22 18:02:47 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,24 @@
 
 
 //IDEE = si on a un content avec genre >out, le coupe en deux, enfin isoler dans cas le >
-typedef struct s_env
+//typedef struct s_env
+//{
+//	char			*name;
+//	char			*value;
+//	struct s_env	*next;
+//}	t_env;
+
+typedef struct s_malloc_node
 {
-	char			*name;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
+	void	*addr;
+	struct s_malloc_node *next;
+	
+}	t_malloc_node;
+
+typedef struct s_malloc
+{
+	t_malloc_node *first;	
+}	t_malloc;
 
 typedef enum e_type
 {
@@ -50,7 +62,8 @@ typedef struct s_token
 typedef struct s_data
 {
 	t_token	*list;
-	t_env	*env_var;
+	t_malloc_node	*gc;
+	//t_env	*env_var;
 	char	**envp;
 	char 	**path;
 	int		pipe[2];
@@ -60,6 +73,7 @@ typedef struct s_data
 	char	**cmd_args;
 	int		quotes;
 	int		exit_status;
+	
 }	t_data;
 
 
@@ -91,7 +105,7 @@ int		ft_strcmp(char *s1, char *s2);
 int		ft_strlcmp(char *s1, char *s2);
 int		return_exit_status(t_data *data);
 void	sigint_handler(int signum);
-int	check_unclosed(t_data *data);
+int		check_unclosed(t_data *data);
 void	remove_quotes_all(t_data *data);
 int		is_alpha(char c);
 // t_token	*findlast(t_token	*list);
@@ -106,5 +120,11 @@ int		get_nbr_node(t_token *list);
 int		ft_atoi(char	*str);
 int		count_word2(char *str);
 int		count_args(char **args);
+void	destroy_node_quotes(t_data *data);
+char	**skip_quotes(t_data *data);
+void	check_exit_status(t_data *data);
+int		return_exit_status(t_data *data);
+void	ft_exit(t_data *data);
+int	is_numeric(char	*str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 16:38:06 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/22 17:52:30 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,43 +446,43 @@ void	exec_command(t_data *data)
 	return;
 }
 
-char	*delete_quotes_str(char *str)
-{
-	int	i;
-	int	j;
-	int	count;
-	char	*res;
+//char	*delete_quotes_str(char *str)
+//{
+//	int	i;
+//	int	j;
+//	int	count;
+//	char	*res;
 
-	count = 0;
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] == '"')
-		{
-			count++;
-		}
-		i++;
-	}
-	res = malloc(sizeof(char) * (i - count + 1));
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] != '"')
-		{
-			res[j] = str[i];
-			i++;
-			j++;			
-		}
-		else
-		{
-			i++;
-		}
-	}
-	res[j] = '\0';
-	return (res);
-}
+//	count = 0;
+//	i = 0;
+//	j = 0;
+//	while (str[i])
+//	{
+//		if (str[i] == '"')
+//		{
+//			count++;
+//		}
+//		i++;
+//	}
+//	res = malloc(sizeof(char) * (i - count + 1));
+//	i = 0;
+//	j = 0;
+//	while (str[i])
+//	{
+//		if (str[i] != '"')
+//		{
+//			res[j] = str[i];
+//			i++;
+//			j++;			
+//		}
+//		else
+//		{
+//			i++;
+//		}
+//	}
+//	res[j] = '\0';
+//	return (res);
+//}
 
 // void	delete_quotes_hard(t_data *data)
 // {
@@ -525,7 +525,6 @@ void	parsing(char *input, char **envp, t_data *data)
 	if (count_global_quotes(data->input) % 2 != 0) // permet de gerer le cas de quotes non fermees
 	{
 		data->exit_status = 127;
-		//printf("nombre de guillemet : %d\n", count_global_quotes(data));
 		printf("minishell: unclosed quote detected\n");
 		return ;
 	}

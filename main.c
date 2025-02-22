@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 16:37:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/22 17:53:28 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,101 +85,9 @@ void	show_list(t_token *list)
 //	return (0);
 //}
 
-void	check_exit_status(t_data *data)
-{
-	t_token	*list;
 
-	list = data->list;
-	while (list)
-	{
-		if (ft_strlcmp(list->content, "$?") == 0)
-		{
-			//printf("$? trouvE!\n");
-			//printf("before : list content = {%s}\n", list->content);
-			printf("data.exit_status = {%d}\n", data->exit_status);
-			list->content = ft_strdup(ft_itoa(data->exit_status));
-			printf("after ; list.content = {%s}\n", list->content);
-		}
-		list = list->next;
-	}
-}
 
-int	return_exit_status(t_data *data)
-{
-	t_token	*list;
 
-	list = data->list;
-	while (list)
-	{
-		if (ft_strlcmp(list->content, "$?") == 0)
-		{
-			//printf("$? trouvE!\n");
-			//printf("before : list content = {%s}\n", list->content);
-			//printf("data.exit_status = {%d}\n", data->exit_status);
-			list->content = ft_strdup(ft_itoa(data->exit_status));
-			//printf("after ; list.content = {%s}\n", list->content);
-			return (1);
-		}
-		list = list->next;
-	}
-	return (0);
-}
-
-int	len_without_quotes(char *str)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		if (str[i] != '"')
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-char	**skip_quotes(t_data *data)
-{	
-	char 	**new_args;
-	int		i;
-	int		j;
-	int		len;
-	int		k;
-
-	i = 0;
-	j = 0;
-	k = 0;
-	while (data->args[i])
-		i++;
-	new_args = malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	while (data->args[i])
-	{
-		j = 0;
-		k = 0;
-		len = len_without_quotes(data->args[i]);
-		new_args[i] = malloc(sizeof(char) * (len + 1));
-		while (data->args[i][j])
-		{
-			if(data->args[i][j] == '"' || data->args[i][j] == '\'')
-				j++;
-			else
-			{
-				new_args[i][k] = data->args[i][j];
-				k++;
-				j++;
-			}
-		}
-		new_args[i][k] = '\0';
-		i++;
-	}
-	new_args[i] = NULL;
-	free(data->args);
-	return (new_args);
-}
 
 //void	destroy_quotes(t_data *data)
 //{
@@ -233,7 +141,9 @@ int	main(int argc, char **argv , char **envp)
 		// ls espace ne fonctionne pas
 		data.args = skip_quotes(&data); //refait un nouveau tableau dargument en skippant les quotes ; {"ls", "} devient
 		// {ls, }.
+		show_tab(data.args);
 		data.list = add_chained_list(&data); //creer une liste chainee correpondant au tableau dargs
+		printf("ici\n");
 		check_exit_status(&data); // si un argument est '$?', le remplace par lexit status.
 		check_dollar(&data); //verifie si ya un $, si yen a un, on parcourt lenv, si on trouve que ca correspond
 		// a une ligne, on met sa valeur dans content.
