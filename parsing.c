@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/21 19:53:42 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/22 16:38:06 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -522,7 +522,7 @@ void	parsing(char *input, char **envp, t_data *data)
 	pid_t	pid;
 	int		status;
 	
-	if (count_global_quotes(data) % 2 != 0) // permet de gerer le cas de quotes non fermees
+	if (count_global_quotes(data->input) % 2 != 0) // permet de gerer le cas de quotes non fermees
 	{
 		data->exit_status = 127;
 		//printf("nombre de guillemet : %d\n", count_global_quotes(data));

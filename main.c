@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/21 19:56:24 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/22 16:37:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ char	**skip_quotes(t_data *data)
 		new_args[i] = malloc(sizeof(char) * (len + 1));
 		while (data->args[i][j])
 		{
-			if(data->args[i][j] == '"')
+			if(data->args[i][j] == '"' || data->args[i][j] == '\'')
 				j++;
 			else
 			{

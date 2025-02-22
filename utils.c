@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/18 20:32:57 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/22 16:37:27 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,24 +76,20 @@ char	**copy_env(char **envp)
 	
 //}
 
-int	count_global_quotes(t_data *data)
+int	count_global_quotes(char *str)
 {
 	int		i;
-	t_token	*list;
 	int		count;
-
+	
+	i = 0;
 	count = 0;
-	list = data->list;
-	while (list != NULL)
+	
+	while (str[i])
 	{
-		i = 0;
-		while (list->content[i])
-		{
-			if (list->content[i] == '"')
-				count++;
-			i++;
-		}
-		list = list->next;
+		
+		if (str[i] == '"' || str[i] == '\'')
+			count++;
+		i++;
 	}
 	return (count);
 }
