@@ -13,7 +13,8 @@ SRC		=	main.c \
 			echo.c \
 			ft_cd.c \
 			ft_quotes.c \
-			exit.c
+			exit.c \
+			ft_malloc.c
 
 CC		=	cc -g3
 

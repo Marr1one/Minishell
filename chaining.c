@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:45:04 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 17:23:45 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/23 18:40:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_token	*add_chained_list(t_data *data)
 	i = 0;
 	while(data->args[i])
 	{
-		new_node = malloc(sizeof(t_token));
+		new_node = ft_malloc(sizeof(t_token));
 		if (!new_node)
 			return (NULL);
 		new_node->content = ft_strdup(data->args[i]);

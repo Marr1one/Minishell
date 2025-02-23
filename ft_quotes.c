@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:41:30 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 16:43:26 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/23 18:43:20 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,14 @@ char	**skip_quotes(t_data *data)
 	k = 0;
 	while (data->args[i])
 		i++;
-	new_args = malloc(sizeof(char *) * (i + 1));
+	new_args = ft_malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	while (data->args[i])
 	{
 		j = 0;
 		k = 0;
 		len = len_without_quotes(data->args[i]);
-		new_args[i] = malloc(sizeof(char) * (len + 1));
+		new_args[i] = ft_malloc(sizeof(char) * (len + 1));
 		while (data->args[i][j])
 		{
 			if(data->args[i][j] == '"' || data->args[i][j] == '\'')

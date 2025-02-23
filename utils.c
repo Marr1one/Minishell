@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 16:37:27 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/23 18:45:29 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**copy_env(char **envp)
 	i = 0;
 	while(envp[i])
 		i++;
-	new_env = malloc(sizeof(char *) * (i + 1));
+	new_env = ft_malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	while (envp[i])
 	{
@@ -290,7 +290,7 @@ char	*ft_join(char *str, char *add)
 	j = 0;
 	if (!str || !add)
 		return (NULL);
-	join = malloc(sizeof(char) * (ft_strlen(str) + ft_strlen(add) + 1));
+	join = ft_malloc(sizeof(char) * (ft_strlen(str) + ft_strlen(add) + 1));
 	if (!join)
 		return (NULL);
 	while (str[i])
@@ -319,7 +319,7 @@ char	*ft_itoa(int	n)
 	tmp = n;
 	if (n == 0)
     {
-        res = malloc(sizeof(char) * 2);
+        res = ft_malloc(sizeof(char) * 2);
         if (!res)
             return (NULL);
         res[0] = '0';
@@ -331,7 +331,7 @@ char	*ft_itoa(int	n)
 		tmp = tmp / 10;
 		len++;
 	}
-	res = malloc(sizeof(char) * 2);
+	res = ft_malloc(sizeof(char) * 2);
 	if (!res)
 		return (NULL);
 	//res[len] = '\0'

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 18:02:47 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/23 18:49:56 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	check_exit_status(t_data *data);
 char	*get_path_env(char **envp);
 char	**add_slash_all(char **tab);
 char	*add_slash(char	*str);
+void	*ft_malloc(size_t size);
 int		ft_strncmp(char *s1, char *s2, int n);
 int		check_builtin(t_data *data);
 void	ft_redirect(t_data *data, int i);
@@ -100,6 +101,7 @@ int		count_global_quotes(char *str);
 char	*take_after(char *str, char c);
 int		ft_strncmp(char *s1, char *s2, int n);
 char	*ft_itoa(int n);
+void	*ft_malloc(size_t size);
 void	ft_cd(t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strlcmp(char *s1, char *s2);

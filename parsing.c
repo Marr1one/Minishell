@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 17:52:30 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/23 18:43:59 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	**create_cmd_args(t_data *data, int i)
 	int	j;
 	char **res;
 
-	res = malloc(i * sizeof(char *));
+	res = ft_malloc(i * sizeof(char *));
 	j = 0;
 	while (j < i)
 	{
@@ -258,7 +258,7 @@ char	*take_before(char *str, char c)
 	while(str[i] != c)
 		i++;
 	len = i;
-	res = malloc(sizeof(char) * (len + 1));
+	res = ft_malloc(sizeof(char) * (len + 1));
 	i = 0;
 	while (i < len)
 	{
@@ -353,7 +353,7 @@ void	ft_clean_input(t_data *data)
 	
 	i = 0;
 	j = 0;
-	new_input = malloc(ft_strlen(data->input) + (2 * count_redirect(data) + 1));
+	new_input = ft_malloc(ft_strlen(data->input) + (2 * count_redirect(data) + 1));
 	if (!new_input)
 		return ;
 	while (data->input[i])

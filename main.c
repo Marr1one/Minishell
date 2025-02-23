@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 17:53:28 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/23 19:00:18 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	**cut_last(char **tab, int	i)
 	int		j;
 	
 	j = 0;
-	new_tab = malloc(sizeof(char *) * (i + 1));
+	new_tab = ft_malloc(sizeof(char *) * (i + 1));
 	if (!new_tab)
 		return (NULL);
 	while (j < i)
@@ -141,9 +141,8 @@ int	main(int argc, char **argv , char **envp)
 		// ls espace ne fonctionne pas
 		data.args = skip_quotes(&data); //refait un nouveau tableau dargument en skippant les quotes ; {"ls", "} devient
 		// {ls, }.
-		show_tab(data.args);
+		// show_tab(data.args);
 		data.list = add_chained_list(&data); //creer une liste chainee correpondant au tableau dargs
-		printf("ici\n");
 		check_exit_status(&data); // si un argument est '$?', le remplace par lexit status.
 		check_dollar(&data); //verifie si ya un $, si yen a un, on parcourt lenv, si on trouve que ca correspond
 		// a une ligne, on met sa valeur dans content.

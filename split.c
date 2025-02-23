@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:35:34 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/06 18:34:03 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/23 18:44:48 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*worddup(char *str, int start, int end)
 	char	*dup;
 
 	i = 0;
-	dup = malloc((end - start + 1) * sizeof(char));
+	dup = ft_malloc((end - start + 1) * sizeof(char));
 	if (!dup)
 		return (NULL);
 	while (start < end)
@@ -62,7 +62,7 @@ char	**ft_split(char *str, char c)
 	idx = -1;
 	i = -1;
 	j = 0;
-	res = malloc((countword(str, c) + 1) * sizeof(char *));
+	res = ft_malloc((countword(str, c) + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
 	while (++i < ft_strlen(str) + 1)

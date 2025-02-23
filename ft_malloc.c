@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:18:27 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 18:03:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/23 18:54:07 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,12 @@ void	*ft_malloc(size_t size)
 	new_node->addr = ptr;
 	new_node->next = NULL;
 	if (!gc)
+	{
+		gc = malloc(sizeof(t_malloc));
+		if (!gc)
+			return (NULL);
 		gc->first = new_node;
+	}
 	else
 		findlast_malloc(gc->first)->next = new_node;
 	return (ptr);

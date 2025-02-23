@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 16:47:47 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/23 18:40:29 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	is_numeric(char	*str)
 
 // 	k = 0;
 // 	//printf("str[start] = %c, et str[i] (fin) = %c\n", str[start], str[i]);
-// 	dup = malloc(sizeof(char) * (i - start) + 1);
+// 	dup = ft_malloc(sizeof(char) * (i - start) + 1);
 // 	if (!dup)
 //     	return (NULL);
 // 	while (start < i)
@@ -130,7 +130,7 @@ int	is_numeric(char	*str)
 	
 // 	while(list->next != NULL)
 // 		list = list->next;
-// 	new_node = malloc(sizeof(t_env));
+// 	new_node = ft_malloc(sizeof(t_env));
 // 	if (!new_node)
 // 		return;
 // 	new_node->name = NULL;
@@ -148,7 +148,7 @@ char	**add_export(t_data *data, char *str)
 	i = 0;
 	while (data->envp[i])
 		i++;
-	new_env = malloc(sizeof(char *) * (i + 2));
+	new_env = ft_malloc(sizeof(char *) * (i + 2));
 	i = 0;
 	while(data->envp[i])
 	{
@@ -170,7 +170,7 @@ char	**ft_unset(t_data *data, int	save)
 	i = 0;
 	while (data->envp[i])
 		i++;
-	new_env = malloc(sizeof(char *) * i);
+	new_env = ft_malloc(sizeof(char *) * i);
 	if (!new_env)
 		return (NULL);
 	i = 0;
@@ -205,7 +205,7 @@ char	*ft_joinunset(char *str)
 	len = ft_strlen(str);
 	i = 0;
 	j = 0;
-	join = malloc(sizeof(char) * (len + 2));
+	join = ft_malloc(sizeof(char) * (len + 2));
 	if (!join)
 		return (NULL);
 	while (str[i])
