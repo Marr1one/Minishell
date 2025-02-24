@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/23 18:40:29 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/24 17:11:39 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,9 +186,9 @@ char	**ft_unset(t_data *data, int	save)
 	}
 	new_env[j] = NULL;
 	i = 0;
-	while (data->envp[i])
-		free(data->envp[i++]);
-	free(data->envp);
+	// while (data->envp[i])
+		// free(data->envp[i++]);
+	// free(data->envp);
 	// printf("nouvelle env ;\n");
 	// show_tab(new_env);
 	return (new_env);
@@ -239,7 +239,7 @@ void	check_unset(t_data *data, char	*str)
 		}
 		i++;
 	}
-	free(join_eg);
+	// free(join_eg);
 }
 
 void	ft_pwd(t_data *data)

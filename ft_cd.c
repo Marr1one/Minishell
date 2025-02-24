@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/18 19:31:36 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/24 17:11:26 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	update_oldpwd(t_data *data, char *pwd)
 	{
 		if (ft_strncmp(data->envp[i], "OLDPWD=", 7) == 0)
 		{
-			free(data->envp[i]);
+			// free(data->envp[i]);
 			data->envp[i] = new_oldpwd;
 		}
 		// new_env[i] = ft_strdup(data->envp[i]);
@@ -54,7 +54,7 @@ void	update_pwd(t_data *data, char *pwd)
 	{
 		if (ft_strncmp(data->envp[i], "PWD=", 7) == 0)
 		{
-			free(data->envp[i]);
+			// free(data->envp[i]);
 			data->envp[i] = new_pwd;
 		}
 		// new_env[i] = ft_strdup(data->envp[i]);

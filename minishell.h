@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/23 18:49:56 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/24 14:55:34 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct s_token
 typedef struct s_data
 {
 	t_token	*list;
-	t_malloc_node	*gc;
+	t_malloc	*gc;
 	//t_env	*env_var;
 	char	**envp;
 	char 	**path;
@@ -88,7 +88,9 @@ char	*ft_join(char *str, char *add);
 void 	ft_echo(t_data data);
 void	check_exit_status(t_data *data);
 char	*get_path_env(char **envp);
+t_malloc	**get_gc(void);
 char	**add_slash_all(char **tab);
+void	show_malloc_list(t_malloc *list);
 char	*add_slash(char	*str);
 void	*ft_malloc(size_t size);
 int		ft_strncmp(char *s1, char *s2, int n);
@@ -128,5 +130,6 @@ void	check_exit_status(t_data *data);
 int		return_exit_status(t_data *data);
 void	ft_exit(t_data *data);
 int	is_numeric(char	*str);
+void	free_all(t_malloc *gc);
 
 #endif

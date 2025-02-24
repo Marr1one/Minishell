@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/23 19:00:18 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/24 16:55:59 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,26 @@ void	show_list(t_token *list)
 	}
 }
 
+void	show_malloc_list(t_malloc *list)
+{
+	int	i;
+	t_malloc_node	*current;
+
+	i = 0;
+	if (!list || !list->first)
+	{
+		printf("rien a afficher\n");
+		return;	
+	}
+	current = list->first;
+	while(current)
+	{
+		printf("noeud  %d : {%p}\n", i,current->addr);
+		current = current->next;
+		i++;
+	}
+}
+
 //int	check_unclosed(t_data *data)
 //{
 //	t_token	*list;
@@ -127,6 +147,7 @@ int	main(int argc, char **argv , char **envp)
 	if (argc != 1)
 		return (printf("Usage : ./minishell\n"));
 	ft_memset(&data, 0, sizeof(t_data));
+	data.gc = *get_gc();
 	data.envp = copy_env(envp);
 	signal(SIGINT, sigint_handler); // gestion de control+c
 	signal(SIGQUIT, SIG_IGN);// gestion de ctrl + '\'
@@ -141,7 +162,6 @@ int	main(int argc, char **argv , char **envp)
 		// ls espace ne fonctionne pas
 		data.args = skip_quotes(&data); //refait un nouveau tableau dargument en skippant les quotes ; {"ls", "} devient
 		// {ls, }.
-		// show_tab(data.args);
 		data.list = add_chained_list(&data); //creer une liste chainee correpondant au tableau dargs
 		check_exit_status(&data); // si un argument est '$?', le remplace par lexit status.
 		check_dollar(&data); //verifie si ya un $, si yen a un, on parcourt lenv, si on trouve que ca correspond

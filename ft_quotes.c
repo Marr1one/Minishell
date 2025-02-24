@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:41:30 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/23 18:43:20 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/24 17:12:11 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,6 @@ char	**skip_quotes(t_data *data)
 		i++;
 	}
 	new_args[i] = NULL;
-	free(data->args);
+	// free(data->args);
 	return (new_args);
 }

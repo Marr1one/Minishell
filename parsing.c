@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/23 18:43:59 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/24 17:10:39 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,12 +192,12 @@ int	test_commands2(t_data *data, char *str)
 		if (access(path_test, F_OK | X_OK) == 0)
 		{
 			data->command_path = ft_strdup(path_test);
-			free(path_test);
+			// free(path_test);
 			return (0);
 		}
 		i++;
 	}
-	free(path_test);
+	// free(path_test);
 	return (1);
 }
 
@@ -226,12 +226,12 @@ int	test_commands(t_data *data)
 		if (access(path_test, F_OK | X_OK) == 0)
 		{
 			data->command_path = ft_strdup(path_test);
-			free(path_test);
+			// free(path_test);
 			return (0);
 		}
 		i++;
 	}
-	free(path_test);
+	// free(path_test);
 	return (1);
 }
 
@@ -387,7 +387,7 @@ void	ft_clean_input(t_data *data)
 		i++;
 	}
 	new_input[j] = '\0';
-	free(data->input);
+	// free(data->input);
 	data->input = new_input;
 }
 

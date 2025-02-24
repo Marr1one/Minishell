@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:18:27 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/23 18:54:07 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/24 17:04:50 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,51 @@ t_malloc_node	*findlast_malloc(t_malloc_node	*list)
 	return (list);
 }
 
-void	*ft_malloc(size_t size)
+void	free_all(t_malloc *gc)
+{
+	t_malloc_node	*current;
+	t_malloc_node	*tmp;
+
+	if (!gc)
+	{
+		printf("gc est null\n");
+		return ;
+	}
+	current = gc->first;
+	printf("gc->first est : %p\n", gc->first);
+	while (current)
+	{
+		printf("Libération de l'adresse : %p\n", current->addr);
+		tmp = current->next;
+		free(current->addr);
+		free(current);
+		current = tmp;
+	}
+	gc->first = NULL;
+}
+
+t_malloc	**get_gc(void)
 {
 	static t_malloc	*gc = NULL;
+	if (!gc)
+	{
+		gc = malloc(sizeof(t_malloc));
+		if (!gc)
+			return (NULL);
+		if (gc)
+			gc->first = NULL;
+	}
+	return (&gc);
+}
+
+void	*ft_malloc(size_t size)
+{
+	printf("in ft_malloc\n");
+	t_malloc	**gc;
 	t_malloc_node	*new_node;
 	void			*ptr;
 	
+	gc = get_gc();
 	ptr = malloc(size);
 	if (!ptr)
 		return (NULL);
@@ -37,15 +76,12 @@ void	*ft_malloc(size_t size)
 		return (NULL);
 	}
 	new_node->addr = ptr;
-	new_node->next = NULL;
-	if (!gc)
+	new_node->next = NULL;	
+	if ((*gc)->first == NULL)
 	{
-		gc = malloc(sizeof(t_malloc));
-		if (!gc)
-			return (NULL);
-		gc->first = new_node;
+		(*gc)->first = new_node;
 	}
 	else
-		findlast_malloc(gc->first)->next = new_node;
+		findlast_malloc((*gc)->first)->next = new_node;
 	return (ptr);
 }

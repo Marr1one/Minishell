@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:46:48 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/14 16:35:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/24 17:09:24 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,11 @@ char	*add_slash(char	*str)
 
 	if (!str)
 		return (NULL);
-	new_str = malloc(sizeof(char) * (ft_strlen(str) + 2));
+	new_str = ft_malloc(sizeof(char) * (ft_strlen(str) + 2));
 	if (!new_str)
 		return (NULL);
 	new_str = ft_strcpy(str, new_str);
 	new_str[ft_strlen(str)] = '/';
 	new_str[ft_strlen(str) + 1] = '\0';
-	free(str);
 	return (new_str);
 }

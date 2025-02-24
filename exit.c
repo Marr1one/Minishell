@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:46:56 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/22 16:47:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/24 16:57:53 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	ft_exit(t_data *data)
 	int	status;
 
 	status = 0;
+	printf("data->gc: %p\n", data->gc);
 	printf("exit\n");
 	//if (count_args(data->args) > 2)
 	//{
@@ -76,5 +77,7 @@ void	ft_exit(t_data *data)
 			return ;	
 		}
 	}
+	show_malloc_list(data->gc);
+	free_all(data->gc);
 	exit(status);
 }
