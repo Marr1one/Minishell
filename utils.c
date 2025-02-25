@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 17:23:59 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/25 20:37:09 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,36 +123,47 @@ int	count_global_quotes(char *str)
 //    }
 //}
 
-//char	*remove_quotes(t_data *data,char *str)
-//{
-//	int		len;
-//	char	*new_str;
+char	*remove_quotes(char *str)
+{
+	int	i;
+	int	j;
+	int	nb_quotes = count_global_quotes(str);
+	char	*new_str;
 
-//	len = ft_strlen(str);
-//	//printf("str[0] == %c et str[len - 1] == %c\n", str[0], str[len - 1]);
-//	if ((str[0] == '"' && str[len - 1] == '"') || (str[0] == '\'' && str[len - 1] == '\''))
-//	{
-//		//printf("in\n");
-//		data->quotes = 1;
-//		new_str = remove_utils(str);
-//		free(str);
-//		return (new_str);
-//	}
-//	//remove_empty_quotes(data);
-//	return (str);
-//}
+	i = 0;
+	while (str[i])
+		i++;
+	new_str = malloc (sizeof(char) * (i - nb_quotes + 1));
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] != '"' && str[i] != '\'')
+		{
+			new_str[j] = str[i];
+			i++;
+			j++;
+		}
+		else
+			i++;
+	}
+	new_str[j] = '\0';
+	return (new_str);
+}
 
-//void	remove_quotes_all(t_data *data)
-//{
-//	t_token	*list;
+void	remove_quotes_all(t_data *data)
+{
+	t_token	*current;
 
-//	list = data->list;
-//	while (list)
-//	{
-//		list->content = remove_quotes(data, list->content);
-//		list = list->next;
-//	}		
-//}
+	current = data->list;
+	while (current)
+	{
+		current->content = remove_quotes(current->content);
+		current = current->next;
+	}		
+}
 
 int	ft_strlen(const char *str)
 {

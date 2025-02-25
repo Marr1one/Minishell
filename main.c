@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 18:01:41 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/25 20:59:17 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,42 @@ void	show_malloc_list(t_malloc *list)
 //	data->args[k] = NULL;
 //}
 
+int	list_len(t_token *list)
+{
+	int	i;
+	t_token *current;
+	
+	i = 0;
+	current = list;
+	while (current)
+	{
+		current = current->next;
+		i++;
+	}
+	return (i);
+}
+
+char	**list_to_args(t_data *data)
+{
+	t_token *current;
+	char	**new_args;
+	int		i;
+	
+	i = 0;
+	new_args = malloc(sizeof(char *) * (list_len(data->list) - 1));
+	if (!new_args)
+		return (NULL);
+	current = data->list;
+	while (current)
+	{
+		new_args[i] = ft_strdup(current->content);
+		i++;
+		current = current->next;
+	}
+	new_args[i] = NULL;
+	return (new_args);
+}
+
 int main(int argc, char **argv, char **envp)
 {
     t_data data;
@@ -167,20 +203,18 @@ int main(int argc, char **argv, char **envp)
             data.args = ft_split(data.input, ' ');
             cut_empty(data.args, &data);
 			data.list = add_chained_list(&data);
-			printf("premiere liste\n");
-			show_list(data.list);
 			check_dollar(&data);
-			printf("list apres check dollar\n");
-			show_list(data.list);
+			
             data.args = skip_quotes(&data);
+			data.args = list_to_args(&data);
             data.list = add_chained_list(&data);
+			printf("list apres check dollar et add chained list\n");
+			show_list(data.list);
 			
             check_exit_status(&data);
           
             if (case_redirection(&data, data.envp) == 1)
-            {
                 parsing(data.input, data.envp, &data);
-            }
         }
         free(data.input);
     }

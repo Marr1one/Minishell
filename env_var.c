@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 18:21:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/25 20:38:33 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,10 @@ void	check_env(t_data *data, char *str, t_token *current)
 	i = 0;
 	index = 0;
 	len = ft_strlen(str) + 1;
-	 printf("str = %s\n", str);
 	while (data->envp[i])
 	{
 		if (ft_strncmp(data->envp[i], ft_joinchar(str, '='), len) == 0)
 		{
-			printf("FOUNDED\n");
 			// printf("data.envp trouve = %s\n", data->envp[i]);
 			index = index_match(data, str);
 			// printf("data.envp[index] = %s\n", data->envp[index]);
@@ -122,16 +120,8 @@ void	check_env(t_data *data, char *str, t_token *current)
 	}
 }
 
-void	remove_quotes_all(t_data *data)
-{
-	char	*new_node;
-
-	while (l)
-}
-
 void	check_dollar(t_data *data)
 {
-	printf("in check dollar\n");
 	t_token *list;
 	int		len;
 	
@@ -146,10 +136,7 @@ void	check_dollar(t_data *data)
 		}
 		else if ((list->content[0] == '"' && list->content[len - 1] == '"') && list->content[1] == '$')
 		{
-			printf("in this case\n");
 			remove_quotes_all(data);
-			printf("tab apres skip quotes\n");
-			show_tab(data->args);
 			//list = add_chained_list(data);
 			//printf("list dans le cas la\n");
 			//show_list(data->list);
