@@ -14,7 +14,8 @@ SRC		=	main.c \
 			ft_cd.c \
 			ft_quotes.c \
 			exit.c \
-			ft_malloc.c
+			ft_malloc.c \
+			pipex.c
 
 CC		=	cc -g3
 

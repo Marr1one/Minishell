@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/24 14:55:34 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/25 17:23:50 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@
 //	char			*value;
 //	struct s_env	*next;
 //}	t_env;
+
+typedef struct s_pipex_pipe
+{
+    int    read;
+    int    write;
+}    t_pipex_pipe;
 
 typedef struct s_malloc_node
 {
@@ -81,7 +87,7 @@ typedef struct s_data
 void	parsing(char *input, char **env, t_data *data);
 char	**copy_env(char **envp);
 char	**ft_split(char *str, char c);
-int		ft_strlen(char *str);
+int		ft_strlen(const char *str);
 void	*ft_memset(void *b, int c, size_t len);
 char	*ft_join(char *str, char *add);
 // int 	handle_env(t_data *data, char *str);
@@ -131,5 +137,14 @@ int		return_exit_status(t_data *data);
 void	ft_exit(t_data *data);
 int	is_numeric(char	*str);
 void	free_all(t_malloc *gc);
+char *ft_strchr(const char *s, int c);
+char *get_cmd_path(const char *cmd, char **envp);
+t_pipex_pipe *init_pipes(int nb_cmd);
+void try_dup2(int oldfd, int newfd);
+void child_redirection(int pos, int nb_cmd, t_pipex_pipe *pipes);
+void close_all_pipes(int nb_cmd, t_pipex_pipe *pipes);
+void execute_pipex(t_data *data);
+void execute_simple_command(t_data *data);
+int count_tab(char **tab);
 
 #endif

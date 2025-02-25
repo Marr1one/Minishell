@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/23 18:45:29 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/25 17:23:59 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int	count_global_quotes(char *str)
 //	}		
 //}
 
-int	ft_strlen(char *str)
+int	ft_strlen(const char *str)
 {
 	int	i;
 

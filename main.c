@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 17:04:24 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/25 18:01:41 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,39 +138,51 @@ void	show_malloc_list(t_malloc *list)
 //	data->args[k] = NULL;
 //}
 
-int	main(int argc, char **argv , char **envp)
+int main(int argc, char **argv, char **envp)
 {
-	
+    t_data data;
 	(void)argv;
-	t_data data;
+	
+    if (argc != 1)
+        return (printf("Usage : ./minishell\n"));
+    ft_memset(&data, 0, sizeof(t_data));
+    data.gc = *get_gc();
+    data.envp = copy_env(envp);
+    signal(SIGINT, sigint_handler);
+    signal(SIGQUIT, SIG_IGN);
 
-	if (argc != 1)
-		return (printf("Usage : ./minishell\n"));
-	ft_memset(&data, 0, sizeof(t_data));
-	data.gc = *get_gc();
-	data.envp = copy_env(envp);
-	signal(SIGINT, sigint_handler); // gestion de control+c
-	signal(SIGQUIT, SIG_IGN);// gestion de ctrl + '\'
-	while (1)
-	{
-		data.input = readline("\033[0;32mminishell$\033[0m ");
-		if (!data.input)
-			break ; //gestion de ctrl +d
-		check_redirect(&data); //reecrit bien les redirection, ls>out devient ls > out, ajoute des espaces entre les >
-		data.args = ft_split(data.input, ' ');
-		cut_empty(data.args, &data); //dans le cas ou on fait ls avec un espace apres, fait fonctionner ls, sans ca 
-		// ls espace ne fonctionne pas
-		data.args = skip_quotes(&data); //refait un nouveau tableau dargument en skippant les quotes ; {"ls", "} devient
-		// {ls, }.
-		data.list = add_chained_list(&data); //creer une liste chainee correpondant au tableau dargs
-		check_exit_status(&data); // si un argument est '$?', le remplace par lexit status.
-		check_dollar(&data); //verifie si ya un $, si yen a un, on parcourt lenv, si on trouve que ca correspond
-		// a une ligne, on met sa valeur dans content.
-		if (case_redirection(&data, data.envp) == 1)//explication dans la fonction
-		{
-			parsing(data.input, data.envp, &data);
-		}
-		add_history(data.input);//permet que lhistorique marche quand on fait fleche du haut 						
-	}
-	return (0);
+    while (1)
+    {
+        data.input = readline("\033[0;32mminishell$\033[0m ");
+        if (!data.input)
+            break;
+        add_history(data.input);
+        if (ft_strchr(data.input, '|'))
+        {
+            execute_pipex(&data);
+        }
+        else
+        {
+            check_redirect(&data);
+            data.args = ft_split(data.input, ' ');
+            cut_empty(data.args, &data);
+			data.list = add_chained_list(&data);
+			printf("premiere liste\n");
+			show_list(data.list);
+			check_dollar(&data);
+			printf("list apres check dollar\n");
+			show_list(data.list);
+            data.args = skip_quotes(&data);
+            data.list = add_chained_list(&data);
+			
+            check_exit_status(&data);
+          
+            if (case_redirection(&data, data.envp) == 1)
+            {
+                parsing(data.input, data.envp, &data);
+            }
+        }
+        free(data.input);
+    }
+    return (0);
 }
