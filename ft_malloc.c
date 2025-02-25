@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:18:27 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/24 17:04:50 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/25 17:05:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ void	free_all(t_malloc *gc)
 {
 	t_malloc_node	*current;
 	t_malloc_node	*tmp;
+	int				i;
 
+	i = 0;
 	if (!gc)
 	{
 		printf("gc est null\n");
@@ -35,11 +37,12 @@ void	free_all(t_malloc *gc)
 	printf("gc->first est : %p\n", gc->first);
 	while (current)
 	{
-		printf("Libération de l'adresse : %p\n", current->addr);
+		printf(" %d: Libération de l'adresse : %p\n", i, current->addr);
 		tmp = current->next;
 		free(current->addr);
 		free(current);
 		current = tmp;
+		i++;
 	}
 	gc->first = NULL;
 }
@@ -60,7 +63,7 @@ t_malloc	**get_gc(void)
 
 void	*ft_malloc(size_t size)
 {
-	printf("in ft_malloc\n");
+	//printf("in ft_malloc\n");
 	t_malloc	**gc;
 	t_malloc_node	*new_node;
 	void			*ptr;

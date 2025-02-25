@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:41:30 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/24 17:12:11 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/25 17:08:44 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	destroy_node_quotes(t_data *data)
 			else
 				data->list = current->next;
 			current = current->next;
-			free(tmp->content);
-			free(tmp);
+			//free(tmp->content);
+			//free(tmp);
 		}
 		else
 		{
