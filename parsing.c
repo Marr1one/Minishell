@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/26 18:22:27 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:28:08 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -522,12 +522,6 @@ void	parsing(char *input, char **envp, t_data *data)
 	pid_t	pid;
 	int		status;
 	
-	if (count_global_quotes(data->input) % 2 != 0) // permet de gerer le cas de quotes non fermees
-	{
-		data->exit_status = 127;
-		printf("minishell: unclosed quote detected\n");
-		return ;
-	}
 	// delete_quotes_inside(data); //tout ce que jai mis en comm je laisse au cas ou
 	if (check_empty(*data) == 1) // cas ou on appuie juste sur entree
 	{

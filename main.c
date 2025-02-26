@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/26 18:25:40 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:30:46 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,28 +193,35 @@ int main(int argc, char **argv, char **envp)
         if (!data.input)
             break;
         add_history(data.input);
-        if (ft_strchr(data.input, '|'))
-        {
-			printf("on trouve |");
-            execute_pipex(&data);
-        }
+		if (count_global_quotes(data.input) % 2 != 0) // permet de gerer le cas de quotes non fermees
+		{
+			data.exit_status = 127;
+			printf("minishell: unclosed quote detected\n");
+		}
         else
-        {
-            check_redirect(&data);
-			
-            data.args = ft_split(data.input, ' ');
-            cut_empty(data.args, &data);
-			data.list = add_chained_list(&data);
-			check_dollar(&data);
-			data.args = list_to_args(&data);
-            data.args = skip_quotes(&data);
-			data.list = add_chained_list(&data);
-            check_exit_status(&data);
-          
-            if (case_redirection(&data, data.envp) == 1)
-                parsing(data.input, data.envp, &data);
-        }
+		{
+			if (ft_strchr(data.input, '|'))
+			{
+				printf("on trouve |");
+				execute_pipex(&data);
+			}
+			else
+			{
+				check_redirect(&data);
+				data.args = ft_split(data.input, ' ');
+				cut_empty(data.args, &data);
+				data.list = add_chained_list(&data);
+				check_dollar(&data);
+				data.args = list_to_args(&data);
+				data.args = skip_quotes(&data);
+				data.list = add_chained_list(&data);
+				check_exit_status(&data);
+				if (case_redirection(&data, data.envp) == 1)
+					parsing(data.input, data.envp, &data);
+			}
+		}
         free(data.input);
     }
+			
     return (0);
 }
