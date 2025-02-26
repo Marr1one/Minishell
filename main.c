@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 20:59:17 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:25:40 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ char	**list_to_args(t_data *data)
 	int		i;
 	
 	i = 0;
-	new_args = malloc(sizeof(char *) * (list_len(data->list) - 1));
+	new_args = malloc(sizeof(char *) * (list_len(data->list) + 1));
 	if (!new_args)
 		return (NULL);
 	current = data->list;
@@ -195,22 +195,20 @@ int main(int argc, char **argv, char **envp)
         add_history(data.input);
         if (ft_strchr(data.input, '|'))
         {
+			printf("on trouve |");
             execute_pipex(&data);
         }
         else
         {
             check_redirect(&data);
+			
             data.args = ft_split(data.input, ' ');
             cut_empty(data.args, &data);
 			data.list = add_chained_list(&data);
 			check_dollar(&data);
-			
-            data.args = skip_quotes(&data);
 			data.args = list_to_args(&data);
-            data.list = add_chained_list(&data);
-			printf("list apres check dollar et add chained list\n");
-			show_list(data.list);
-			
+            data.args = skip_quotes(&data);
+			data.list = add_chained_list(&data);
             check_exit_status(&data);
           
             if (case_redirection(&data, data.envp) == 1)

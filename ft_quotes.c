@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:41:30 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 17:08:44 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:08:57 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	destroy_node_quotes(t_data *data)
 	//printf("in destroy node quotes\n");
 	t_token	*prev;
 	t_token	*current;
-	t_token	*tmp;
+	// t_token	*tmp;
 	int		i;
 
 	current = data->list;
@@ -45,7 +45,7 @@ void	destroy_node_quotes(t_data *data)
 			i++;
 		if (current->content[i] == '\0')
 		{
-			tmp = current;
+			// tmp = current;
 			if (prev)
 				prev->next = current->next;
 			else
