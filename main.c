@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/27 02:57:30 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/27 19:24:20 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,24 @@ char	**list_to_args(t_data *data)
 	return (new_args);
 }
 
+void	update_list(t_data *data)
+{
+	t_token	*list;
+	t_token	*temp;
+	list = data->list;
+
+	while (list)
+	{
+		while (list && list->content[0] == '$')
+		{
+			temp = list;
+			
+		}
+			
+		list = list->next;
+	}
+}
+
 int main(int argc, char **argv, char **envp)
 {
     t_data data;
@@ -216,6 +234,8 @@ int main(int argc, char **argv, char **envp)
 				data.args = skip_quotes(&data);
 				data.list = add_chained_list(&data);
 				check_exit_status(&data);
+				printf("list juste avant le parsing\n");
+				show_list(data.list);
 				if (case_redirection(&data, data.envp) == 1)
 					parsing(data.input, data.envp, &data);
 			}

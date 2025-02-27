@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/27 02:38:53 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/27 19:00:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,14 +101,17 @@ void	check_env(t_data *data, char *str, t_token *current)
 	int	i;
 	int	len;
 	int	index;
+	int	founded;
 	
 	i = 0;
+	founded = 0;
 	index = 0;
 	len = ft_strlen(str) + 1;
 	while (data->envp[i])
 	{
 		if (ft_strncmp(data->envp[i], ft_joinchar(str, '='), len) == 0)
 		{
+			founded = 1;
 			// printf("data.envp trouve = %s\n", data->envp[i]);
 			index = index_match(data, str);
 			// printf("data.envp[index] = %s\n", data->envp[index]);
@@ -118,6 +121,8 @@ void	check_env(t_data *data, char *str, t_token *current)
 		}
 		i++;
 	}
+	if (founded == 0)
+		current->content = ft_strdup("");
 }
 
 void	check_dollar(t_data *data)
@@ -139,9 +144,6 @@ void	check_dollar(t_data *data)
 				if ((list->content[0] == '"' && list->content[len - 1] == '"'))
 				{
 					remove_quotes_all(data);
-					//list = add_chained_list(data);
-					//printf("list dans le cas la\n");
-					//show_list(data->list);
 					check_env(data, list->content, list);
 				}
 				else
