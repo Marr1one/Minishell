@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:18:27 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 17:05:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/27 03:04:16 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	free_all(t_malloc *gc)
 		i++;
 	}
 	gc->first = NULL;
+	free(gc);
 }
 
 t_malloc	**get_gc(void)

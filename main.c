@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/26 18:30:46 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/27 02:57:30 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ char	**list_to_args(t_data *data)
 	int		i;
 	
 	i = 0;
-	new_args = malloc(sizeof(char *) * (list_len(data->list) + 1));
+	new_args = ft_malloc(sizeof(char *) * (list_len(data->list) + 1));
 	if (!new_args)
 		return (NULL);
 	current = data->list;

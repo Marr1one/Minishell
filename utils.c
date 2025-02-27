@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 20:37:09 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/27 02:56:30 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ char	*remove_quotes(char *str)
 	i = 0;
 	while (str[i])
 		i++;
-	new_str = malloc (sizeof(char) * (i - nb_quotes + 1));
+	new_str = ft_malloc (sizeof(char) * (i - nb_quotes + 1));
 	if (!new_str)
 		return (NULL);
 	i = 0;
@@ -281,7 +281,7 @@ char	*ft_strdup(char	*str)
 	char	*dup;
 
 	i = 0;
-	dup = malloc(sizeof(char) * ft_strlen(str) + 1);
+	dup = ft_malloc(sizeof(char) * ft_strlen(str) + 1);
 	while (str[i])
 	{
 		dup[i] = str[i];
