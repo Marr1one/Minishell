@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 20:38:33 by maissat          ###   ########.fr       */
+/*   Updated: 2025/02/27 02:38:53 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,26 +124,33 @@ void	check_dollar(t_data *data)
 {
 	t_token *list;
 	int		len;
+	int		i;
 	
 	list = data->list;
 	while (list != NULL)
 	{
+		i = 0;
 		len = ft_strlen(list->content);
-		if (list->content[0] == '$')
+		while (list->content[i])
 		{
-			printf("on trouve un $\n");
-			check_env(data, list->content, list);
-		}
-		else if ((list->content[0] == '"' && list->content[len - 1] == '"') && list->content[1] == '$')
-		{
-			remove_quotes_all(data);
-			//list = add_chained_list(data);
-			//printf("list dans le cas la\n");
-			//show_list(data->list);
-			check_env(data, list->content, list);
+			if (list->content[i] == '$')
+			{
+				printf("on trouve un $\n");
+				if ((list->content[0] == '"' && list->content[len - 1] == '"'))
+				{
+					remove_quotes_all(data);
+					//list = add_chained_list(data);
+					//printf("list dans le cas la\n");
+					//show_list(data->list);
+					check_env(data, list->content, list);
+				}
+				else
+					check_env(data, list->content, list);
+			}
+			i++;
 		}
 		list = list->next;
-	}	
+	}
 }
 
 //char	*ft_strdupenv(char	*str, int start, int	i)
