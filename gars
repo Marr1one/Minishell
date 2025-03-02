@@ -12,6 +12,8 @@ export.c
 ft_cd.c
 ft_malloc.c
 ft_quotes.c
+gars
+les
 ls
 main.c
 minishell
@@ -22,6 +24,7 @@ parsing.c
 pipex.c
 ramzy.supp
 s
+salut
 signals.c
 sortie
 split.c

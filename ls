@@ -4,7 +4,6 @@ add_slash.c
 built_in.c
 chaining.c
 comment.c
-dslkfjsldkfjslfk
 echo.c
 env_var.c
 exit.c
@@ -23,6 +22,5 @@ pipex.c
 ramzy.supp
 s
 signals.c
-sortie
 split.c
 utils.c

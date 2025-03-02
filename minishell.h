@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/27 18:51:34 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/01 11:39:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_data
 	char	*input;
 	char	*command_path;
 	char	**args;
+	char	**skipped_qu;
 	char	**cmd_args;
 	int		quotes;
 	int		exit_status;
@@ -124,7 +125,7 @@ t_token	*add_chained_list(t_data *data);
 void	show_list(t_token *list);
 char	*ft_joinchar(char *str, char c);
 char	*ft_strdup(char	*str);
-void	check_dollar(t_data *data);
+int	check_dollar(t_data *data);
 int		check_export_compatibility(char *str);
 int		get_nbr_node(t_token *list);
 int		ft_atoi(char	*str);

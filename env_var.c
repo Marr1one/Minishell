@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/27 19:00:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/01 11:39:48 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,16 +121,18 @@ void	check_env(t_data *data, char *str, t_token *current)
 		}
 		i++;
 	}
-	if (founded == 0)
+	if (founded == 0 && (str[0] != '\'' && str[len - 1] != '\''))
 		current->content = ft_strdup("");
 }
 
-void	check_dollar(t_data *data)
+int	check_dollar(t_data *data)
 {
 	t_token *list;
 	int		len;
 	int		i;
-	
+	int		check;
+
+	check = 0;
 	list = data->list;
 	while (list != NULL)
 	{
@@ -148,11 +150,13 @@ void	check_dollar(t_data *data)
 				}
 				else
 					check_env(data, list->content, list);
+				check = 1;
 			}
 			i++;
 		}
 		list = list->next;
 	}
+	return (check);
 }
 
 //char	*ft_strdupenv(char	*str, int start, int	i)

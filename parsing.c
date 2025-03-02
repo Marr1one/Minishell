@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/26 18:28:08 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/02 01:09:59 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,23 @@ void	handle_redirect(t_data *data, int	i, char **envp)
 	data->path = add_slash_all(data->path);
 	if (test_commands(data) == 0)
 	{
-		pid = fork();
-		if (pid == 0)
-		{
-			fd = open(data->args[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd == -1)
+			pid = fork();
+			if (pid == 0)
 			{
-				perror("open");
+				fd = open(data->args[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (fd == -1)
+				{
+					perror("open");
+					exit(1);
+				}
+				dup2(fd, STDOUT_FILENO);
+				close(fd);
+				execve(data->command_path, data->cmd_args, envp);
+				perror("execve");
 				exit(1);
 			}
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-			execve(data->command_path, data->cmd_args, envp);
-			perror("execve");
-			exit(1);
+			waitpid(pid, NULL, 0);
 		}
-		waitpid(pid, NULL, 0);
-	}
 }
 
 char	**create_cmd_args(t_data *data, int i)
@@ -119,26 +119,69 @@ void		handle_back(t_data *data, int i)
 int	case_redirection(t_data *data, char **envp)
 {
 	t_token	*list;
+	t_token	*last_redir;
+	t_token *first_redir;
+	int		tmp;
+	int		has_redir;
 	
+	last_redir = NULL;
+	has_redir = 0;
 	list = data->list;
 	while (list != NULL)
 	{
 		if (ft_strlcmp(list->content, ">") == 0)
 		{
+			if (has_redir == 0)
+			{
+				first_redir = list;
+			}
 			if (!list->next || !(*list->next->content))
 			{
-				printf("Nul part ou rediriger!\n");
+				printf("minishell: syntax error near unexpected token `newline'\n");
 				return (0);
 			}
-			data->cmd_args = create_cmd_args(data, list->index);
-			handle_redirect(data, list->index, envp);
-			return (0);	
+			last_redir = list;
+			has_redir = 1;
+			// data->cmd_args = create_cmd_args(data, list->index);
+			// handle_redirect(data, list->index, envp);
+			// return (0);	
 		}
-		else if (ft_strlcmp(list->content, "<") == 0)
+		list = list->next;
+	}
+	if (has_redir == 1)
+	{
+		data->cmd_args = create_cmd_args(data, first_redir->index);
+		printf("cmd_args\n");
+		show_tab(data->cmd_args);
+		list = data->list;
+		while (list)
+		{
+			if (ft_strlcmp(list->content, ">") == 0)
+			{
+				if (list != last_redir)
+				{
+					tmp = open(list->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					if (tmp == -1)
+						return (perror("open"), 0);
+					close(tmp);
+				}
+				else
+				{
+					handle_redirect(data, list->index, envp);
+				}
+			}
+			list = list->next;
+		}
+		return (0);
+	}
+	list = data->list;
+	while (list)
+	{
+		if (ft_strlcmp(list->content, "<") == 0)
 		{
 			if (!list->next || !(*list->next->content))
 			{
-				printf(" Rien apres le <!\n");
+				printf("minishell: syntax error near unexpected token `newline'\n");
 				return (0);
 			}
 			data->cmd_args = create_cmd_args(data, list->index);
@@ -149,7 +192,7 @@ int	case_redirection(t_data *data, char **envp)
 		{
 			if (!list->next || !(*list->next->content))
 			{
-				printf(" Rien apres le >>!\n");
+				printf("minishell: syntax error near unexpected token `newline'\n");
 				return (0);
 			}
 			data->cmd_args = create_cmd_args(data, list->index);
