@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/02 22:59:17 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/02 23:10:07 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ int	case_redirection(t_data *data)
 	int 	status;
 	int		output_fd;
 	int		has_redir;
+	pid_t	pid;
 	
 	input_fd = -1;
 	output_fd = -1;
@@ -217,7 +218,7 @@ int	case_redirection(t_data *data)
     data->path = add_slash_all(data->path);
     if (test_commands(data) == 0) 
 	{
-        pid_t pid = fork();
+        pid = fork();
         if (pid == 0) 
 		{
             if (input_fd != -1) 
