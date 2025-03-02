@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/01 11:39:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/02 23:00:02 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int		ft_strncmp(char *s1, char *s2, int n);
 int		check_builtin(t_data *data);
 void	ft_redirect(t_data *data, int i);
 void		check_redirect(t_data *data);
-int		case_redirection(t_data *data, char **envp);
+int		case_redirection(t_data *data);
 int		test_commands(t_data *data);
 int		count_global_quotes(char *str);
 char	*take_after(char *str, char c);

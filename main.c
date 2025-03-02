@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/01 11:40:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/02 22:59:50 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ int main(int argc, char **argv, char **envp)
 				data.args = skip_quotes(&data);
 				data.list = add_chained_list(&data);
 				check_exit_status(&data);
-				if (case_redirection(&data, data.envp) == 1)
+				if (case_redirection(&data) == 1)
 					parsing(data.input, data.envp, &data);
 			}
 		}

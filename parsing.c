@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/02 01:09:59 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/02 22:59:17 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,92 +116,135 @@ void		handle_back(t_data *data, int i)
 // on va verifier si on une redirect, laquelle et on redirige dans la bonne fonction
 // toutes les fonctions de handle font la meme chose, il font comme pipex, il redirige la sortie de stdout vers ce quil ya apres la redirection
 // note : ls > out out2 doit marcher, actuellement on peut juste rediriger vers un fichier!
-int	case_redirection(t_data *data, char **envp)
+int	case_redirection(t_data *data)
 {
 	t_token	*list;
-	t_token	*last_redir;
 	t_token *first_redir;
-	int		tmp;
+	int		input_fd;
+	int 	status;
+	int		output_fd;
 	int		has_redir;
 	
-	last_redir = NULL;
+	input_fd = -1;
+	output_fd = -1;
 	has_redir = 0;
+	first_redir = NULL;
 	list = data->list;
-	while (list != NULL)
+    while (list != NULL) 
 	{
-		if (ft_strlcmp(list->content, ">") == 0)
+        if (ft_strlcmp(list->content, "<") == 0) 
 		{
-			if (has_redir == 0)
+            if (!list->next || !(*list->next->content)) 
 			{
-				first_redir = list;
-			}
-			if (!list->next || !(*list->next->content))
+                printf("minishell: syntax error near unexpected token `newline'\n");
+                return (0);
+            }
+            if (has_redir == 0) 
 			{
-				printf("minishell: syntax error near unexpected token `newline'\n");
-				return (0);
-			}
-			last_redir = list;
-			has_redir = 1;
-			// data->cmd_args = create_cmd_args(data, list->index);
-			// handle_redirect(data, list->index, envp);
-			// return (0);	
-		}
-		list = list->next;
-	}
-	if (has_redir == 1)
+                first_redir = list;
+                has_redir = 1;
+            }
+            if (input_fd != -1)
+                close(input_fd);
+            input_fd = open(list->next->content, O_RDONLY);
+            if (input_fd == -1) 
+			{
+                perror("open");
+                if (output_fd != -1)
+                    close(output_fd);
+                return (0);
+            }
+        }
+        else if (ft_strlcmp(list->content, ">") == 0) 
+		{
+            if (!list->next || !(*list->next->content)) 
+			{
+                printf("minishell: syntax error near unexpected token `newline'\n");
+                if (input_fd != -1)
+                    close(input_fd);
+                if (output_fd != -1)
+                    close(output_fd);
+                return (0);
+            }
+            if (has_redir == 0) {
+                first_redir = list;
+                has_redir = 1;
+            }
+            if (output_fd != -1)
+                close(output_fd);
+            output_fd = open(list->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (output_fd == -1) 
+			{
+                perror("open");
+                if (input_fd != -1)
+                    close(input_fd);
+                return (0);
+            }
+        }
+        else if (ft_strlcmp(list->content, ">>") == 0) 
+		{
+            if (!list->next || !(*list->next->content))
+			{
+                printf("minishell: syntax error near unexpected token `newline'\n");
+                if (input_fd != -1)
+                    close(input_fd);
+                if (output_fd != -1)
+                    close(output_fd);
+                return (0);
+            }
+            if (has_redir == 0) 
+			{
+                first_redir = list;
+                has_redir = 1;
+            }
+            if (output_fd != -1)
+                close(output_fd);
+            output_fd = open(list->next->content, O_WRONLY | O_CREAT | O_APPEND, 0644);
+            if (output_fd == -1) 
+			{
+                perror("open");
+                if (input_fd != -1)
+                    close(input_fd);
+                return (0);
+            }
+        }
+        list = list->next;
+    }
+    if (has_redir == 0)
+        return (1);
+    data->cmd_args = create_cmd_args(data, first_redir->index);
+    data->path = ft_split(get_path_env(data->envp), ':');
+    data->path = add_slash_all(data->path);
+    if (test_commands(data) == 0) 
 	{
-		data->cmd_args = create_cmd_args(data, first_redir->index);
-		printf("cmd_args\n");
-		show_tab(data->cmd_args);
-		list = data->list;
-		while (list)
+        pid_t pid = fork();
+        if (pid == 0) 
 		{
-			if (ft_strlcmp(list->content, ">") == 0)
+            if (input_fd != -1) 
 			{
-				if (list != last_redir)
-				{
-					tmp = open(list->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-					if (tmp == -1)
-						return (perror("open"), 0);
-					close(tmp);
-				}
-				else
-				{
-					handle_redirect(data, list->index, envp);
-				}
-			}
-			list = list->next;
-		}
-		return (0);
-	}
-	list = data->list;
-	while (list)
-	{
-		if (ft_strlcmp(list->content, "<") == 0)
-		{
-			if (!list->next || !(*list->next->content))
+                dup2(input_fd, STDIN_FILENO);
+                close(input_fd);
+            }
+            
+            if (output_fd != -1) 
 			{
-				printf("minishell: syntax error near unexpected token `newline'\n");
-				return (0);
-			}
-			data->cmd_args = create_cmd_args(data, list->index);
-			handle_back(data, list->index);
-			return (0);	
-		}
-		else if (ft_strlcmp(list->content, ">>") == 0)
-		{
-			if (!list->next || !(*list->next->content))
-			{
-				printf("minishell: syntax error near unexpected token `newline'\n");
-				return (0);
-			}
-			data->cmd_args = create_cmd_args(data, list->index);
-			handle_append(data, list->index);
-			return (0);	
-		}
-		list = list->next;
-	}
-	return (1);
+                dup2(output_fd, STDOUT_FILENO);
+                close(output_fd);
+            }
+            execve(data->command_path, data->cmd_args, data->envp);
+            perror("execve");
+            exit(1);
+        }
+        waitpid(pid, &status, 0);
+        if (WIFEXITED(status))
+            data->exit_status = WEXITSTATUS(status);
+    }
+    if (input_fd != -1)
+        close(input_fd);
+    if (output_fd != -1)
+        close(output_fd);
+    
+    return (0);
 }
 
 int	only_space(char *input)
@@ -567,9 +610,7 @@ void	parsing(char *input, char **envp, t_data *data)
 	
 	// delete_quotes_inside(data); //tout ce que jai mis en comm je laisse au cas ou
 	if (check_empty(*data) == 1) // cas ou on appuie juste sur entree
-	{
 		return ;
-	}
 	if (check_builtin(data) != 0) //la on verifie si ya on est dans le cas dun built in
 		return;
 	// delete_quotes_hard(data);
