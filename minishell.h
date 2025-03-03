@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/03 09:15:40 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/03 09:37:54 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ void execute_pipex(t_data *data);
 void execute_simple_command(t_data *data);
 int count_tab(char **tab);
 int heredoc_input(char *delimiter);
-char **build_cmd_args(t_data *data);
+char *ft_strstr(const char *haystack, const char *needle);
+
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/01 11:55:24 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/03 09:39:27 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,4 +367,24 @@ int	ft_atoi(char	*str)
 		i++;
 	}
 	return (n);
+}
+char	*ft_strstr(const char *haystack, const char *needle)
+{
+	size_t	i;
+	size_t	j;
+
+	if (!*needle)
+		return ((char *)haystack);
+	i = 0;
+	while (haystack[i])
+	{
+		j = 0;
+		while (haystack[i + j] && needle[j]
+			&& haystack[i + j] == needle[j])
+			j++;
+		if (!needle[j])
+			return ((char *)(haystack + i));
+		i++;
+	}
+	return (0);
 }

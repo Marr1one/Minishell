@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/03 09:29:15 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/03 09:38:06 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,7 @@ char	**list_to_args(t_data *data)
 // 		list = list->next;
 // 	}
 // }
+
 
 int main(int argc, char **argv, char **envp)
 {
