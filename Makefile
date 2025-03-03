@@ -15,7 +15,8 @@ SRC		=	main.c \
 			ft_quotes.c \
 			exit.c \
 			ft_malloc.c \
-			pipex.c
+			pipex.c \
+			heredoc.c
 
 CC		=	cc -g3
 

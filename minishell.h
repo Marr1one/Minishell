@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/02 23:00:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/03 09:15:40 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef enum e_type
 {
 	WORD,
 	REDIRECTION,
+	HEREDOC
 }   t_type;
 
 typedef struct s_token
@@ -147,5 +148,7 @@ void close_all_pipes(int nb_cmd, t_pipex_pipe *pipes);
 void execute_pipex(t_data *data);
 void execute_simple_command(t_data *data);
 int count_tab(char **tab);
+int heredoc_input(char *delimiter);
+char **build_cmd_args(t_data *data);
 
 #endif

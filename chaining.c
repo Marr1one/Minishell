@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chaining.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:45:04 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/01 11:54:59 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/03 08:10:00 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ t_token	*add_chained_list(t_data *data)
 			return (NULL);
 		new_node->content = ft_strdup(data->args[i]);
 		new_node->index = i;
+		if (ft_strlcmp(new_node->content, "<<") == 0)
+			new_node->type = HEREDOC;
 		if (ft_strlcmp(new_node->content, ">") == 0 ||
 		ft_strlcmp(new_node->content, "<") == 0 ||
 		ft_strlcmp(new_node->content, ">>") == 0)
