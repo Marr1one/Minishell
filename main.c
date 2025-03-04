@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/03 09:38:06 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:19:20 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,7 @@ void	show_tab(char **tab)
 	}
 }
 
-char	**cut_last(char **tab, int	i)
-{
-	char	**new_tab;
-	int		j;
-	
-	j = 0;
-	new_tab = ft_malloc(sizeof(char *) * (i + 1));
-	if (!new_tab)
-		return (NULL);
-	while (j < i)
-	{
-		new_tab[j] = tab[j];
-		j++;
-	}
-	new_tab[j] = NULL;
-	return (new_tab);
-}
+
 
 void	cut_empty(char **tab, t_data *data)
 {
@@ -88,109 +72,6 @@ void	show_malloc_list(t_malloc *list)
 		i++;
 	}
 }
-
-//int	check_unclosed(t_data *data)
-//{
-//	t_token	*list;
-//	int		len;
-	
-//	list = data->list;
-//	while (list)
-//	{
-//		//len = ft_strlen(data->list->content);
-//		//if (data->list->content[0] == '"' && data->list->content[len - 1] != '"')
-//		//	return (1);
-//		list = list->next;
-//	}
-//	return (0);
-//}
-
-
-
-
-
-//void	destroy_quotes(t_data *data)
-//{
-//	int		i;
-//	int		j;
-//	int		k;
-//	char 	**args;
-	
-//	args = data->args;
-//	i = 0;
-//	k = 0;
-//	while (data->args[i])
-//	{
-//		j = 0;
-//		while (data->args[i][j] == '"')
-//			j++;
-//		if (data->args[i][j] == '\0')
-//		{
-//			free(data->args[i]);
-//		}
-//		else
-//		{
-//			data->args[k] = data->args[i];
-//			k++;
-//		}
-//		i++;
-//	}
-//	data->args[k] = NULL;
-//}
-
-int	list_len(t_token *list)
-{
-	int	i;
-	t_token *current;
-	
-	i = 0;
-	current = list;
-	while (current)
-	{
-		current = current->next;
-		i++;
-	}
-	return (i);
-}
-
-char	**list_to_args(t_data *data)
-{
-	t_token *current;
-	char	**new_args;
-	int		i;
-	
-	i = 0;
-	new_args = ft_malloc(sizeof(char *) * (list_len(data->list) + 1));
-	if (!new_args)
-		return (NULL);
-	current = data->list;
-	while (current)
-	{
-		new_args[i] = ft_strdup(current->content);
-		i++;
-		current = current->next;
-	}
-	new_args[i] = NULL;
-	return (new_args);
-}
-
-// void	update_list(t_data *data)
-// {
-// 	t_token	*list;
-// 	t_token	*temp;
-// 	list = data->list;
-
-// 	while (list)
-// 	{
-// 		while (list && list->content[0] == '$')
-// 		{
-// 			temp = list;
-			
-// 		}
-			
-// 		list = list->next;
-// 	}
-// }
 
 
 int main(int argc, char **argv, char **envp)

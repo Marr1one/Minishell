@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/01 11:39:48 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/04 16:20:46 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int	check_dollar(t_data *data)
 				printf("on trouve un $\n");
 				if ((list->content[0] == '"' && list->content[len - 1] == '"'))
 				{
-					remove_quotes_all(data);
+					rm_qts_nodes(data);
 					check_env(data, list->content, list);
 				}
 				else

@@ -1,17 +1,14 @@
->
 Makefile
 add_slash.c
+built_in
 built_in.c
 chaining.c
 comment.c
-echo.c
 env_var.c
-exit.c
-export.c
-ft_cd.c
 ft_malloc.c
 ft_quotes.c
-ls
+handle_quotes.c
+heredoc.c
 main.c
 minishell
 minishell.h
@@ -20,8 +17,8 @@ out
 parsing.c
 pipex.c
 ramzy.supp
-s
 signals.c
-sortie
+signals.o
 split.c
-utils.c
+utils
+salut les gars

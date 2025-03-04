@@ -7,8 +7,10 @@ comment.c
 env_var.c
 ft_malloc.c
 ft_quotes.c
+gars
 handle_quotes.c
 heredoc.c
+les
 main.c
 minishell
 minishell.h
@@ -17,8 +19,10 @@ out
 parsing.c
 pipex.c
 ramzy.supp
+salut
 signals.c
 signals.o
+sortie
 split.c
 utils
-salut les gars
+youhou

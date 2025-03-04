@@ -1,54 +1,35 @@
-NAME	=	minishell
+CC = cc -g3
+CFLAGS = -Wall -Wextra -Werror 
 
-SRC		=	main.c \
-			parsing.c \
-			split.c \
-			utils.c \
-			add_slash.c \
-			built_in.c \
-			signals.c \
-			chaining.c \
-			env_var.c \
-			export.c \
-			echo.c \
-			ft_cd.c \
-			ft_quotes.c \
-			exit.c \
-			ft_malloc.c \
-			pipex.c \
-			heredoc.c
+NAME = minishell
+OBJDIR = obj
 
-CC		=	cc -g3
+# Find all source files
+SRC = $(shell find . -type f -name "*.c")
 
-OBJ_DIR	=	obj
+# Convert source files to object files in the obj directory
+OBJ = $(patsubst %.c,$(OBJDIR)/%.o,$(SRC))
 
-CFLAGS	=	-Wall -Werror -Wextra
+# Ensure the obj directory exists
+$(shell mkdir -p $(OBJDIR))
 
-LDFLAGS	=	-lreadline
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
+	@echo "*----------------------*"
+	@echo "\033[1;32mCompilation completed 🎉\033[0m"
+	@echo "*----------------------*"
 
-OBJ		=	$(SRC:%.c=$(OBJ_DIR)/%.o)
-
-all:		$(NAME)
-
-$(NAME):	$(OBJ)
-			$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
-			@echo "*----------------------*"
-			@echo "\033[1;32mCompilation completed 🎉\033[0m"
-			@echo "*----------------------*"
-
-
-$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
-			$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR):
-			mkdir -p $(OBJ_DIR)
+# Rule to compile .c files into .o files in the obj directory
+$(OBJDIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-			rm -f $(OBJ)
+	rm -rf $(OBJDIR)
 
-fclean:		clean
-			rm -f $(NAME)
+fclean: clean
+	rm -f $(NAME)
 
-re:			fclean all
+re: fclean $(NAME)
 
-.PHONY:		all clean fclean re
+.PHONY: clean fclean re

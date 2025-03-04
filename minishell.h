@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/03 09:37:54 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:00:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int		ft_strlcmp(char *s1, char *s2);
 int		return_exit_status(t_data *data);
 void	sigint_handler(int signum);
 int		check_unclosed(t_data *data);
-void	remove_quotes_all(t_data *data);
+void	rm_qts_nodes(t_data *data);
 int		is_alpha(char c);
 // t_token	*findlast(t_token	*list);
 void	show_tab(char **tab);
@@ -142,14 +142,15 @@ void	free_all(t_malloc *gc);
 char *ft_strchr(const char *s, int c);
 char *get_cmd_path(const char *cmd, char **envp);
 t_pipex_pipe *init_pipes(int nb_cmd);
-void try_dup2(int oldfd, int newfd);
-void child_redirection(int pos, int nb_cmd, t_pipex_pipe *pipes);
-void close_all_pipes(int nb_cmd, t_pipex_pipe *pipes);
-void execute_pipex(t_data *data);
-void execute_simple_command(t_data *data);
-int count_tab(char **tab);
-int heredoc_input(char *delimiter);
-char *ft_strstr(const char *haystack, const char *needle);
-
-
+void 	try_dup2(int oldfd, int newfd);
+void 	child_redirection(int pos, int nb_cmd, t_pipex_pipe *pipes);
+void 	close_all_pipes(int nb_cmd, t_pipex_pipe *pipes);
+void 	execute_pipex(t_data *data);
+void 	execute_simple_command(t_data *data);
+int 	count_tab(char **tab);
+int 	heredoc_input(char *delimiter);
+char 	*ft_strstr(const char *haystack, const char *needle);
+char	**list_to_args(t_data *data);
+char	**cut_last(char **tab, int	i);
+int		list_len(t_token *list);
 #endif
