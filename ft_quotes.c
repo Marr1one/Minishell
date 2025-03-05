@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:41:30 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/26 18:08:57 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/05 19:27:29 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,31 @@ void	destroy_node_quotes(t_data *data)
 			current = current->next;
 		}
 	}
+}
+
+void		destroy_empty_node(t_data *data)
+{
+	t_token	*current;
+	t_token	*prev;
+	
+	current = data->list;
+	prev = NULL;
+	while (current)
+	{
+		if (current->content[0] == '\0')
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				data->list = current->next;
+			current = current->next;
+		}
+		else
+		{
+			prev = current;
+			current = current->next;
+		}
+	} 
 }
 
 char	**skip_quotes(t_data *data)

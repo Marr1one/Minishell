@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/05 17:18:54 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/05 19:46:47 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,12 +333,17 @@ int	test_commands(t_data *data)
 		return (1);
 	if (data->path == NULL)
 		return (1);
+	printf("list que prend testcommands\n");
+	show_list(data->list);
 	while (data->path[i])
 	{
 		path_test = ft_join(data->path[i], data->list->content);
+		printf("path test : %s\n", path_test);
 		if (access(path_test, F_OK | X_OK) == 0)
 		{
+			printf("on trouve un chemin !\n");
 			data->command_path = ft_strdup(path_test);
+			printf("data.commandpath = %s\n", data->command_path);
 			// free(path_test);
 			return (0);
 		}
@@ -529,7 +534,10 @@ void	exec_command(t_data *data)
 {
 	pid_t	pid;
 	int		status;
-	
+	printf("in execcommand\n");
+	printf("tab dans execcommand\n");
+	show_tab(data->args);
+	data->args = list_to_args(data);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -635,6 +643,7 @@ void	exec_command(t_data *data)
 
 void	parsing(char **envp, t_data *data)
 {
+	printf("in parsing\n");
 	pid_t	pid;
 	int		status;
 	
@@ -686,6 +695,7 @@ void	parsing(char **envp, t_data *data)
 		}
 		return;
 	}
+		printf("iciiiii\n");
 	data->path = ft_split(get_path_env(envp), ':');//a partir de la cest comme pipex finalement
 	data->path = add_slash_all(data->path);
 	if (test_commands(data) == 0)// cas ou on trouve la commande avec access

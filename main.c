@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/05 17:40:31 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/05 19:45:14 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int main(int argc, char **argv, char **envp)
         else
         {
             check_redirect(&data);
-            data.args = ft_split(data.input, ' ');
+            data.args = custom_split(data.input, ' ');
 			printf("tab apres split\n");
 			show_tab(data.args);
             cut_empty(data.args, &data);
@@ -120,10 +120,11 @@ int main(int argc, char **argv, char **envp)
             if (check_dollar(&data) != 0)
                 data.args = list_to_args(&data);
             data.args = skip_quotes(&data);
-            data.list = add_chained_list(&data);
+            data.list = add_chained_list(&data);\
             //check_exit_status(&data);
 			//printf("list apres le check exit\n");
 			//show_list(data.list);
+			destroy_empty_node(&data);
             if (case_redirection(&data) == 1)
                 parsing(data.envp, &data);
         }
