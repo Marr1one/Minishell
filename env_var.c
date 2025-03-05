@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/04 16:20:46 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/05 17:18:19 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ int	index_match(t_data *data, char *str)
 
 void	check_env(t_data *data, char *str, t_token *current)
 {
+	//printf("dans check env\n");
 	int	i;
 	int	len;
 	int	index;
@@ -116,13 +117,23 @@ void	check_env(t_data *data, char *str, t_token *current)
 			index = index_match(data, str);
 			// printf("data.envp[index] = %s\n", data->envp[index]);
 			current->content = ft_strdup(take_after(data->envp[index], '='));
-			printf("content : %s\n", current->content);
+			//printf("content : %s\n", current->content);
 			return ;
 		}
 		i++;
 	}
+	printf("on trouve pas dans env\n");
 	if (founded == 0 && (str[0] != '\'' && str[len - 1] != '\''))
-		current->content = ft_strdup("");
+	{
+		if (ft_strlcmp(str, "$?") == 0)
+		{
+			printf("on trouve exactement $?");
+			current->content = ft_itoa(data->exit_status);
+		}
+		else
+			current->content = ft_strdup("");
+	}
+	
 }
 
 int	check_dollar(t_data *data)

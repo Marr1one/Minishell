@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/03 09:26:08 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:18:54 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -630,7 +630,10 @@ void	exec_command(t_data *data)
 // 	}
 // }
 
-void	parsing(char *input, char **envp, t_data *data)
+
+//|| (input[0] == '.' && input[1] == '/'))
+
+void	parsing(char **envp, t_data *data)
 {
 	pid_t	pid;
 	int		status;
@@ -641,24 +644,24 @@ void	parsing(char *input, char **envp, t_data *data)
 	if (check_builtin(data) != 0) //la on verifie si ya on est dans le cas dun built in
 		return;
 	// delete_quotes_hard(data);
-	if (input[0] == '/' || (input[0] == '.' && input[1] == '/')) //ce cas la est pas demande dans le sujet, donc on pourra enlever
+	if (data->list->content[0] == '/') //ce cas la est pas demande dans le sujet, donc on pourra enlever
 	//je pense mais pour linstant je le garde au cas ou mais tu peux passer
 	{
-		if (access(input, F_OK) != 0)
+		if (access(data->list->content, F_OK) != 0)
 		{
-            printf("minishell: %s: No such file or directory\n", input);
+            printf("minishell: %s: No such file or directory\n", data->list->content);
             return;
         }
-        if (access(input, X_OK) != 0)
+        if (access(data->list->content, X_OK) != 0)
         {
 			data->exit_status = 126;
-            printf("minishell: %s: Permission denied\n", input);
+            printf("minishell: %s: Permission denied\n", data->list->content);
             return;
         }
 		pid = fork();
 		if (pid == 0)
 		{
-			execve(input, data->args, envp);
+			execve(data->list->content, data->args, envp);
 			perror("execve");
 			//data->exit_status = 127;
 			//check_exit_status(data);

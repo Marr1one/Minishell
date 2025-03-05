@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/04 17:19:20 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/05 17:40:31 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@ void	show_tab(char **tab)
 
 	i = 0;
 	if (!tab)
+	{
+		printf("tab existe pas!\n");
 		return;
+	}
 	while (tab[i])
 	{
-		printf("%s\n", tab[i]);
+		printf("ligne %d :%s\n", i, tab[i]);
 		i++;
 	}
 }
@@ -110,15 +113,19 @@ int main(int argc, char **argv, char **envp)
         {
             check_redirect(&data);
             data.args = ft_split(data.input, ' ');
+			printf("tab apres split\n");
+			show_tab(data.args);
             cut_empty(data.args, &data);
             data.list = add_chained_list(&data);
             if (check_dollar(&data) != 0)
                 data.args = list_to_args(&data);
             data.args = skip_quotes(&data);
             data.list = add_chained_list(&data);
-            check_exit_status(&data);
+            //check_exit_status(&data);
+			//printf("list apres le check exit\n");
+			//show_list(data.list);
             if (case_redirection(&data) == 1)
-                parsing(data.input, data.envp, &data);
+                parsing(data.envp, &data);
         }
         free(data.input);
     }

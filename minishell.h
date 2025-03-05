@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/04 17:00:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/05 16:35:41 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ typedef struct s_data
 
 
 
-void	parsing(char *input, char **env, t_data *data);
+void	parsing(char **envp, t_data *data);
 char	**copy_env(char **envp);
 char	**ft_split(char *str, char c);
 int		ft_strlen(const char *str);
