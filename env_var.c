@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/05 17:18:19 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:36:50 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,21 +113,16 @@ void	check_env(t_data *data, char *str, t_token *current)
 		if (ft_strncmp(data->envp[i], ft_joinchar(str, '='), len) == 0)
 		{
 			founded = 1;
-			// printf("data.envp trouve = %s\n", data->envp[i]);
 			index = index_match(data, str);
-			// printf("data.envp[index] = %s\n", data->envp[index]);
 			current->content = ft_strdup(take_after(data->envp[index], '='));
-			//printf("content : %s\n", current->content);
 			return ;
 		}
 		i++;
 	}
-	printf("on trouve pas dans env\n");
 	if (founded == 0 && (str[0] != '\'' && str[len - 1] != '\''))
 	{
 		if (ft_strlcmp(str, "$?") == 0)
 		{
-			printf("on trouve exactement $?");
 			current->content = ft_itoa(data->exit_status);
 		}
 		else
@@ -153,7 +148,6 @@ int	check_dollar(t_data *data)
 		{
 			if (list->content[i] == '$')
 			{
-				printf("on trouve un $\n");
 				if ((list->content[0] == '"' && list->content[len - 1] == '"'))
 				{
 					rm_qts_nodes(data);

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 16:54:17 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:34:22 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -440,7 +440,7 @@ int	count_redirect(t_data *data)
 	return (count);
 }
 
-void	ft_clean_input(t_data *data)
+void	ft_clean_input(t_data *data, char c)
 {
 	char	*new_input;
 	int		i;
@@ -453,19 +453,19 @@ void	ft_clean_input(t_data *data)
 		return ;
 	while (data->input[i])
 	{
-		if (data->input[i] == '>')
+		if (data->input[i] == c)
 		{
 			if (i > 0 && data->input[i - 1] != ' ')
 			{
 				new_input[j] = ' ';
 				j++;
 			}
-			new_input[j] = '>';
+			new_input[j] = c;
 			j++;
-			if (data->input[i + 1] == '>')
+			if (data->input[i + 1] == c)
 			{
 				i++;
-				new_input[j] = '>';
+				new_input[j] = c;
 				j++;
 			}
 			if (data->input[i + 1] && data->input[i + 1] != ' ')
@@ -502,7 +502,7 @@ void	check_redirect(t_data *data)
 	while (data->input[i])
 	{
 		if(data->input[i] == '>')
-			ft_clean_input(data);
+			ft_clean_input(data, '>');
 		i++;
 	}
 }
@@ -595,8 +595,10 @@ void	parsing(char **envp, t_data *data)
 	if (data->list->content[0] == '/') //ce cas la est pas demande dans le sujet, donc on pourra enlever
 	//je pense mais pour linstant je le garde au cas ou mais tu peux passer
 	{
+		//REVOIR lES EXITS STATUS DE /bin/ls/file
 		if (access(data->list->content, F_OK) != 0)
 		{
+			data->exit_status = 127;
             printf("minishell: %s: No such file or directory\n", data->list->content);
             return;
         }

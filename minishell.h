@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 16:56:09 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:33:56 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int				ft_strlen(const char *str);
 void			*ft_memset(void *b, int c, size_t len);
 char			*ft_join(char *str, char *add);
 // int 	handle_env(t_data *data, char *str);
+void			ft_clean_input(t_data *data, char c);
 void 			ft_echo(t_data data);
 void			check_exit_status(t_data *data);
 char			*get_path_env(char **envp);

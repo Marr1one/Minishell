@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:46:56 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 17:13:31 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:17:51 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	ft_exit(t_data *data)
 	//	printf("bash: exit: too many arguments\n");
 	//	return ;	
 	//}
+	printf("exit\n");
 	if (data->args[1])
 	{
 		status = ft_atoi(data->args[1]);
