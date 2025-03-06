@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:45:04 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/05 19:07:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 16:14:47 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ t_token	*add_chained_list(t_data *data)
 	i = 0;
 	while(data->args[i])
 	{
-		printf("on rentre dans la boucle\n");
 		new_node = ft_malloc(sizeof(t_token));
 		if (!new_node)
 			return (NULL);

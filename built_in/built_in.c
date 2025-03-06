@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/05 17:19:00 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 16:57:34 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,26 +242,6 @@ void	check_unset(t_data *data, char	*str)
 	// free(join_eg);
 }
 
-void	ft_pwd(t_data *data)
-{
-	char path[1024];
-
-
-    if (getcwd(path, sizeof(path)) != NULL)
-	{
-		data->exit_status = 0;
-        printf("%s\n", path);
-	}
-    else
-	{
-		data->exit_status = 1;
-        perror("getcwd");
-	}
-}
-
-
-
-
 int	count_args(char **args)
 {
 	int	i;
@@ -278,9 +258,8 @@ int	check_builtin(t_data *data)
 {
 	if (data->list && (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0))
 	{
+		printf("dans mon pwd a moi\n");
 		destroy_node_quotes(data); //detruit les noeuds ou ya juste des guillemets ; pwd "" devient pwd.
-		if (get_nbr_node(data->list) > 1)
-			return (printf("pwd: too many arguments\n"), 1);
 		ft_pwd(data);
 		return (1);
 	}

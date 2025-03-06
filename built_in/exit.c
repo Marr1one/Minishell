@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:46:56 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/04 16:43:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:13:31 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ void	ft_exit(t_data *data)
 	int	status;
 
 	status = 0;
-	printf("data->gc: %p\n", data->gc);
-	printf("exit\n");
 	//if (count_args(data->args) > 2)
 	//{
 	//	printf("bash: exit: too many arguments\n");

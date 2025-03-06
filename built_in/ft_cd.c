@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/04 16:43:29 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 16:36:22 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,13 @@ void ft_cd(t_data *data)
 	char	current_pwd[1024];
 	char	pwd_after[1024];
 
-	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
+	if(list_len(data->list) > 2)
 	{
-		perror("getcwd");
+		printf("minishell: cd: too many arguments\n");
+		return ;
 	}
+	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
+		return (perror("getcwd"));
 	// printf("current pwd = %s\n", current_pwd);
 	old_pwd = search_oldpwd(data);
 	//printf("old_pwd = %s\n", old_pwd);

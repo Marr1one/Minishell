@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/05 19:46:47 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 16:54:17 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,48 +321,25 @@ int	ft_empty(t_data *data)
 	return (0);
 }
 
-int	test_commands(t_data *data)
-{
-	int		i;
-	char	*path_test;
-	
-	i = 0;
-	if (ft_empty(data) == 1)
-		return (1);
-	if (only_space(data->input) == 0)
-		return (1);
-	if (data->path == NULL)
-		return (1);
-	printf("list que prend testcommands\n");
-	show_list(data->list);
-	while (data->path[i])
-	{
-		path_test = ft_join(data->path[i], data->list->content);
-		printf("path test : %s\n", path_test);
-		if (access(path_test, F_OK | X_OK) == 0)
-		{
-			printf("on trouve un chemin !\n");
-			data->command_path = ft_strdup(path_test);
-			printf("data.commandpath = %s\n", data->command_path);
-			// free(path_test);
-			return (0);
-		}
-		i++;
-	}
-	// free(path_test);
-	return (1);
-}
 
 int		check_empty(t_data data)
 {
 	int	i;
-
-	i = 0;	
+	int	len_tab;
+	char	**tab;
+	
+	i = 0;
+	len_tab = 0;
+	tab = data.args;
+	while (tab[len_tab])
+		len_tab++;	
 	if (!data.input)
 		return (1);
 	while(data.input[i] == ' ')
 		i++;
 	if (data.input[i] == '\0')
+		return (1);
+	if (len_tab == 1 && data.args[0][0] == '\0')
 		return (1);
 	return (0);
 }
@@ -530,42 +507,7 @@ void	check_redirect(t_data *data)
 	}
 }
 
-void	exec_command(t_data *data)
-{
-	pid_t	pid;
-	int		status;
-	printf("in execcommand\n");
-	printf("tab dans execcommand\n");
-	show_tab(data->args);
-	data->args = list_to_args(data);
-	pid = fork();
-	if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		execve(data->command_path, data->args, data->envp);
-		perror("execve");
-		exit(127);
-	}	
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status)) // cas ou on a fait ctrl +c pendant la commande (par ex un sleep), la ca a pas vraiment
-	// dinteret cest juste pour faire comme bash
-	{
-		int signal_number = WTERMSIG(status);
-		printf("Process terminated by signal: %d\n", signal_number);
-		data->exit_status = 128 + signal_number;
-	}
-	else if (WIFEXITED(status)) //cas ou tout se passe bien
-	{
-		data->exit_status = WEXITSTATUS(status);
-		//check_exit_status(data);
-	}
-	else //securite au cas ou yai un truc innatendu, afin que exit status ai pas une valeur random
-	{
-		data->exit_status = 128;
-		//check_exit_status(data);
-	}
-	return;
-}
+
 
 //char	*delete_quotes_str(char *str)
 //{
@@ -643,16 +585,13 @@ void	exec_command(t_data *data)
 
 void	parsing(char **envp, t_data *data)
 {
-	printf("in parsing\n");
 	pid_t	pid;
 	int		status;
 	
-	// delete_quotes_inside(data); //tout ce que jai mis en comm je laisse au cas ou
 	if (check_empty(*data) == 1) // cas ou on appuie juste sur entree
 		return ;
 	if (check_builtin(data) != 0) //la on verifie si ya on est dans le cas dun built in
 		return;
-	// delete_quotes_hard(data);
 	if (data->list->content[0] == '/') //ce cas la est pas demande dans le sujet, donc on pourra enlever
 	//je pense mais pour linstant je le garde au cas ou mais tu peux passer
 	{
@@ -695,7 +634,6 @@ void	parsing(char **envp, t_data *data)
 		}
 		return;
 	}
-		printf("iciiiii\n");
 	data->path = ft_split(get_path_env(envp), ':');//a partir de la cest comme pipex finalement
 	data->path = add_slash_all(data->path);
 	if (test_commands(data) == 0)// cas ou on trouve la commande avec access

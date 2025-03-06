@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/05 19:45:14 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:14:12 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ void	show_malloc_list(t_malloc *list)
 	current = list->first;
 	while(current)
 	{
-		printf("noeud  %d : {%p}\n", i,current->addr);
 		current = current->next;
 		i++;
 	}
+	printf("nombre d'allocations : %d\n", i);
 }
 
 
@@ -113,17 +113,12 @@ int main(int argc, char **argv, char **envp)
         {
             check_redirect(&data);
             data.args = custom_split(data.input, ' ');
-			printf("tab apres split\n");
-			show_tab(data.args);
             cut_empty(data.args, &data);
             data.list = add_chained_list(&data);
             if (check_dollar(&data) != 0)
                 data.args = list_to_args(&data);
             data.args = skip_quotes(&data);
             data.list = add_chained_list(&data);\
-            //check_exit_status(&data);
-			//printf("list apres le check exit\n");
-			//show_list(data.list);
 			destroy_empty_node(&data);
             if (case_redirection(&data) == 1)
                 parsing(data.envp, &data);
