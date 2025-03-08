@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:35:34 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 17:11:29 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/08 17:52:33 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ char	**ft_split(char *str, char c)
 	idx = -1;
 	i = 0;
 	j = 0;
+	printf("countword = %d\n", countword(str, c));
 	res = ft_malloc((countword(str, c) + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
@@ -87,9 +88,18 @@ char	**ft_split(char *str, char c)
 	{
 		
 		if (str[i] != c && idx < 0 )
-			idx = i;
-		else if (str[i] == c  && idx >= 0)
 		{
+			printf("on entre dans un mot, on voit le caractere : {%c}\n", str[i]);
+			idx = i;
+		}
+		if (str[i + 1] == '\0')
+		{
+			res[j++] = custom_worddup(str, idx, i);
+			break;
+		}
+		else if ((str[i] == c  && idx >= 0))
+		{
+			printf("on est a la fin du mot :{ %c}\n", str[i]);
 			res [j++] = worddup(str, idx, i);
 			idx = -1;
 		}

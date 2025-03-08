@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/08 01:18:01 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/08 17:08:02 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,14 +170,14 @@ int	check_change(t_data *data, char *str)
 	name = take_before(str, '=');
 	printf("name = %s\n", name);
 	len = ft_strlen(name) + 1;
-	printf("name + '=' = %s\n", ft_joinchar(name, '='));
+	printf("name + '=' = %s\n", ft_joinchar(name, '=', 0));
 	printf("len de name = %d\n", len);
 	env = data->envp;
 	found = 0;
 	i = 0;
 	while (env[i] != NULL)
 	{
-		if (ft_strncmp(env[i], ft_joinchar(name, '='), len) == 0)
+		if (ft_strncmp(env[i], ft_joinchar(name, '=', 0), len) == 0)
 		{
 			printf("on trouve un truc qui existe et qui se nomme deja comme ca\n");
 			printf("env[i] = %s\n", env[i]);
@@ -301,6 +301,17 @@ int	count_args(char **args)
 	return (i);
 }
 
+void	show_tab_export(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		printf("export %s\n", tab[i]);
+		i++;
+	}
+}
 
 //la on verifie le premier argument, si cest parmis un builtin on lance la fonction adequates.
 int	check_builtin(t_data *data)
@@ -341,7 +352,7 @@ int	check_builtin(t_data *data)
 	if (data->list && (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0))
 	{
 		if (get_nbr_node(data->list) == 1)
-			show_tab(data->envp);
+			show_tab_export(data->envp);
 		else
 		{
 			data->list = data->list->next;

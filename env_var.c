@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/08 01:19:36 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/08 17:08:17 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ char	*take_after(char *str, char c)
 	return (res);
 }
 
-char	*ft_joinchar(char *str, char c)
+
+
+char	*ft_joinchar(char *str, char c, int x)
 {
 	int		i;
 	int		j;
@@ -60,7 +62,10 @@ char	*ft_joinchar(char *str, char c)
 	char	*join;
 
 	len = ft_strlen(str);
-	i = 0;
+	if (x == 1)
+		i = 1;
+	else
+		i = 0;
 	j = 0;
 	join = ft_malloc(sizeof(char) * (len + 2));
 	if (!join)
@@ -86,7 +91,7 @@ int	index_match(t_data *data, char *str)
 	len = ft_strlen(str) + 1;
 	while (data->envp[i])
 	{
-		if (ft_strncmp(data->envp[i], ft_joinchar(str, '='), len) == 0)
+		if (ft_strncmp(data->envp[i], ft_joinchar(str, '=', 1), len) == 0)
 		{
 			// printf("dans index ; data.envp trouve = %s\n", data->envp[i]);
 			return (i);
@@ -110,8 +115,9 @@ void	check_env(t_data *data, char *str, t_token *current)
 	len = ft_strlen(str) + 1;
 	while (data->envp[i])
 	{
-		if (ft_strncmp(data->envp[i], ft_joinchar(str, '='), len) == 0)
+		if (ft_strncmp(data->envp[i], ft_joinchar(str, '=', 1), len) == 0)
 		{
+			printf("on trouve !\n");
 			founded = 1;
 			index = index_match(data, str);
 			current->content = ft_strdup(take_after(data->envp[index], '='));

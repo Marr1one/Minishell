@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 17:34:22 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/08 17:40:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -583,7 +583,7 @@ void	check_redirect(t_data *data)
 
 //|| (input[0] == '.' && input[1] == '/'))
 
-void	parsing(char **envp, t_data *data)
+void	 parsing(char **envp, t_data *data)
 {
 	pid_t	pid;
 	int		status;
@@ -636,8 +636,15 @@ void	parsing(char **envp, t_data *data)
 		}
 		return;
 	}
+	printf("get_path_env = %s\n", get_path_env(envp));
 	data->path = ft_split(get_path_env(envp), ':');//a partir de la cest comme pipex finalement
+	
+	//printf("data.paths apres split\n");
+	//show_tab(data->path);
 	data->path = add_slash_all(data->path);
+	
+	printf("data.paths\n");
+	show_tab(data->path);
 	if (test_commands(data) == 0)// cas ou on trouve la commande avec access
 	{
 		exec_command(data); //execute la commande.

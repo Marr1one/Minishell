@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/08 01:09:30 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/08 17:07:46 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int				is_alpha(char c);
 void			show_tab(char **tab);
 t_token			*add_chained_list(t_data *data);
 void			show_list(t_token *list);
-char			*ft_joinchar(char *str, char c);
+char			*ft_joinchar(char *str, char c, int x);
 char			*ft_strdup(char	*str);
 int				check_dollar(t_data *data);
 int				check_export_compatibility(char *str);

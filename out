@@ -1,0 +1,26 @@
+total 164
+drwxr-xr-x  8 maissat 2024_paris  4096 Mar  8 16:16 .
+drwxr-xr-x 12 maissat 2024_paris   183 Mar  8 15:58 ..
+-rw-r--r--  1 maissat 2024_paris     0 Mar  8 15:58 >
+-rw-r--r--  1 maissat 2024_paris  1527 Mar  8 15:58 add_slash.c
+drwxr-xr-x  2 maissat 2024_paris    99 Mar  8 15:58 built_in
+-rw-r--r--  1 maissat 2024_paris  2129 Mar  8 15:58 chaining.c
+-rw-r--r--  1 maissat 2024_paris  3179 Mar  8 15:58 comment.c
+-rw-r--r--  1 maissat 2024_paris  4591 Mar  8 15:58 env_var.c
+-rw-r--r--  1 maissat 2024_paris  2224 Mar  8 15:58 exec.c
+drwxr-xr-x  2 maissat 2024_paris    25 Mar  8 15:58 garbage_collector
+drwxr-xr-x  8 maissat 2024_paris   185 Mar  8 16:02 .git
+-rw-r--r--  1 maissat 2024_paris  1573 Mar  8 15:58 heredoc.c
+-rw-r--r--  1 maissat 2024_paris  3282 Mar  8 15:58 main.c
+-rw-r--r--  1 maissat 2024_paris   545 Mar  8 15:58 Makefile
+-rwxr-xr-x  1 maissat 2024_paris 81424 Mar  8 16:08 minishell
+-rw-r--r--  1 maissat 2024_paris  4865 Mar  8 15:58 minishell.h
+drwxr-xr-x  5 maissat 2024_paris  4096 Mar  8 16:00 obj
+-rw-r--r--  1 maissat 2024_paris     0 Mar  8 16:17 out
+-rw-r--r--  1 maissat 2024_paris 13688 Mar  8 15:58 parsing.c
+-rw-r--r--  1 maissat 2024_paris  4737 Mar  8 15:58 pipex.c
+-rw-r--r--  1 maissat 2024_paris   335 Mar  8 15:58 ramzy.supp
+-rw-r--r--  1 maissat 2024_paris     0 Mar  8 15:58 salut
+-rw-r--r--  1 maissat 2024_paris  1077 Mar  8 15:58 signals.c
+drwxr-xr-x  2 maissat 2024_paris    98 Mar  8 15:58 utils
+drwxr-xr-x  2 maissat 2024_paris    75 Mar  8 15:58 .vscode

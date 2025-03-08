@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/08 00:49:34 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/08 16:54:40 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int main(int argc, char **argv, char **envp)
             if (check_dollar(&data) != 0)
                 data.args = list_to_args(&data);
             data.args = skip_quotes(&data);
-            data.list = add_chained_list(&data);\
+            data.list = add_chained_list(&data);
 			destroy_empty_node(&data);
             if (case_redirection(&data) == 1)
                 parsing(data.envp, &data);
