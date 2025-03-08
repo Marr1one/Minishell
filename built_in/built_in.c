@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 16:57:34 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/08 01:18:01 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,56 @@ int	is_numeric(char	*str)
 // 	new_node->value = NULL;
 // }
 
+// char	*take_before(char	*str)
+// {
+// 	int	i;
+// 	char	*new_str;
 
+// 	i = 0;
+// 	while (str[i] && str[i] != '=')
+// 		i++;
+// 	new_str = ft_malloc(sizeof(char) * i + 1);
+// 	i = 0;
+// 	while (str[i] && str[i] != '=')
+// 	{
+// 		new_str[i] = str[i];
+// 		i++;
+// 	}
+// 	new_str[i] = '\0';
+// 	return (new_str);
+// }
+
+int	check_change(t_data *data, char *str)
+{
+	printf("in check change\n");
+	char 	**env;
+	int		i;
+	int		len;
+	int		found;
+	char	*name;
+
+	
+	name = take_before(str, '=');
+	printf("name = %s\n", name);
+	len = ft_strlen(name) + 1;
+	printf("name + '=' = %s\n", ft_joinchar(name, '='));
+	printf("len de name = %d\n", len);
+	env = data->envp;
+	found = 0;
+	i = 0;
+	while (env[i] != NULL)
+	{
+		if (ft_strncmp(env[i], ft_joinchar(name, '='), len) == 0)
+		{
+			printf("on trouve un truc qui existe et qui se nomme deja comme ca\n");
+			printf("env[i] = %s\n", env[i]);
+			env[i] = ft_strdup(str);
+			found = 1;
+		}
+		i++;
+	}
+	return (found);
+}
 
 char	**add_export(t_data *data, char *str)
 {
@@ -301,7 +350,10 @@ int	check_builtin(t_data *data)
 				if (check_export_compatibility(data->list->content) == 0)
 				{
 					printf("Good format!\n");
-					data->envp = add_export(data, data->list->content);
+					if (check_change(data, data->list->content) == 1)
+						return (1);
+					else
+						data->envp = add_export(data, data->list->content);
 				}
 				else
 					printf("Bad format!\n");

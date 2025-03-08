@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 17:14:12 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/08 00:49:34 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	show_tab(char **tab)
 	}
 	while (tab[i])
 	{
-		printf("ligne %d :%s\n", i, tab[i]);
+		printf("%s\n", tab[i]);
 		i++;
 	}
 }

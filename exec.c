@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 19:38:38 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 16:48:16 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/07 15:27:40 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,10 @@ int	test_commands(t_data *data)
 		if (access(path_test, F_OK | X_OK) == 0)
 		{
 			data->command_path = ft_strdup(path_test);
-			// free(path_test);
 			return (0);
 		}
 		i++;
 	}
-	// free(path_test);
 	return (1);
 }
 void	exec_command(t_data *data)

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 17:36:50 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/08 01:19:36 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ char	*ft_joinchar(char *str, char c)
 	char	*join;
 
 	len = ft_strlen(str);
-	i = 1;
+	i = 0;
 	j = 0;
-	join = ft_malloc(sizeof(char) * (len + 1));
+	join = ft_malloc(sizeof(char) * (len + 2));
 	if (!join)
 		return (NULL);
 	while (str[i])
@@ -72,7 +72,7 @@ char	*ft_joinchar(char *str, char c)
 		i++;
 	}
 	join[j] = c;
-	i++;
+	j++;
 	join[j] = '\0';
 	return (join);
 }
