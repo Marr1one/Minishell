@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/08 17:08:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/09 20:30:11 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int	is_numeric(char	*str)
 
 int	check_change(t_data *data, char *str)
 {
-	printf("in check change\n");
+	//printf("in check change\n");
 	char 	**env;
 	int		i;
 	int		len;
@@ -168,10 +168,10 @@ int	check_change(t_data *data, char *str)
 
 	
 	name = take_before(str, '=');
-	printf("name = %s\n", name);
+	//printf("name = %s\n", name);
 	len = ft_strlen(name) + 1;
-	printf("name + '=' = %s\n", ft_joinchar(name, '=', 0));
-	printf("len de name = %d\n", len);
+	//printf("name + '=' = %s\n", ft_joinchar(name, '=', 0));
+	//printf("len de name = %d\n", len);
 	env = data->envp;
 	found = 0;
 	i = 0;
@@ -179,8 +179,8 @@ int	check_change(t_data *data, char *str)
 	{
 		if (ft_strncmp(env[i], ft_joinchar(name, '=', 0), len) == 0)
 		{
-			printf("on trouve un truc qui existe et qui se nomme deja comme ca\n");
-			printf("env[i] = %s\n", env[i]);
+			//printf("on trouve un truc qui existe et qui se nomme deja comme ca\n");
+			//printf("env[i] = %s\n", env[i]);
 			env[i] = ft_strdup(str);
 			found = 1;
 		}
@@ -318,7 +318,7 @@ int	check_builtin(t_data *data)
 {
 	if (data->list && (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0))
 	{
-		printf("dans mon pwd a moi\n");
+		//printf("dans mon pwd a moi\n");
 		destroy_node_quotes(data); //detruit les noeuds ou ya juste des guillemets ; pwd "" devient pwd.
 		ft_pwd(data);
 		return (1);
@@ -351,26 +351,7 @@ int	check_builtin(t_data *data)
 	}
 	if (data->list && (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0))
 	{
-		if (get_nbr_node(data->list) == 1)
-			show_tab_export(data->envp);
-		else
-		{
-			data->list = data->list->next;
-			while(data->list != NULL)
-			{
-				if (check_export_compatibility(data->list->content) == 0)
-				{
-					printf("Good format!\n");
-					if (check_change(data, data->list->content) == 1)
-						return (1);
-					else
-						data->envp = add_export(data, data->list->content);
-				}
-				else
-					printf("Bad format!\n");
-				data->list = data->list->next;
-			}
-		}
+		export(data);
 		return (1);
 	}
 	return (0);

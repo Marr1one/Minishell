@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/08 17:07:46 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/09 20:32:35 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,4 +162,9 @@ char			**cut_last(char **tab, int	i);
 int				list_len(t_token *list);
 int				only_space(char *input);
 void			ft_pwd(t_data *data);
+void			export(t_data *data);
+char			**add_export(t_data *data, char *str);
+void			show_tab_export(char **tab);
+int				check_change(t_data *data, char *str);
+
 #endif

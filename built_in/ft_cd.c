@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 16:36:22 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/09 15:56:07 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void ft_cd(t_data *data)
 	{
 		if (!old_pwd)
 		{
-			printf("minishell: cd: OLDPWD not set\n");
+			//printf("minishell: cd: OLDPWD not set\n");
 			data->exit_status = 1;
 			return ;
 		}

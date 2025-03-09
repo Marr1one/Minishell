@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/08 17:08:17 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/09 15:53:12 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	check_env(t_data *data, char *str, t_token *current)
 	{
 		if (ft_strncmp(data->envp[i], ft_joinchar(str, '=', 1), len) == 0)
 		{
-			printf("on trouve !\n");
+			//printf("on trouve !\n");
 			founded = 1;
 			index = index_match(data, str);
 			current->content = ft_strdup(take_after(data->envp[index], '='));

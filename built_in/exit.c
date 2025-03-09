@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:46:56 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 17:17:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/09 15:55:13 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	check_exit_status(t_data *data)
 		{
 			//printf("$? trouvE!\n");
 			//printf("before : list content = {%s}\n", list->content);
-			printf("data.exit_status = {%d}\n", data->exit_status);
+			//printf("data.exit_status = {%d}\n", data->exit_status);
 			list->content = ft_strdup(ft_itoa(data->exit_status));
-			printf("after ; list.content = {%s}\n", list->content);
+			//printf("after ; list.content = {%s}\n", list->content);
 		}
 		list = list->next;
 	}
