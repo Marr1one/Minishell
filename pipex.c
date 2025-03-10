@@ -3,29 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/25 17:19:31 by maissat           #+#    #+#             */
-/*   Updated: 2025/02/25 17:29:28 by maissat          ###   ########.fr       */
+/*   Created: 2025/03/08 22:00:55 by braugust          #+#    #+#             */
+/*   Updated: 2025/03/10 16:22:19 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strchr(const char *s, int c)
+char    *ft_strchr(const char *s, int c)
 {
-	int	i;
+        int     i;
 
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (char)c)
-			return ((char *)(&s[i]));
-		i++;
-	}
-	if (s[i] == (char)c)
-		return ((char *)(&s[i]));
-	return (0);
+        i = 0;
+        while (s[i])
+        {
+                if (s[i] == (char)c)
+                        return ((char *)(&s[i]));
+                i++;
+        }
+        if (s[i] == (char)c)
+                return ((char *)(&s[i]));
+        return (0);
+}
+
+int is_builtin(char *cmd)
+{
+    if (ft_strlcmp(cmd, "echo") == 0 ||
+        ft_strlcmp(cmd, "cd") == 0 ||
+        ft_strlcmp(cmd, "exit") == 0 ||
+        ft_strlcmp(cmd, "export") == 0 ||
+        ft_strlcmp(cmd, "pwd") == 0)
+    {
+        return (1);
+    }
+    return (0);
+}
+
+void execute_builtin(t_data *data, char **args)
+{
+    if (ft_strlcmp(args[0], "echo") == 0)
+    {
+        ft_echo(*data);
+    }
+    else if (ft_strlcmp(args[0], "cd") == 0)
+    {
+        ft_cd(data);
+    }
+    else if (ft_strlcmp(args[0], "exit") == 0)
+    {
+        ft_exit(data);
+    }
+    else if (ft_strlcmp(args[0], "pwd") == 0)
+    {
+        ft_pwd(data);
+    }
+    else if (ft_strlcmp(args[0], "env") == 0)
+    {
+        show_tab(data->envp);
+    }
 }
 
 char *get_cmd_path(const char *cmd, char **envp)
@@ -37,41 +74,41 @@ char *get_cmd_path(const char *cmd, char **envp)
     len = ft_strlen("/bin/") + ft_strlen(cmd) + 1;
     path = ft_malloc(len);
     if (!path)
-        return NULL;
+        return (NULL);
     strcpy(path, "/bin/");
     strcat(path, cmd);
     if (access(path, X_OK) == 0)
-        return path;
-    return NULL;
+        return (path);
+    return (NULL);
 }
 
-t_pipex_pipe	*init_pipes(int nb_cmd)
+t_pipex_pipe    *init_pipes(int nb_cmd)
 {
-	t_pipex_pipe	*pipes;
-	int				i;
-	int				p[2];
+        t_pipex_pipe    *pipes;
+        int             i;
+        int             p[2];
 
-	if (nb_cmd <= 1)
-		return (NULL);
-	pipes = ft_malloc((nb_cmd - 1) * sizeof(t_pipex_pipe));
-	if (!pipes)
-	{
-		perror("malloc pipes");
-		exit(EXIT_FAILURE);
-	}
-	i = 0;
-	while (i < nb_cmd - 1)
-	{
-		if (pipe(p) < 0)
-		{
-			perror("pipe");
-			exit(EXIT_FAILURE);
-		}
-		pipes[i].read = p[0];
-		pipes[i].write = p[1];
-		i++;
-	}
-	return (pipes);
+        if (nb_cmd <= 1)
+                return (NULL);
+        pipes = ft_malloc((nb_cmd - 1) * sizeof(t_pipex_pipe));
+        if (!pipes)
+        {
+                perror("malloc pipes");
+                exit(EXIT_FAILURE);
+        }
+        i = 0;
+        while (i < nb_cmd - 1)
+        {
+                if (pipe(p) < 0)
+                {
+                        perror("pipe");
+                        exit(EXIT_FAILURE);
+                }
+                pipes[i].read = p[0];
+                pipes[i].write = p[1];
+                i++;
+        }
+        return (pipes);
 }
 
 void try_dup2(int oldfd, int newfd)
@@ -120,67 +157,74 @@ void close_all_pipes(int nb_cmd, t_pipex_pipe *pipes)
     }
 }
 
-void	execute_pipex(t_data *data)
+void execute_pipex(t_data *data)
 {
-	char			**cmds;
-	t_pipex_pipe	*pipes;
-	char			**args;
-	char			*cmd_path;
-	pid_t			pid;
-	pid_t			last_pid;
-	int				nb_cmd;
-	int				i;
-	int				status;
+    char                    **cmds;
+    t_pipex_pipe            *pipes;
+    char                    **args;
+    char                    *cmd_path;
+    pid_t                   pid;
+    pid_t                   last_pid;
+    int                     nb_cmd;
+    int                     i;
+    int                     status;
 
-	cmds = ft_split(data->input, '|');
-	if (!cmds)
-		return ;
-	nb_cmd = count_tab(cmds);
-	pipes = init_pipes(nb_cmd);
-	last_pid = 0;
-	i = 0;
-	while (i < nb_cmd)
-	{
-		pid = fork();
-		if (pid < 0)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		if (pid == 0)
-		{
-			child_redirection(i, nb_cmd, pipes);
-			if (nb_cmd > 1)
-				close_all_pipes(nb_cmd, pipes);
-			args = ft_split(cmds[i], ' ');
-			if (!args || !args[0])
-			{
-				write(STDERR_FILENO, "Error: empty command\n", 21);
-				exit(127);
-			}
-			cmd_path = get_cmd_path(args[0], data->envp);
-			if (!cmd_path)
-			{
-				fprintf(stderr, "Command not found: %s\n", args[0]);
-				exit(127);
-			}
-			args[0] = cmd_path;
-			execve(args[0], args, data->envp);
-			perror("execve");
-			exit(127);
-		}
-		last_pid = pid;
-		i++;
-	}
-	if (nb_cmd > 1 && pipes)
-	{
-		close_all_pipes(nb_cmd, pipes);
-		free(pipes);
-	}
-	if (waitpid(last_pid, &status, 0) < 0)
-		status = 1;
-	while (wait(NULL) > 0)
-		;
+    cmds = ft_split(data->input, '|');
+    if (!cmds)
+        return ;
+    nb_cmd = count_tab(cmds);
+    pipes = init_pipes(nb_cmd);
+    last_pid = 0;
+    i = 0;
+    while (i < nb_cmd)
+    {
+        pid = fork();
+        if (pid < 0)
+        {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        }
+        if (pid == 0)
+        {
+            child_redirection(i, nb_cmd, pipes);
+            if (nb_cmd > 1)
+                close_all_pipes(nb_cmd, pipes);
+            args = ft_split(cmds[i], ' ');
+            if (!args || !args[0])
+            {
+                write(STDERR_FILENO, "Error: empty command\n", 21);
+                exit(127);
+            }
+            /* Vérifier si la commande est un builtin */
+            if (is_builtin(args[0]))
+            {
+                execute_builtin(data, args);
+                exit(data->exit_status);  // Quitte après exécution du builtin
+            }
+            cmd_path = get_cmd_path(args[0], data->envp);
+            if (!cmd_path)
+            {
+                fprintf(stderr, "Command not found: %s\n", args[0]);
+                exit(127);
+            }
+            free(args[0]);
+            args[0] = cmd_path;
+            execve(args[0], args, data->envp);
+            perror("execve");
+            exit(127);
+        }
+        i++;
+        last_pid = pid;
+    }
+    if (nb_cmd > 1 && pipes)
+    {
+        close_all_pipes(nb_cmd, pipes);
+        free(pipes);
+    }
+    if (waitpid(last_pid, &status, 0) < 0)
+        status = 1;
+    while (wait(NULL) > 0)
+        ;
 }
 
 void execute_simple_command(t_data *data)

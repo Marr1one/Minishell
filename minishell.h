@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/09 20:32:35 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/10 16:18:50 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ int				is_numeric(char	*str);
 void			free_all(t_malloc *gc);
 void 			destroy_empty_node(t_data *data);
 char			**custom_split(char *str, char c);
+//pipex
 char 			*ft_strchr(const char *s, int c);
 char 			*get_cmd_path(const char *cmd, char **envp);
 t_pipex_pipe	*init_pipes(int nb_cmd);
@@ -155,6 +156,9 @@ void 			close_all_pipes(int nb_cmd, t_pipex_pipe *pipes);
 void 			execute_pipex(t_data *data);
 void 			execute_simple_command(t_data *data);
 int 			count_tab(char **tab);
+int				is_builtin(char *cmd);
+void			execute_builtin(t_data *data, char **args);
+// heredoc
 int 			heredoc_input(char *delimiter);
 char 			*ft_strstr(const char *haystack, const char *needle);
 char			**list_to_args(t_data *data);
