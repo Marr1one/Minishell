@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/11 15:54:40 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:20:52 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,24 @@ typedef struct s_malloc
 
 typedef enum e_type
 {
-	CMD,
-	ARG,
+	//CMD,
+	//ARG,
+	WORD,
 	INFILE,
 	OUTFILE_APPEND,
 	OUTFILE_TRUNC,
 	HEREDOC,
 	PIPE,
-	FILE,
-	REDIRECTION,
+	//FILE,
 }   t_type;
 
 typedef struct s_token
 {
 	t_type			type;
 	char			*content;
-	// int				index;
+	int				index;
 	struct	s_token	*next;
+	struct	s_token *prev;
 }	t_token;
 
 typedef struct s_file
@@ -147,7 +148,7 @@ void			rm_qts_nodes(t_data *data);
 int				is_alpha(char c);
 // t_token	*findlast(t_token	*list);
 void			show_tab(char **tab);
-t_token			*add_chained_list(t_data *data);
+t_token			*add_chained_list(char **tab);
 void			show_list(t_token *list);
 char			*ft_joinchar(char *str, char c, int x);
 char			*ft_strdup(char	*str);

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 16:45:04 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/06 16:14:47 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/11 18:26:41 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,36 +44,86 @@ t_token	*findlast_token(t_token	*list)
 }
 
 
-t_token	*add_chained_list(t_data *data)
+int	is_arg(char *str)
 {
 	int	i;
-	t_token	*list;
-	t_token *new_node;
-	
-	list = NULL;
+	int	check;
+
+	check = 0;
 	i = 0;
-	while(data->args[i])
+	while (str[i])
 	{
-		new_node = ft_malloc(sizeof(t_token));
-		if (!new_node)
+		if (str[0] == '-')
+		{
+			if (str[1] == '\0')
+				return (1);
+			else
+				check =  1;
+		}
+		i++;
+	}
+	if (check == 1)
+		return (0);
+	return (1);
+	
+}
+
+void	check_redirect(t_token *current)
+{
+	if (ft_strlcmp(current->content, "<<") == 0)
+		return (current->type = HEREDOC, 1);
+	else if (ft_strlcmp(current->content, ">") == 0)
+		return (current->type = OUTFILE_TRUNC, 1);
+	else if (ft_strlcmp(current->content, "<") == 0)
+		return (current->type = INFILE, 1);
+	else if (ft_strlcmp(current->content, ">>") == 0)
+		return (current->type = OUTFILE_APPEND, 1);
+	
+}
+
+t_token	*add_chained_list(char **tab)
+{
+	int	i;
+	t_token	*head;
+	t_token *prev;
+	t_token *current;
+
+
+	head = NULL;
+	current = NULL;
+	prev = NULL;
+	i = 0;
+	while(tab[i])
+	{
+		current = ft_malloc(sizeof(t_token));
+		if (!current)
 			return (NULL);
-		new_node->content = ft_strdup(data->args[i]);
-		new_node->index = i;
-		if (ft_strlcmp(new_node->content, "<<") == 0)
-			new_node->type = HEREDOC;
-		if (ft_strlcmp(new_node->content, ">") == 0 ||
-		ft_strlcmp(new_node->content, "<") == 0 ||
-		ft_strlcmp(new_node->content, ">>") == 0)
-			new_node->type = REDIRECTION;
+		current->content = ft_strdup(tab[i]);
+		if (ft_strlcmp(current->content, "|") == 0)
+			current->type = PIPE;
+		else if (ft_strlcmp(current->content, "<<") == 0)
+			current->type = HEREDOC;
+		else if (ft_strlcmp(current->content, ">") == 0)
+			current->type = OUTFILE_TRUNC;
+		else if (ft_strlcmp(current->content, "<") == 0)
+			current->type = INFILE;
+		else if (ft_strlcmp(current->content, ">>") == 0)
+			current->type = OUTFILE_APPEND;
+		else if(prev && prev->content )
+		else //si celui davant est une redirection, le token apres est un file
+			current->type = WORD;
+		current->next = NULL;
+		current->prev = prev;
+		if (!head)
+			head = current;
 		else
-			new_node->type = WORD;
-		new_node->next = NULL;
-		if (!list)
-			list = new_node;
-		else	
-			findlast_token(list)->next = new_node;
+		{
+			prev->next = current;
+			findlast_token(head)->next = current;
+		}
+		prev = current;
 		i++;
 	}
 	//show_content(list);
-	return (list);
+	return (head);
 }

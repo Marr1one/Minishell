@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 19:38:38 by braugust          #+#    #+#             */
-/*   Updated: 2025/03/11 15:22:15 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/11 17:28:44 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int	test_commands(t_data *data)
 	char	*path_test;
 	
 	i = 0;
-	if (ft_empty(data) == 1)
-		return (1);
-	if (only_space(data->input) == 0)
-		return (1);
-	if (data->path == NULL)
-		return (1);
+	//if (ft_empty(data) == 1)
+	//	return (1);
+	//if (only_space(data->input) == 0)
+	//	return (1);
+	//if (data->path == NULL)
+	//	return (1);
 	while (data->path[i])
 	{
 		path_test = ft_join(data->path[i], data->list->content);

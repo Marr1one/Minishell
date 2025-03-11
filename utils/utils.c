@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/08 17:40:13 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/11 18:13:49 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ int	check_len(char *s1, char *s2)
 int	ft_strlcmp(char *s1, char *s2)
 {
 	int	i;
+	//printf("in strlcmp\n");
 
 	i = 0;
 	if (!s1 || !s2)
