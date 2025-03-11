@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 22:00:55 by braugust          #+#    #+#             */
-/*   Updated: 2025/03/10 16:22:19 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:22:01 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,36 @@ char    *ft_strchr(const char *s, int c)
         if (s[i] == (char)c)
                 return ((char *)(&s[i]));
         return (0);
+}
+
+static int	is_whitespace(char c)
+{
+	return (c == ' ' || c == '\n' || c == '\t');
+}
+
+char	*ft_strtrim(char const *s)
+{
+	size_t	start;
+	size_t	end;
+	size_t	i;
+	char	*trimmed;
+
+	if (!s)
+		return (NULL);
+	start = 0;
+	while (s[start] && is_whitespace(s[start]))
+		start++;
+	end = ft_strlen(s);
+	while (end > start && is_whitespace(s[end - 1]))
+		end--;
+	trimmed = ft_malloc((end - start + 1) * sizeof(char));
+	if (!trimmed)
+		return (NULL);
+	i = 0;
+	while (start < end)
+		trimmed[i++] = s[start++];
+	trimmed[i] = '\0';
+	return (trimmed);
 }
 
 int is_builtin(char *cmd)
@@ -130,7 +160,7 @@ void child_redirection(int pos, int nb_cmd, t_pipex_pipe *pipes)
     else if (pos == 0)
     {
         try_dup2(STDIN_FILENO, STDIN_FILENO);
-        try_dup2(pipes[0].write, STDOUT_FILENO);
+        try_dup2(pipes[pos].write, STDOUT_FILENO);
     }
     else if (pos == nb_cmd - 1)
     {
@@ -173,6 +203,12 @@ void execute_pipex(t_data *data)
     if (!cmds)
         return ;
     nb_cmd = count_tab(cmds);
+    i = 0;
+    while (i < nb_cmd)
+    {
+        cmds[i] = ft_strtrim(cmds[i]);
+        i++;
+    }  
     pipes = init_pipes(nb_cmd);
     last_pid = 0;
     i = 0;
@@ -199,7 +235,7 @@ void execute_pipex(t_data *data)
             if (is_builtin(args[0]))
             {
                 execute_builtin(data, args);
-                exit(data->exit_status);  // Quitte après exécution du builtin
+                exit(data->exit_status);
             }
             cmd_path = get_cmd_path(args[0], data->envp);
             if (!cmd_path)
@@ -225,41 +261,6 @@ void execute_pipex(t_data *data)
         status = 1;
     while (wait(NULL) > 0)
         ;
-}
-
-void execute_simple_command(t_data *data)
-{   
-    int status;
-    char **args;
-    char *cmd_path;
-    pid_t pid;
-
-    args = ft_split(data->input, ' ');
-    if (!args || !args[0])
-    {
-        return;
-    }
-    pid = fork();
-    if (pid < 0)
-    {
-        perror("fork");
-        return;
-    }
-    if (pid == 0)
-    {
-        cmd_path = get_cmd_path(args[0], data->envp);
-        if (!cmd_path)
-        {
-            fprintf(stderr, "Command not found: %s\n", args[0]);
-            exit(127);
-        }
-        free(args[0]);
-        args[0] = cmd_path;
-        execve(args[0], args, data->envp);
-        perror("execve");
-        exit(127);
-    }
-    waitpid(pid, &status, 0);
 }
 
 int count_tab(char **tab)

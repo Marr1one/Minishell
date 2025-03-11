@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 18:48:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/04 16:43:14 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/11 15:29:11 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void ft_echo(t_data data)
 			printf("%s", list->content);
 		else
 			printf("%s ", list->content);
-		// if (data.args[i + 1] != NULL)
-		// 	printf(" ");
-		// i++;
+		if (data.args[i + 1] != NULL)
+			printf(" ");
+		i++;
 		list = list->next;
 	}
 	if (n == 0)

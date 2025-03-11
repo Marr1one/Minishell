@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/10 16:18:50 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/11 15:54:40 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,38 @@ typedef struct s_malloc
 
 typedef enum e_type
 {
-	WORD,
+	CMD,
+	ARG,
+	INFILE,
+	OUTFILE_APPEND,
+	OUTFILE_TRUNC,
+	HEREDOC,
+	PIPE,
+	FILE,
 	REDIRECTION,
-	HEREDOC
 }   t_type;
 
 typedef struct s_token
 {
 	t_type			type;
 	char			*content;
-	int				index;
+	// int				index;
 	struct	s_token	*next;
 }	t_token;
+
+typedef struct s_file
+{
+	t_type mode;
+	char *path;
+	struct s_file *next;
+} t_file;
+
+typedef struct s_cmd
+{
+	char **args;
+	t_file *files;	
+	struct	s_cmd	*next;
+}	t_cmd;
 
 typedef struct s_data
 {

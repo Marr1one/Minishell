@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/05 19:38:38 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/09 17:25:45 by maissat          ###   ########.fr       */
+/*   Created: 2025/03/05 19:38:38 by braugust          #+#    #+#             */
+/*   Updated: 2025/03/11 15:22:15 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	test_commands(t_data *data)
 	while (data->path[i])
 	{
 		path_test = ft_join(data->path[i], data->list->content);
-		printf("chemin teste : {%s}\n", path_test);
 		if (access(path_test, F_OK | X_OK) == 0)
 		{
 			data->command_path = ft_strdup(path_test);
