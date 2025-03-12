@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/09 15:53:12 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/12 18:29:30 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,17 @@
 int	is_alpha(char c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c<= 'Z'))
-		return (0);
-	else
 		return (1);
+	else
+		return (0);
+}
+
+int	is_digit(char c)
+{
+	if ((c >= '0' && c <= '9'))
+		return (1);
+	else
+		return (0);
 }
 
 char	*take_after(char *str, char c)

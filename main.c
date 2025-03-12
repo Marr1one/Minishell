@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/12 03:28:03 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/12 22:16:07 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ t_token	*add_node(char *str, t_token *list,  t_type type)
 }
 
 int	case_pipe(char *input, int	i)
-{
-	printf("in case pipe\n");
+{	
 	int	count;
 	
 	count = 0;
@@ -65,13 +64,49 @@ int	case_pipe(char *input, int	i)
 	
 }
 
+t_type	case_redirect(char *input, int	i)
+{
+	int	count;
+	
+	count = 0;
+	if (input[i] == '<')
+	{
+		while (input[i] == '<')
+		{
+			i++;
+			count++;
+		}
+		if (count == 1)
+			return (INFILE);
+		if (count == 2)
+			return (HEREDOC);
+		return (UNKNOWN);
+	}
+	else
+	{
+		while (input[i] == '>')
+		{
+			i++;
+			count++;
+		}
+		if (count == 1)
+			return (OUTFILE_TRUNC);
+		if (count == 2)
+			return (OUTFILE_APPEND);
+		return (UNKNOWN);
+	}
+}
+
 t_token	*tokenizer(char *input)
 {
 	int			i;
 	t_token		*list;
+	t_type		expect;
+	t_type		redirect;
 	int			start;
 
 	i = 0;
+	expect = CMD;
 	list = NULL;
 	while (input[i])
 	{
@@ -82,19 +117,58 @@ t_token	*tokenizer(char *input)
 			printf("dans le cas ou il nya que des espaces!\n");
 			break;
 		}
-		if (is_alpha(input[i]) == 0)
+		if (is_alpha(input[i]) == 1 || is_digit(input[i]) == 1
+			|| input[i] == '/')
 		{
 			start = i;
-			while(is_alpha(input[i]) == 0)
+			while(is_alpha(input[i]) == 1 || is_digit(input[i]) == 1
+				|| input[i] == '/' || input[i] == '-')
 				i++;
-			list = add_node(ft_substr(input, start, i), list, WORD);
+			list = add_node(ft_substr(input, start, i), list, expect);
+			if (expect == CMD)
+				expect = ARG;
+			if (expect == FICHIER)
+				expect = ARG;
+			continue;	
+		}
+		else if (input[i] == '-')
+		{
+			// Traiter le tiret et ce qui suit comme un token distinct
+			start = i++;  // Avancer après le tiret
+			while(is_alpha(input[i]) == 1 || is_digit(input[i]) == 1)
+				i++;
+			list = add_node(ft_substr(input, start, i), list, ARG);  // Toujours un ARG
+			continue;
 		}
 		if (input[i] == '|')
 		{
 			if (case_pipe(input, i) > 1)
 				break;
 			list = add_node("|", list, PIPE);
+			expect = CMD;
+			i++;
+			continue;
 		}
+		if (input[i] == '<' || input[i] == '>')
+		{
+			redirect = case_redirect(input, i);
+			if (redirect == UNKNOWN)
+			{
+				printf("erreur de redirect\n");
+				break;
+			}
+			if (input[i] == '<')
+				list = add_node("<", list, redirect);
+			else
+				list = add_node(">", list, redirect);
+			if (redirect == INFILE || redirect == OUTFILE_TRUNC)
+                i++;
+            else if (redirect == HEREDOC || redirect == OUTFILE_APPEND)
+                i += 2;
+			expect = FICHIER;
+			continue;
+		}
+		// if ()
 		i++;
 	}
 	return (list);

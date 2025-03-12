@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/12 02:55:03 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/12 21:27:36 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,27 @@ void	cut_empty(char **tab, t_data *data)
 	}
 }
 
+const char	*get_token_type_name(t_type type)
+{
+	if (type == CMD)
+		return "CMD";
+	if (type == ARG)
+		return "ARG";
+	if (type == INFILE)
+		return "INFILE";
+	if (type == OUTFILE_APPEND)
+		return "OUTFILE_APPEND";
+	if (type == OUTFILE_TRUNC)
+		return "OUTFILE_TRUNC";
+	if (type == HEREDOC)
+		return "HEREDOC";
+	if (type == PIPE)
+		return "PIPE";
+	if (type == FICHIER)
+		return "FICHIER";
+	return "UNKNOWN";
+}
+
 void	show_list(t_token *list)
 {
 	int	i;
@@ -54,7 +75,7 @@ void	show_list(t_token *list)
 	i = 0;
 	while(list)
 	{
-		printf("noeud %d : {%s}, type = {%u}\n", i, list->content, list->type);
+		printf("noeud %d : {%s}, type = {%s}\n", i, list->content, get_token_type_name(list->type));
 		list = list->next;
 		i++;
 	}
