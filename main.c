@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/12 22:16:07 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/13 17:00:03 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ char	*ft_substr(char *str,  int start, int end)
 	i = 0;
 	if (!str)
 		return (NULL);
-	// if (start >= len_str)
-	// 	return (ft_strdup(""));
 	new_str = ft_malloc(sizeof(char) * (end - start + 1));
 	if (new_str == NULL)
 		return (NULL);
@@ -96,6 +94,8 @@ t_type	case_redirect(char *input, int	i)
 		return (UNKNOWN);
 	}
 }
+// is_redirect && is_pipe && is_space
+
 
 t_token	*tokenizer(char *input)
 {
@@ -117,19 +117,17 @@ t_token	*tokenizer(char *input)
 			printf("dans le cas ou il nya que des espaces!\n");
 			break;
 		}
-		if (is_alpha(input[i]) == 1 || is_digit(input[i]) == 1
-			|| input[i] == '/')
+		if (!is_space(input[i]) && !is_redirect(input[i]) && !is_pipe(input[i]))
 		{
 			start = i;
-			while(is_alpha(input[i]) == 1 || is_digit(input[i]) == 1
-				|| input[i] == '/' || input[i] == '-')
+			while(!is_space(input[i]) && !is_redirect(input[i]) && !is_pipe(input[i]))
 				i++;
 			list = add_node(ft_substr(input, start, i), list, expect);
 			if (expect == CMD)
 				expect = ARG;
 			if (expect == FICHIER)
 				expect = ARG;
-			continue;	
+			continue;
 		}
 		else if (input[i] == '-')
 		{
@@ -174,13 +172,125 @@ t_token	*tokenizer(char *input)
 	return (list);
 }
 
+int		count_arguments(t_token *list)
+{
+	int		count;
+	t_token	*current;
+
+	count = 0;
+	current = list;
+	while (current)
+	{
+		if (current->type == PIPE)
+			break;
+		if (current->type == CMD || current->type == ARG)
+			count++;
+		current = current->next;
+	}
+	return (count);
+}
+
+
+t_cmd	*create_args(t_token *list_tkn, t_cmd *list_cmd)
+{
+	int		i;
+	t_token	*current_tkn;
+	t_cmd	*current_cmd;
+
+	current_tkn = list_tkn;
+	current_cmd = list_cmd;
+	i = 0;
+	while (current_tkn)
+	{
+		
+		if (current_tkn->type == PIPE)
+		{
+			current_cmd->args[i] = NULL;
+			i = 0;
+			current_cmd = current_cmd->next;
+		}
+		if (current_tkn->type == CMD || current_tkn->type == ARG)
+		{
+			if (current_tkn->type == CMD)
+				current_cmd->args = ft_malloc(sizeof(char *) * (count_arguments(current_tkn) + 1));
+			current_cmd->args[i] = ft_strdup(current_tkn->content);
+			i++;
+		} 
+		current_tkn = current_tkn->next;
+	}
+	return (list_cmd);
+}
+
+t_cmd	*add_cmd_node(t_cmd *cmd_list)
+{
+	t_cmd *new_cmd;
+	t_cmd *last;
+
+	new_cmd = ft_malloc(sizeof(t_cmd));
+	if (!new_cmd)
+		return (NULL);
+	new_cmd->args = NULL;
+	new_cmd->files = NULL;
+	new_cmd->next = NULL;
+	if (!cmd_list)
+		return (new_cmd);
+	else
+	{
+		last = cmd_list;
+		while (last->next)
+			last = last->next;
+		last->next = new_cmd;
+	}
+	return (cmd_list);
+}
+
+
+t_cmd	*parse_cmd(t_token *list)
+{
+	t_token *current;
+	t_cmd	*list_cmd;
+	int		count;
+
+	list_cmd = NULL;
+	count = 0;
+	current = list;
+	while (current)
+	{
+		if (current->type == CMD)
+		{
+			list_cmd = add_cmd_node(list_cmd);
+			count++;
+		}
+		current = current->next;
+	}
+	printf("count = %d\n", count);
+	return (list_cmd);
+}
+
+void	show_list_cmd(t_cmd *list)
+{
+	t_cmd *current;
+	int		i;
+
+	current = list;
+	i = 0;
+	while (current)
+	{
+		printf("commande %d\n", i +1);
+		i++;
+		show_tab(current->args);
+		current = current->next;
+	}
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	
     (void)argv;
 	(void)envp;
 	char	*input;
-	t_token *list;
+	t_cmd	*list_cmd;
+	t_token *list_tkn;
     
     if (argc != 1)
         return (printf("Usage : ./minishell\n"));
@@ -193,8 +303,14 @@ int main(int argc, char **argv, char **envp)
         if (!input)
             break;
         add_history(input); 
-		list = tokenizer(input);
-		show_list(list);
+		list_tkn = tokenizer(input);
+		printf("list apres tokenize\n");
+		show_list(list_tkn);
+		list_cmd = parse_cmd(list_tkn);
+		list_cmd = create_args(list_tkn, list_cmd);
+		show_list_cmd(list_cmd);
+		//printf("test dune commande\n");
+		//show_tab(args_test);
     }
     return (0);
 }

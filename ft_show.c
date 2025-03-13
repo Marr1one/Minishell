@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/12 21:27:36 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/13 15:46:48 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,14 @@ void	show_tab(char **tab)
 		printf("tab existe pas!\n");
 		return;
 	}
+	if (!*tab)
+	{
+		printf("il ya rien dans tab!\n");
+		return;
+	}
 	while (tab[i])
 	{
-		printf("%s\n", tab[i]);
+		printf("{%s}\n", tab[i]);
 		i++;
 	}
 }
