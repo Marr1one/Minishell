@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/13 17:05:07 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/13 17:21:44 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,16 @@ t_type	case_redirect(char *input, int	i)
 }
 // is_redirect && is_pipe && is_space
 
+int is_word(char c)
+{
+	if (is_space(c))
+		return (0);
+	if (is_redirect(c))
+		return (0);
+	if (is_pipe(c))
+		return (0);
+	return (1);
+}
 
 t_token	*tokenizer(char *input)
 {
@@ -117,10 +127,10 @@ t_token	*tokenizer(char *input)
 			printf("dans le cas ou il nya que des espaces!\n");
 			break;
 		}
-		if (is_space(input[i]) == 0 || is_redirect(input[i]) == 0 || is_pipe(input[i]) == 0)
+		if (is_word(input[i]) == 1)
 		{
 			start = i;
-			while(is_space(input[i]) == 0 || is_redirect(input[i]) == 0 || is_pipe(input[i]) == 0)
+			while(input[i] && is_word(input[i]) == 1)
 				i++;
 			list = add_node(ft_substr(input, start, i), list, expect);
 			if (expect == CMD)
