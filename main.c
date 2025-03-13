@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/13 17:00:03 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/13 17:05:07 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,10 @@ t_token	*tokenizer(char *input)
 			printf("dans le cas ou il nya que des espaces!\n");
 			break;
 		}
-		if (!is_space(input[i]) && !is_redirect(input[i]) && !is_pipe(input[i]))
+		if (is_space(input[i]) == 0 || is_redirect(input[i]) == 0 || is_pipe(input[i]) == 0)
 		{
 			start = i;
-			while(!is_space(input[i]) && !is_redirect(input[i]) && !is_pipe(input[i]))
+			while(is_space(input[i]) == 0 || is_redirect(input[i]) == 0 || is_pipe(input[i]) == 0)
 				i++;
 			list = add_node(ft_substr(input, start, i), list, expect);
 			if (expect == CMD)
@@ -129,15 +129,15 @@ t_token	*tokenizer(char *input)
 				expect = ARG;
 			continue;
 		}
-		else if (input[i] == '-')
-		{
-			// Traiter le tiret et ce qui suit comme un token distinct
-			start = i++;  // Avancer après le tiret
-			while(is_alpha(input[i]) == 1 || is_digit(input[i]) == 1)
-				i++;
-			list = add_node(ft_substr(input, start, i), list, ARG);  // Toujours un ARG
-			continue;
-		}
+		//else if (input[i] == '-')
+		//{
+		//	// Traiter le tiret et ce qui suit comme un token distinct
+		//	start = i++;  // Avancer après le tiret
+		//	while(is_alpha(input[i]) == 1 || is_digit(input[i]) == 1)
+		//		i++;
+		//	list = add_node(ft_substr(input, start, i), list, ARG);  // Toujours un ARG
+		//	continue;
+		//}
 		if (input[i] == '|')
 		{
 			if (case_pipe(input, i) > 1)
