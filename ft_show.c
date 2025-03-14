@@ -6,11 +6,27 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/13 15:46:48 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/14 14:59:04 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	show_list_cmd(t_cmd *list)
+{
+	t_cmd *current;
+	int		i;
+
+	current = list;
+	i = 0;
+	while (current)
+	{
+		printf("commande %d\n", i +1);
+		i++;
+		show_tab(current->args);
+		current = current->next;
+	}
+}
 
 void	show_tab(char **tab)
 {

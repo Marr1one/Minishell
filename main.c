@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 14:44:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/14 15:29:36 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,81 +105,6 @@ int is_word(char c)
 	if (is_pipe(c))
 		return (0);
 	return (1);
-}
-
-t_token	*tokenizer(char *input)
-{
-	int			i;
-	t_token		*list;
-	t_type		expect;
-	t_type		redirect;
-	int			start;
-
-	i = 0;
-	expect = CMD;
-	list = NULL;
-	while (input[i])
-	{
-		while (input[i] == ' ')
-			i++;
-		if (input[i] == '\0')
-		{
-			printf("dans le cas ou il nya que des espaces!\n");
-			break;
-		}
-		if (is_word(input[i]) == 1)
-		{
-			start = i;
-			while(input[i] && is_word(input[i]) == 1)
-				i++;
-			list = add_node(ft_substr(input, start, i), list, expect);
-			if (expect == CMD)
-				expect = ARG;
-			if (expect == FICHIER)
-				expect = ARG;
-			continue;
-		}
-		//else if (input[i] == '-')
-		//{
-		//	// Traiter le tiret et ce qui suit comme un token distinct
-		//	start = i++;  // Avancer après le tiret
-		//	while(is_alpha(input[i]) == 1 || is_digit(input[i]) == 1)
-		//		i++;
-		//	list = add_node(ft_substr(input, start, i), list, ARG);  // Toujours un ARG
-		//	continue;
-		//}
-		if (input[i] == '|')
-		{
-			if (case_pipe(input, i) > 1)
-				break;
-			list = add_node("|", list, PIPE);
-			expect = CMD;
-			i++;
-			continue;
-		}
-		if (input[i] == '<' || input[i] == '>')
-		{
-			redirect = case_redirect(input, i);
-			if (redirect == UNKNOWN)
-			{
-				printf("erreur de redirect\n");
-				break;
-			}
-			if (input[i] == '<')
-				list = add_node("<", list, redirect);
-			else
-				list = add_node(">", list, redirect);
-			if (redirect == INFILE || redirect == OUTFILE_TRUNC)
-                i++;
-            else if (redirect == HEREDOC || redirect == OUTFILE_APPEND)
-                i += 2;
-			expect = FICHIER;
-			continue;
-		}
-		// if ()
-		i++;
-	}
-	return (list);
 }
 
 int		count_arguments(t_token *list)
@@ -283,19 +208,40 @@ t_cmd	*parse_cmd(t_token *list)
 	return (list_cmd);
 }
 
-void	show_list_cmd(t_cmd *list)
+t_file *	add_file(t_file	*list_file, t_token *file_tkn)
 {
-	t_cmd *current;
-	int		i;
+	t_file *new_file;
+	t_file *last_file;
 
-	current = list;
-	i = 0;
-	while (current)
+	new_file = ft_malloc(sizeof(t_file));
+	if (!new_file)
+		return (NULL);
+	new_file->mode = UNKNOWN;
+	new_file->path = ft_strdup(file_tkn->content);
+	new_file->next = NULL;
+	if (list_file == NULL)
+		return (new_file);
+	else
+		last_file = list_file;
+		while(last_file->next)
+			last_file = last_file->next;
+		last_file->next = new_file;
+	return (list_file);
+}
+
+t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
+{
+	t_token *current_tkn;
+	t_cmd *current_cmd;
+
+	current_tkn = list_tkn;
+	current_cmd = list_cmd;
+	while (current_tkn && current_cmd)
 	{
-		printf("commande %d\n", i +1);
-		i++;
-		show_tab(current->args);
-		current = current->next;
+		if (current_tkn->type == FICHIER)
+		{
+			current_cmd->files = add_file(current_cmd->files, current_tkn);
+		}
 	}
 }
 
@@ -324,6 +270,7 @@ int main(int argc, char **argv, char **envp)
 		show_list(list_tkn);
 		list_cmd = parse_cmd(list_tkn);
 		list_cmd = create_args(list_tkn, list_cmd);
+		list_cmd = create_files(list_tkn, list_cmd);
 		show_list_cmd(list_cmd);
 		//printf("test dune commande\n");
 		//show_tab(args_test);
