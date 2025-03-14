@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 14:32:03 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/14 14:44:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,10 @@ int		count_arguments(t_token *list)
 	t_token	*current;
 
 	count = 0;
-	current = list;
+	if (list->type == PIPE)
+		current = list->next;
+	else
+		current = list;
 	while (current)
 	{
 		if (current->type == PIPE)
@@ -197,6 +200,7 @@ int		count_arguments(t_token *list)
 			count++;
 		current = current->next;
 	}
+	printf("nombre darguments = %d\n", count);
 	return (count);
 }
 
