@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/13 17:21:44 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/14 14:32:03 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,7 @@ int		count_arguments(t_token *list)
 
 t_cmd	*create_args(t_token *list_tkn, t_cmd *list_cmd)
 {
+	printf("dans create args\n");
 	int		i;
 	t_token	*current_tkn;
 	t_cmd	*current_cmd;
@@ -210,24 +211,24 @@ t_cmd	*create_args(t_token *list_tkn, t_cmd *list_cmd)
 	current_tkn = list_tkn;
 	current_cmd = list_cmd;
 	i = 0;
-	while (current_tkn)
+	current_cmd->args = ft_malloc(sizeof(char *) * (count_arguments(current_tkn) + 1));
+	while (current_tkn && current_cmd)
 	{
-		
-		if (current_tkn->type == PIPE)
-		{
-			current_cmd->args[i] = NULL;
-			i = 0;
-			current_cmd = current_cmd->next;
-		}
 		if (current_tkn->type == CMD || current_tkn->type == ARG)
 		{
-			if (current_tkn->type == CMD)
-				current_cmd->args = ft_malloc(sizeof(char *) * (count_arguments(current_tkn) + 1));
-			current_cmd->args[i] = ft_strdup(current_tkn->content);
-			i++;
+			current_cmd->args[i++] = ft_strdup(current_tkn->content);
 		} 
+		else if (current_tkn->type == PIPE)
+		{
+			current_cmd->args[i] = NULL;	
+			i = 0;
+			current_cmd = current_cmd->next;
+			current_cmd->args = ft_malloc(sizeof(char *) * (count_arguments(current_tkn) + 1));
+		}
 		current_tkn = current_tkn->next;
 	}
+	if (current_cmd)
+		current_cmd->args[i] = NULL;
 	return (list_cmd);
 }
 
@@ -262,11 +263,12 @@ t_cmd	*parse_cmd(t_token *list)
 	int		count;
 
 	list_cmd = NULL;
-	count = 0;
+	list_cmd = add_cmd_node(list_cmd);
+	count = 1;
 	current = list;
 	while (current)
 	{
-		if (current->type == CMD)
+		if (current->type == PIPE)
 		{
 			list_cmd = add_cmd_node(list_cmd);
 			count++;
