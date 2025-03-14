@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 20:35:24 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/14 23:42:46 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,7 @@ int main(int argc, char **argv, char **envp)
 		list_cmd = create_args(list_tkn, list_cmd);
 		list_cmd = create_files(list_tkn, list_cmd);
 		show_list_cmd(list_cmd);
+		
 		//printf("test dune commande\n");
 		//show_tab(args_test);
     }
