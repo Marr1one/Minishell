@@ -6,11 +6,27 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 14:59:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/14 20:18:45 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+void	show_files(t_file *list_file)
+{
+	t_file *current;
+	int		i;
+
+	current = list_file;
+	i = 0;
+	while (current)
+	{
+		printf("file %d : mode = %s, path = %s\n", i + 1, get_token_type_name(current->mode), current->path);
+		current = current->next;
+		i++;
+	}
+}
 
 void	show_list_cmd(t_cmd *list)
 {
@@ -23,7 +39,10 @@ void	show_list_cmd(t_cmd *list)
 	{
 		printf("commande %d\n", i +1);
 		i++;
+		printf("args\n");
 		show_tab(current->args);
+		printf("files\n");
+		show_files(current->files);
 		current = current->next;
 	}
 }

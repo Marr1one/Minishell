@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 15:02:56 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/14 20:19:04 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct s_data
 }	t_data;
 
 
+char			*ft_substr(char *str,  int start, int end);
 void			show_list_cmd(t_cmd *list);
 void			show_tab(char **tab);
 void			show_list(t_token *list);
@@ -115,6 +116,7 @@ int				is_redirect(char c);
 int				is_pipe(char c);
 int				is_space(char c);
 t_token			*tokenizer(char *input);
+const char		*get_token_type_name(t_type type);
 
 void			parsing(char **envp, t_data *data);
 char			**copy_env(char **envp);
