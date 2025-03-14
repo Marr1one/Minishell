@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 20:15:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/14 20:35:24 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,13 +170,13 @@ t_type save_mode(t_token current_tkn)
 	return (save);
 }
 
-int	is_tkn_redirect(t_token *current_tkn)
-{
-	if (current_tkn->type == HEREDOC || current_tkn->type == INFILE || 
-		current_tkn->type == OUTFILE_APPEND || current_tkn->type == OUTFILE_TRUNC)
-		return (1);
-	return (0);
-}
+// int	is_tkn_redirect(t_token *current_tkn)
+// {
+// 	if (current_tkn->type == HEREDOC || current_tkn->type == INFILE || 
+// 		current_tkn->type == OUTFILE_APPEND || current_tkn->type == OUTFILE_TRUNC)
+// 		return (1);
+// 	return (0);
+// }
 
 t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 {
@@ -189,7 +189,7 @@ t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 	current_cmd = list_cmd;
 	while (current_tkn && current_cmd)
 	{
-		if (is_tkn_redirect(current_tkn))
+		if (is_redirect(current_tkn->content[0]))
 			save = save_mode(*current_tkn);
 		if (current_tkn->type == FICHIER)
 		{
