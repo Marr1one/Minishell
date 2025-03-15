@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 23:42:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/15 08:14:33 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exec(t_cmd *list_cmd)
-{
-}
+// void	exec(t_cmd *list_cmd)
+// {
+// }

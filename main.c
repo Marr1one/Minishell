@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 23:42:46 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/15 08:18:32 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,10 @@ int main(int argc, char **argv, char **envp)
 	char	*input;
 	t_cmd	*list_cmd;
 	t_token *list_tkn;
-    
+	t_data	data;
+	
+    data.envp = envp;
+	data.exit_status = 0;
     if (argc != 1)
         return (printf("Usage : ./minishell\n"));
     signal(SIGINT, sigint_handler);
@@ -227,6 +230,9 @@ int main(int argc, char **argv, char **envp)
             break;
         add_history(input); 
 		list_tkn = tokenizer(input);
+		data.list = list_tkn;
+		check_dollar(&data);
+		rm_qts_nodes(&data);
 		printf("list apres tokenize\n");
 		show_list(list_tkn);
 		list_cmd = parse_cmd(list_tkn);
