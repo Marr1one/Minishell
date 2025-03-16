@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/15 08:18:32 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/16 16:21:23 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,7 @@ int main(int argc, char **argv, char **envp)
 
     while (1)
     {
-        input = readline("\033[0;32mminishell$\033[0m ");
+        input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
         if (!input)
             break;
         add_history(input); 
