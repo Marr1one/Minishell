@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/16 16:21:23 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:16:14 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,12 +206,15 @@ t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 	return (list_cmd);
 }
 
+
+
 int main(int argc, char **argv, char **envp)
 {
 	
     (void)argv;
 	(void)envp;
 	char	*input;
+	char	**paths;
 	t_cmd	*list_cmd;
 	t_token *list_tkn;
 	t_data	data;
@@ -233,13 +236,15 @@ int main(int argc, char **argv, char **envp)
 		data.list = list_tkn;
 		check_dollar(&data);
 		rm_qts_nodes(&data);
-		printf("list apres tokenize\n");
-		show_list(list_tkn);
+		// printf("list apres tokenize\n");
+		// show_list(list_tkn);
 		list_cmd = parse_cmd(list_tkn);
 		list_cmd = create_args(list_tkn, list_cmd);
 		list_cmd = create_files(list_tkn, list_cmd);
-		show_list_cmd(list_cmd);
-		
+		// show_list_cmd(list_cmd);
+		paths = ft_split(get_path_env(envp), ':');
+    	paths = add_slash_all(paths);
+		execute_cmds(list_cmd, paths);
 		//printf("test dune commande\n");
 		//show_tab(args_test);
     }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/15 08:26:56 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/17 14:08:14 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,9 @@ int				is_pipe(char c);
 int				is_space(char c);
 t_token			*tokenizer(char *input);
 const char		*get_token_type_name(t_type type);
+void			execute_cmds(t_cmd *cmds, char **paths);
+
+
 
 void			parsing(char **envp, t_data *data);
 char			**copy_env(char **envp);
