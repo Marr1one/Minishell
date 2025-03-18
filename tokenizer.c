@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 19:30:05 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:09:30 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,11 @@ t_token	*tokenizer(char *input)
 			expect = FICHIER;
 			continue;
 		}
-		// if ()
+		if (list && findlast_token(list)->type == PIPE)
+		{
+			printf("Pipe not closed\n");
+			return (NULL);
+		}
 		i++;
 	}
 	return (list);

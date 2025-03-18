@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/17 14:16:14 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:50:41 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ t_cmd	*parse_cmd(t_token *list)
 	t_cmd	*list_cmd;
 	int		count;
 
+	count = 0;
 	list_cmd = NULL;
 	list_cmd = add_cmd_node(list_cmd);
 	current = list;
@@ -123,6 +124,11 @@ t_cmd	*parse_cmd(t_token *list)
 	{
 		if (current->type == PIPE)
 		{
+			if (!current->next || current->next->type == PIPE)
+			{
+				printf("Syntax error: pipe not closed\n");
+				return (NULL);
+			}
 			list_cmd = add_cmd_node(list_cmd);
 			count++;
 		}
@@ -130,6 +136,7 @@ t_cmd	*parse_cmd(t_token *list)
 	}
 	return (list_cmd);
 }
+
 
 t_file *	add_file(t_file	*list_file, t_token *file_tkn, t_type mode)
 {
@@ -239,6 +246,11 @@ int main(int argc, char **argv, char **envp)
 		// printf("list apres tokenize\n");
 		// show_list(list_tkn);
 		list_cmd = parse_cmd(list_tkn);
+		if (list_cmd == NULL)
+        {
+            free(input);
+            continue;
+        }
 		list_cmd = create_args(list_tkn, list_cmd);
 		list_cmd = create_files(list_tkn, list_cmd);
 		// show_list_cmd(list_cmd);

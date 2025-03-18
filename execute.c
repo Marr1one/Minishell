@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/17 14:16:38 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/18 13:50:16 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,45 @@ int open_file(char *path, t_type mode)
     return fd;
 }
 
+
+int is_builtin(char *cmd)
+{
+    if (ft_strlcmp(cmd, "echo") == 0 ||
+        ft_strlcmp(cmd, "cd") == 0 ||
+        ft_strlcmp(cmd, "exit") == 0 ||
+        ft_strlcmp(cmd, "export") == 0 ||
+        ft_strlcmp(cmd, "pwd") == 0)
+    {
+        return (1);
+    }
+    return (0);
+}
+
+void execute_builtin(t_data *data, char **args)
+{
+    if (ft_strlcmp(args[0], "echo") == 0)
+    {
+        ft_echo(*data);
+    }
+    else if (ft_strlcmp(args[0], "cd") == 0)
+    {
+        ft_cd(data);
+    }
+    else if (ft_strlcmp(args[0], "exit") == 0)
+    {
+        ft_exit(data);
+    }
+    else if (ft_strlcmp(args[0], "pwd") == 0)
+    {
+        ft_pwd(data);
+    }
+    else if (ft_strlcmp(args[0], "env") == 0)
+    {
+        show_tab(data->envp);
+    }
+}
+
+
 void	execute_cmds(t_cmd *cmds, char **paths)
 {
     int		fd_in;
@@ -63,6 +102,7 @@ void	execute_cmds(t_cmd *cmds, char **paths)
 
 	current_cmd = cmds;
 	fd_in = 0;
+    // rajouter execute_builtin
     while (current_cmd)
     {
         if (current_cmd->next)
@@ -124,3 +164,5 @@ void	execute_cmds(t_cmd *cmds, char **paths)
         current_cmd = current_cmd->next;
     }
 }
+
+

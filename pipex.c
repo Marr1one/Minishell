@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 22:00:55 by braugust          #+#    #+#             */
-/*   Updated: 2025/03/10 17:22:01 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:50:59 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,43 +56,6 @@ char	*ft_strtrim(char const *s)
 		trimmed[i++] = s[start++];
 	trimmed[i] = '\0';
 	return (trimmed);
-}
-
-int is_builtin(char *cmd)
-{
-    if (ft_strlcmp(cmd, "echo") == 0 ||
-        ft_strlcmp(cmd, "cd") == 0 ||
-        ft_strlcmp(cmd, "exit") == 0 ||
-        ft_strlcmp(cmd, "export") == 0 ||
-        ft_strlcmp(cmd, "pwd") == 0)
-    {
-        return (1);
-    }
-    return (0);
-}
-
-void execute_builtin(t_data *data, char **args)
-{
-    if (ft_strlcmp(args[0], "echo") == 0)
-    {
-        ft_echo(*data);
-    }
-    else if (ft_strlcmp(args[0], "cd") == 0)
-    {
-        ft_cd(data);
-    }
-    else if (ft_strlcmp(args[0], "exit") == 0)
-    {
-        ft_exit(data);
-    }
-    else if (ft_strlcmp(args[0], "pwd") == 0)
-    {
-        ft_pwd(data);
-    }
-    else if (ft_strlcmp(args[0], "env") == 0)
-    {
-        show_tab(data->envp);
-    }
 }
 
 char *get_cmd_path(const char *cmd, char **envp)
