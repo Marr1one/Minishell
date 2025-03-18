@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 15:11:46 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/18 16:06:25 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,28 +65,34 @@ int is_builtin(char *cmd)
     return (0);
 }
 
-void execute_builtin(t_data *data, t_cmd *cmd)
+int execute_builtin(t_cmd *cmd)
 {
     if (ft_strlcmp(cmd->args[0], "echo") == 0)
     {
-        ft_echo(*data);
+        ft_echo(cmd);
+        return (1);
     }
-    else if (ft_strlcmp(cmd->args[0], "cd") == 0)
-    {
-        ft_cd(data);
-    }
-    else if (ft_strlcmp(cmd->args[0], "exit") == 0)
-    {
-        ft_exit(data);
-    }
-    else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
-    {
-        ft_pwd(data);
-    }
-    else if (ft_strlcmp(cmd->args[0], "env") == 0)
-    {
-        show_tab(data->envp);
-    }
+    // else if (ft_strlcmp(cmd->args[0], "cd") == 0)
+    // {
+    //     ft_cd(cmd);
+    //     return (1);
+    // }
+    // else if (ft_strlcmp(cmd->args[0], "exit") == 0)
+    // {
+    //     ft_exit(cmd);
+    //     return (1);
+    // }
+    // else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
+    // {
+    //     ft_pwd(cmd);
+    //     return (1);
+    // }
+    // // else if (ft_strlcmp(cmd->args[0], "env") == 0)
+    // // {
+    // //     show_tab(cmd->envp);
+    // //     return (1);
+    // // }
+    return (0);
 }
 
 // void	execute_cmds(t_cmd *cmds, char **paths)
@@ -212,10 +218,16 @@ void execute_cmds(t_data *data, t_cmd *cmds, char **paths)
                 close(fd_in);
             }
             /* Au lieu d'exécuter execve on exécute builtin */
+          if (execute_builtin(current_cmd) == 1)
+            {
+                exit(0);
+            }
             good_path = new_test_commands(paths, current_cmd->args[0]);
             if (good_path != NULL)
             {
-                execute_builtin(data, current_cmd);
+                
+                execve(good_path, current_cmd->args, NULL);
+ 				perror("execve");
                 exit(data->exit_status);
             }
             else

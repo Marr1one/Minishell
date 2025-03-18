@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 15:01:43 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/18 16:06:06 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,8 @@ int				is_space(char c);
 t_token			*tokenizer(char *input);
 const char		*get_token_type_name(t_type type);
 // void			execute_cmds(t_cmd *cmds, char **paths);
-void execute_cmds(t_data *data, t_cmd *cmds, char **paths);
-void execute_builtin(t_data *data, t_cmd *cmd);
+void 			execute_cmds(t_data *data, t_cmd *cmds, char **paths);
+int 			execute_builtin(t_cmd *cmd);
 
 void			parsing(char **envp, t_data *data);
 char			**copy_env(char **envp);
@@ -133,7 +133,7 @@ void			*ft_memset(void *b, int c, size_t len);
 char			*ft_join(char *str, char *add);
 // int 	handle_env(t_data *data, char *str);
 void			ft_clean_input(t_data *data, char c);
-void 			ft_echo(t_data data);
+void 			ft_echo(t_cmd *current_cmd);
 void			check_exit_status(t_data *data);
 char			*get_path_env(char **envp);
 t_malloc		**get_gc(void);
