@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 14:49:39 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:00:35 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,54 +65,126 @@ int is_builtin(char *cmd)
     return (0);
 }
 
-void execute_builtin(t_data *data, char **args)
+void execute_builtin(t_data *data, t_cmd *cmd)
 {
-    if (ft_strlcmp(args[0], "echo") == 0)
+    if (ft_strlcmp(cmd->args[0], "echo") == 0)
     {
         ft_echo(*data);
     }
-    else if (ft_strlcmp(args[0], "cd") == 0)
+    else if (ft_strlcmp(cmd->args[0], "cd") == 0)
     {
         ft_cd(data);
     }
-    else if (ft_strlcmp(args[0], "exit") == 0)
+    else if (ft_strlcmp(cmd->args[0], "exit") == 0)
     {
         ft_exit(data);
     }
-    else if (ft_strlcmp(args[0], "pwd") == 0)
+    else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
     {
         ft_pwd(data);
     }
-    else if (ft_strlcmp(args[0], "env") == 0)
+    else if (ft_strlcmp(cmd->args[0], "env") == 0)
     {
         show_tab(data->envp);
     }
 }
 
+// void	execute_cmds(t_cmd *cmds, char **paths)
+// {
+//     int		fd_in;
+//     int		fd_pipe[2];
+// 	int		fd;
+// 	char	*good_path;
+// 	pid_t	pid;
+// 	t_file	*current_file;
+// 	t_cmd	*current_cmd;
 
-void	execute_cmds(t_cmd *cmds, char **paths)
+// 	current_cmd = cmds;
+// 	fd_in = 0;
+//     // rajouter execute_builtin
+//     while (current_cmd)
+//     {
+//         if (current_cmd->next)
+//             pipe(fd_pipe);            
+//         pid = fork();
+//         if (pid == 0)
+//         {
+//             if (current_cmd->files)
+//             {
+//                	current_file = current_cmd->files;
+//                 while (current_file)
+//                 {
+//                     fd = open_file(current_file->path, current_file->mode);
+//                     if (fd == -1)
+//                     {
+//                         perror("open");
+//                         exit(1);
+//                     }
+//                     if (current_file->mode == INFILE || current_file->mode == HEREDOC)
+//                         dup2(fd, STDIN_FILENO);
+//                     else
+//                         dup2(fd, STDOUT_FILENO);
+//                     close(fd);
+//                     current_file = current_file->next;
+//                 }
+//             }
+//             if (current_cmd->next)
+//             {
+//                 dup2(fd_pipe[1], STDOUT_FILENO);
+//                 close(fd_pipe[0]);
+//                 close(fd_pipe[1]);
+//             }
+//             if (fd_in != 0)
+//             {
+//                 dup2(fd_in, STDIN_FILENO);
+//                 close(fd_in);
+//             }
+// 			good_path = new_test_commands(paths,  current_cmd->args[0]);
+// 			if (good_path != (NULL))
+//             {
+// 				execve(good_path, current_cmd->args, NULL);
+// 				perror("execve");
+// 				exit(1);
+// 			}
+// 			else
+// 				printf("minishell: %s: command not found\n", current_cmd->args[0]);
+//         }
+//         else if (pid > 0)
+//         {
+//             waitpid(pid, NULL, 0);
+//             if (fd_in != 0)
+//                 close(fd_in);
+//             if (current_cmd->next)
+//             {
+//                 close(fd_pipe[1]);
+//                 fd_in = fd_pipe[0];
+//             }
+//         }
+//         current_cmd = current_cmd->next;
+//     }
+// }
+
+void execute_cmds(t_data *data, t_cmd *cmds, char **paths)
 {
-    int		fd_in;
-    int		fd_pipe[2];
-	int		fd;
-	char	*good_path;
-	pid_t	pid;
-	t_file	*current_file;
-	t_cmd	*current_cmd;
+    int     fd_in = 0;
+    int     fd_pipe[2];
+    int     fd;
+    char    *good_path;
+    pid_t   pid;
+    t_file  *current_file;
+    t_cmd   *current_cmd = cmds;
 
-	current_cmd = cmds;
-	fd_in = 0;
-    // rajouter execute_builtin
     while (current_cmd)
     {
         if (current_cmd->next)
-            pipe(fd_pipe);            
+            pipe(fd_pipe);
         pid = fork();
         if (pid == 0)
         {
+            /* Gestion des redirections vers fichiers */
             if (current_cmd->files)
             {
-               	current_file = current_cmd->files;
+                current_file = current_cmd->files;
                 while (current_file)
                 {
                     fd = open_file(current_file->path, current_file->mode);
@@ -129,26 +201,33 @@ void	execute_cmds(t_cmd *cmds, char **paths)
                     current_file = current_file->next;
                 }
             }
+            /* Gestion du pipe de sortie si commande suivante présente */
             if (current_cmd->next)
             {
                 dup2(fd_pipe[1], STDOUT_FILENO);
                 close(fd_pipe[0]);
                 close(fd_pipe[1]);
             }
+            /* Gestion du pipe d'entrée si présent */
             if (fd_in != 0)
             {
                 dup2(fd_in, STDIN_FILENO);
                 close(fd_in);
             }
-			good_path = new_test_commands(paths,  current_cmd->args[0]);
-			if (good_path != (NULL))
+            /* Au lieu d'exécuter execve, on vérifie si on trouve un chemin correct.
+             * Si oui, on exécute la built-in correspondante.
+             */
+            good_path = new_test_commands(paths, current_cmd->args[0]);
+            if (good_path != NULL)
             {
-				execve(good_path, current_cmd->args, NULL);
-				perror("execve");
-				exit(1);
-			}
-			else
-				printf("minishell: %s: command not found\n", current_cmd->args[0]);
+                execute_builtin(data, current_cmd);
+                exit(data->exit_status);
+            }
+            else
+            {
+                printf("minishell: %s: command not found\n", current_cmd->args[0]);
+                exit(127);
+            }
         }
         else if (pid > 0)
         {
@@ -164,4 +243,3 @@ void	execute_cmds(t_cmd *cmds, char **paths)
         current_cmd = current_cmd->next;
     }
 }
-

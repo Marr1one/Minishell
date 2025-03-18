@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 14:35:34 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:01:37 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,7 @@ int main(int argc, char **argv, char **envp)
 		// show_list_cmd(list_cmd);
 		paths = ft_split(get_path_env(envp), ':');
     	paths = add_slash_all(paths);
-		execute_cmds(list_cmd, paths);
+		execute_cmds(&data, list_cmd, paths);
 		//printf("test dune commande\n");
 		//show_tab(args_test);
     }
