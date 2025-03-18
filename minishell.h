@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 13:50:34 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:47:41 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ int				is_space(char c);
 t_token			*tokenizer(char *input);
 const char		*get_token_type_name(t_type type);
 void			execute_cmds(t_cmd *cmds, char **paths);
-
 
 void			parsing(char **envp, t_data *data);
 char			**copy_env(char **envp);

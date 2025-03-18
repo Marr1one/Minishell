@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 13:50:16 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:49:39 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	execute_cmds(t_cmd *cmds, char **paths)
     while (current_cmd)
     {
         if (current_cmd->next)
-            pipe(fd_pipe);
+            pipe(fd_pipe);            
         pid = fork();
         if (pid == 0)
         {
@@ -164,5 +164,4 @@ void	execute_cmds(t_cmd *cmds, char **paths)
         current_cmd = current_cmd->next;
     }
 }
-
 
