@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 22:00:55 by braugust          #+#    #+#             */
-/*   Updated: 2025/03/18 13:50:59 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:29:09 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,81 +150,81 @@ void close_all_pipes(int nb_cmd, t_pipex_pipe *pipes)
     }
 }
 
-void execute_pipex(t_data *data)
-{
-    char                    **cmds;
-    t_pipex_pipe            *pipes;
-    char                    **args;
-    char                    *cmd_path;
-    pid_t                   pid;
-    pid_t                   last_pid;
-    int                     nb_cmd;
-    int                     i;
-    int                     status;
+// void execute_pipex(t_data *data)
+// {
+//     char                    **cmds;
+//     t_pipex_pipe            *pipes;
+//     char                    **args;
+//     char                    *cmd_path;
+//     pid_t                   pid;
+//     pid_t                   last_pid;
+//     int                     nb_cmd;
+//     int                     i;
+//     int                     status;
 
-    cmds = ft_split(data->input, '|');
-    if (!cmds)
-        return ;
-    nb_cmd = count_tab(cmds);
-    i = 0;
-    while (i < nb_cmd)
-    {
-        cmds[i] = ft_strtrim(cmds[i]);
-        i++;
-    }  
-    pipes = init_pipes(nb_cmd);
-    last_pid = 0;
-    i = 0;
-    while (i < nb_cmd)
-    {
-        pid = fork();
-        if (pid < 0)
-        {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        }
-        if (pid == 0)
-        {
-            child_redirection(i, nb_cmd, pipes);
-            if (nb_cmd > 1)
-                close_all_pipes(nb_cmd, pipes);
-            args = ft_split(cmds[i], ' ');
-            if (!args || !args[0])
-            {
-                write(STDERR_FILENO, "Error: empty command\n", 21);
-                exit(127);
-            }
-            /* Vérifier si la commande est un builtin */
-            if (is_builtin(args[0]))
-            {
-                execute_builtin(data, args);
-                exit(data->exit_status);
-            }
-            cmd_path = get_cmd_path(args[0], data->envp);
-            if (!cmd_path)
-            {
-                fprintf(stderr, "Command not found: %s\n", args[0]);
-                exit(127);
-            }
-            free(args[0]);
-            args[0] = cmd_path;
-            execve(args[0], args, data->envp);
-            perror("execve");
-            exit(127);
-        }
-        i++;
-        last_pid = pid;
-    }
-    if (nb_cmd > 1 && pipes)
-    {
-        close_all_pipes(nb_cmd, pipes);
-        free(pipes);
-    }
-    if (waitpid(last_pid, &status, 0) < 0)
-        status = 1;
-    while (wait(NULL) > 0)
-        ;
-}
+//     cmds = ft_split(data->input, '|');
+//     if (!cmds)
+//         return ;
+//     nb_cmd = count_tab(cmds);
+//     i = 0;
+//     while (i < nb_cmd)
+//     {
+//         cmds[i] = ft_strtrim(cmds[i]);
+//         i++;
+//     }  
+//     pipes = init_pipes(nb_cmd);
+//     last_pid = 0;
+//     i = 0;
+//     while (i < nb_cmd)
+//     {
+//         pid = fork();
+//         if (pid < 0)
+//         {
+//             perror("fork");
+//             exit(EXIT_FAILURE);
+//         }
+//         if (pid == 0)
+//         {
+//             child_redirection(i, nb_cmd, pipes);
+//             if (nb_cmd > 1)
+//                 close_all_pipes(nb_cmd, pipes);
+//             args = ft_split(cmds[i], ' ');
+//             if (!args || !args[0])
+//             {
+//                 write(STDERR_FILENO, "Error: empty command\n", 21);
+//                 exit(127);
+//             }
+//             /* Vérifier si la commande est un builtin */
+//             if (is_builtin(args[0]))
+//             {
+//                 execute_builtin(data, args);
+//                 exit(data->exit_status);
+//             }
+//             cmd_path = get_cmd_path(args[0], data->envp);
+//             if (!cmd_path)
+//             {
+//                 fprintf(stderr, "Command not found: %s\n", args[0]);
+//                 exit(127);
+//             }
+//             free(args[0]);
+//             args[0] = cmd_path;
+//             execve(args[0], args, data->envp);
+//             perror("execve");
+//             exit(127);
+//         }
+//         i++;
+//         last_pid = pid;
+//     }
+//     if (nb_cmd > 1 && pipes)
+//     {
+//         close_all_pipes(nb_cmd, pipes);
+//         free(pipes);
+//     }
+//     if (waitpid(last_pid, &status, 0) < 0)
+//         status = 1;
+//     while (wait(NULL) > 0)
+//         ;
+// }
 
 int count_tab(char **tab)
 {
