@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 15:00:35 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:11:46 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,6 @@ void execute_cmds(t_data *data, t_cmd *cmds, char **paths)
         pid = fork();
         if (pid == 0)
         {
-            /* Gestion des redirections vers fichiers */
             if (current_cmd->files)
             {
                 current_file = current_cmd->files;
@@ -201,22 +200,18 @@ void execute_cmds(t_data *data, t_cmd *cmds, char **paths)
                     current_file = current_file->next;
                 }
             }
-            /* Gestion du pipe de sortie si commande suivante présente */
             if (current_cmd->next)
             {
                 dup2(fd_pipe[1], STDOUT_FILENO);
                 close(fd_pipe[0]);
                 close(fd_pipe[1]);
             }
-            /* Gestion du pipe d'entrée si présent */
             if (fd_in != 0)
             {
                 dup2(fd_in, STDIN_FILENO);
                 close(fd_in);
             }
-            /* Au lieu d'exécuter execve, on vérifie si on trouve un chemin correct.
-             * Si oui, on exécute la built-in correspondante.
-             */
+            /* Au lieu d'exécuter execve on exécute builtin */
             good_path = new_test_commands(paths, current_cmd->args[0]);
             if (good_path != NULL)
             {
