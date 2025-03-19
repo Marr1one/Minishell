@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 16:06:06 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/19 02:39:51 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ void			destroy_node_quotes(t_data *data);
 char			**skip_quotes(t_data *data);
 void			check_exit_status(t_data *data);
 int				return_exit_status(t_data *data);
-void			ft_exit(t_data *data);
+void			ft_exit(t_cmd *cmd);
 int				is_numeric(char	*str);
 void			free_all(t_malloc *gc);
 void 			destroy_empty_node(t_data *data);

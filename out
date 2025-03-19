@@ -22,5 +22,8 @@ pipex.c
 ramzy.supp
 salut
 signals.c
+sortie
+sortie2
+sortie4
 tokenizer.c
 utils
