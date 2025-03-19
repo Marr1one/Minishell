@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 21:52:39 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/19 22:04:12 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,5 +210,8 @@ void			export(t_data *data);
 char			**add_export(t_data *data, char *str);
 void			show_tab_export(char **tab);
 int				check_change(t_data *data, char *str);
+
+int validate_input(const char *input);
+
 
 #endif

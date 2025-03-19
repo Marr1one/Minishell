@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 16:42:16 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:04:53 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,7 +258,12 @@ int main(int argc, char **argv, char **envp)
         if (!input)
             break;
 		input = ft_strdup(input);
-        add_history(input); 
+        add_history(input);
+		if (!validate_input(input))
+        {
+            free(input);
+            continue;
+        }
 		list_tkn = tokenizer(input);
 		// rm_qts_nodes(&data);
 		list_cmd = parse_cmd(list_tkn);

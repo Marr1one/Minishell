@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 16:40:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 22:14:46 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,4 +170,42 @@ t_token	*tokenizer(char *input)
 		i++;
 	}
 	return (list);
+}
+
+int validate_input(const char *input)
+{
+    char quote;
+    int i;
+
+	i = 0;
+	quote = 0;
+    while (input[i])
+    {
+        // Si on rencontre une quote (simple ou double)
+        if (input[i] == '\'' || input[i] == '"')
+        {
+            // Si aucune quote n'est ouverte, on ouvre la quote
+            if (quote == 0)
+                quote = input[i];
+            // Sinon, si la quote courante correspond à la quote ouverte, on la ferme
+            else if (quote == input[i])
+                quote = 0;
+        }
+        // Si aucun quote n'est ouvert on vérifie les caractères spéciaux interdits
+        else if (quote == 0)
+        {
+            if (input[i] == '\\' || input[i] == ';')
+            {
+                fprintf(stderr, "Erreur de parsing : caractère spécial\n");
+                return (0);
+			}
+        }
+        i++;
+    }
+    if (quote != 0)
+    {
+        fprintf(stderr, "Erreur de parsing : quote non fermée\n");
+        return (0);
+    }
+    return (1);
 }
