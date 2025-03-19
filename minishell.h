@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 02:39:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 02:58:28 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ char			*take_after(char *str, char c);
 int				ft_strncmp(char *s1, char *s2, int n);
 char			*ft_itoa(int n);
 void			*ft_malloc(size_t size);
-void			ft_cd(t_data *data);
+void			ft_cd(t_cmd *cmd);
 int				ft_strcmp(char *s1, char *s2);
 int				ft_strlcmp(char *s1, char *s2);
 int				return_exit_status(t_data *data);

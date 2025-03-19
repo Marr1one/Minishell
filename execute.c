@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 02:45:30 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 03:19:51 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,11 @@ int execute_builtin(t_cmd *cmd)
         ft_echo(cmd);
         return (1);
     }
-    // else if (ft_strlcmp(cmd->args[0], "cd") == 0)
+    // else if (ft_strlcmp(cmd->args[0], "exit") == 0)
     // {
-    //     ft_cd(cmd);
-    //     return (1);
+    //      ft_exit(cmd);
+    //      return (1);
     // }
-    else if (ft_strlcmp(cmd->args[0], "exit") == 0)
-    {
-         ft_exit(cmd);
-         return (1);
-    }
     // else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
     // {
     //     ft_pwd(cmd);
@@ -179,11 +174,18 @@ void execute_cmds(t_data *data, t_cmd *cmds, char **paths)
     pid_t   pid;
     t_file  *current_file;
     t_cmd   *current_cmd = cmds;
-
+	
     while (current_cmd)
     {
-		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "exit") == 0)
+		if (ft_strlcmp(current_cmd->args[0], "cd") == 0)
+		{
+			ft_cd(current_cmd);
+			current_cmd = current_cmd->next;
+			continue;
+		}
+		else if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "exit") == 0)
         {
+			printf("in exit if\n");
             ft_exit(current_cmd);
             return;
         }
