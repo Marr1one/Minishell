@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 16:06:12 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 20:52:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,7 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
 		{
 			ft_cd(current_cmd);
 			current_cmd = current_cmd->next;
+			continue;
 		}
 		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "env") == 0)
 			show_env(data->envp);
