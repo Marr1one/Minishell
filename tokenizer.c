@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 22:25:49 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/19 22:27:20 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,17 +185,13 @@ int validate_input(const char *input)
 	quote = 0;
     while (input[i])
     {
-        // Si on rencontre une quote (simple ou double)
         if (input[i] == '\'' || input[i] == '"')
         {
-            // Si aucune quote n'est ouverte, on ouvre la quote
             if (quote == 0)
                 quote = input[i];
-            // Sinon, si la quote courante correspond à la quote ouverte, on la ferme
             else if (quote == input[i])
                 quote = 0;
         }
-        // Si aucun quote n'est ouvert on vérifie les caractères spéciaux interdits
         else if (quote == 0)
         {
             if (input[i] == '\\' || input[i] == ';')
