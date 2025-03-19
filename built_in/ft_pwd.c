@@ -12,19 +12,40 @@
 
 #include "../minishell.h"
 
-void	ft_pwd(t_data *data)
+// void	ft_pwd(t_data *data)
+// {
+// 	char path[1024];
+
+
+//     if (getcwd(path, sizeof(path)) != NULL)
+// 	{
+// 		data->exit_status = 0;
+//         printf("%s\n", path);
+// 	}
+//     else
+// 	{
+// 		data->exit_status = 1;
+//         perror("getcwd");
+// 	}
+// }
+
+void ft_pwd(t_cmd *cmd)
 {
-	char path[1024];
+    char cwd[1024];
 
+    // Si vous souhaitez vérifier la présence d'arguments et éventuellement afficher une erreur :
+    if (cmd->args[1] != NULL)
+    {
+        printf("ft_pwd: too many arguments\n");
+        return;
+    }
 
-    if (getcwd(path, sizeof(path)) != NULL)
-	{
-		data->exit_status = 0;
-        printf("%s\n", path);
-	}
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
+    {
+        printf("%s\n", cwd);
+    }
     else
-	{
-		data->exit_status = 1;
-        perror("getcwd");
-	}
+    {
+        perror("ft_pwd");
+    }
 }

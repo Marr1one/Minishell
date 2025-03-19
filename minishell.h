@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 16:25:06 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 21:52:39 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ char			**list_to_args(t_data *data);
 char			**cut_last(char **tab, int	i);
 int				list_len(t_token *list);
 int				only_space(char *input);
-void			ft_pwd(t_data *data);
+void			ft_pwd(t_cmd *cmd);
 void			export(t_data *data);
 char			**add_export(t_data *data, char *str);
 void			show_tab_export(char **tab);

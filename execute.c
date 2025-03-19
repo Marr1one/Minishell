@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 20:52:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 21:55:04 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,16 @@ int execute_builtin(t_cmd *cmd)
     //      ft_exit(cmd);
     //      return (1);
     // }
-    // else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
+    else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
+    {
+        ft_pwd(cmd);
+        return (1);
+    }
+    // else if (ft_strlcmp(cmd->args[0], "env") == 0)
     // {
-    //     ft_pwd(cmd);
+    //     show_tab(cmd->envp);
     //     return (1);
     // }
-    // // else if (ft_strlcmp(cmd->args[0], "env") == 0)
-    // // {
-    // //     show_tab(cmd->envp);
-    // //     return (1);
-    // // }
     return (0);
 }
 
