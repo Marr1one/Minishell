@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 02:58:28 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 16:00:43 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,9 @@ const char		*get_token_type_name(t_type type);
 // void			execute_cmds(t_cmd *cmds, char **paths);
 void 			execute_cmds(t_data *data, t_cmd *cmds, char **paths);
 int 			execute_builtin(t_cmd *cmd);
+void			show_env(char **tab);
+
+
 
 void			parsing(char **envp, t_data *data);
 char			**copy_env(char **envp);

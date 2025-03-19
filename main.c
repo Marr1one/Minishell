@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 15:01:37 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/19 15:56:57 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ int main(int argc, char **argv, char **envp)
 	t_token *list_tkn;
 	t_data	data;
 	
-    data.envp = envp;
+    data.envp = copy_env(envp);
 	data.exit_status = 0;
     if (argc != 1)
         return (printf("Usage : ./minishell\n"));
@@ -243,8 +243,6 @@ int main(int argc, char **argv, char **envp)
 		data.list = list_tkn;
 		check_dollar(&data);
 		rm_qts_nodes(&data);
-		// printf("list apres tokenize\n");
-		// show_list(list_tkn);
 		list_cmd = parse_cmd(list_tkn);
 		if (list_cmd == NULL)
         {
@@ -253,12 +251,9 @@ int main(int argc, char **argv, char **envp)
         }
 		list_cmd = create_args(list_tkn, list_cmd);
 		list_cmd = create_files(list_tkn, list_cmd);
-		// show_list_cmd(list_cmd);
 		paths = ft_split(get_path_env(envp), ':');
     	paths = add_slash_all(paths);
 		execute_cmds(&data, list_cmd, paths);
-		//printf("test dune commande\n");
-		//show_tab(args_test);
     }
     return (0);
 }

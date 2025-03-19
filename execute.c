@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 03:19:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 16:02:50 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,8 @@ int execute_builtin(t_cmd *cmd)
 //     }
 // }
 
-void execute_cmds(t_data *data, t_cmd *cmds, char **paths)
+
+void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
 {
     int     fd_in = 0;
     int     fd_pipe[2];
@@ -183,6 +184,8 @@ void execute_cmds(t_data *data, t_cmd *cmds, char **paths)
 			current_cmd = current_cmd->next;
 			continue;
 		}
+		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "env") == 0)
+			show_env(data->envp);
 		else if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "exit") == 0)
         {
 			printf("in exit if\n");

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/14 20:18:45 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 16:00:08 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,18 @@ void	show_list_cmd(t_cmd *list)
 		printf("files\n");
 		show_files(current->files);
 		current = current->next;
+	}
+}
+
+void	show_env(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		printf("%s\n", tab[i]);
+		i++;
 	}
 }
 
