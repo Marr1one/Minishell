@@ -6,11 +6,30 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 15:56:57 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/19 16:42:16 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*ft_substr_qte(char *str,  int start, int len)
+{
+	int	i;
+	char	*new_str;
+
+	i = 0;
+	if (!str)
+		return (NULL);
+	new_str = ft_malloc(sizeof(char) * (len + 1));
+	if (new_str == NULL)
+		return (NULL);
+	while (str[start] && i < len)
+	{
+		new_str[i++] = str[start++];
+	}
+	new_str[i] = '\0';
+	return (new_str);
+}
 
 char	*ft_substr(char *str,  int start, int end)
 {
@@ -18,7 +37,7 @@ char	*ft_substr(char *str,  int start, int end)
 	char	*new_str;
 
 	i = 0;
-	if (!str)
+	if (!str || start >= end)
 		return (NULL);
 	new_str = ft_malloc(sizeof(char) * (end - start + 1));
 	if (new_str == NULL)
@@ -238,11 +257,10 @@ int main(int argc, char **argv, char **envp)
         input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
         if (!input)
             break;
+		input = ft_strdup(input);
         add_history(input); 
 		list_tkn = tokenizer(input);
-		data.list = list_tkn;
-		check_dollar(&data);
-		rm_qts_nodes(&data);
+		// rm_qts_nodes(&data);
 		list_cmd = parse_cmd(list_tkn);
 		if (list_cmd == NULL)
         {

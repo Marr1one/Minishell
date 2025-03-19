@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/18 13:09:30 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:40:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ t_token	*tokenizer(char *input)
 	t_token		*list;
 	t_type		expect;
 	t_type		redirect;
+	char		quote;
 	int			start;
 
 	i = 0;
@@ -101,8 +102,25 @@ t_token	*tokenizer(char *input)
 			i++;
 		if (input[i] == '\0')
 		{
-			printf("dans le cas ou il nya que des espaces!\n");
+			// printf("dans le cas ou il nya que des espaces!\n");
 			break;
+		}
+		if (input[i] == '"' || input[i] == '\'')
+		{
+			quote = input[i];
+			start = ++i;
+			while (input[i] && input[i] != quote)
+				i++;
+			if (input[i] == '\0')
+			{
+				printf("Erreur : Quote non fermée\n");
+				return (NULL);
+			}
+			list = add_node(ft_substr_qte(input, start, i - start), list, expect);
+			i++;
+			if (expect == CMD)
+				expect = ARG;
+			continue;
 		}
 		if (is_word(input[i]) == 1)
 		{
