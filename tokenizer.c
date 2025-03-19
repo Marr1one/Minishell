@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 22:14:46 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/19 22:25:49 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,10 @@ t_token	*tokenizer(char *input)
 	i = 0;
 	expect = CMD;
 	list = NULL;
+	if (!validate_input(input))
+	{
+		return(NULL);
+	}
 	while (input[i])
 	{
 		while (input[i] == ' ')
