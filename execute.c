@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 21:55:04 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/21 18:10:16 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,8 +174,9 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
     char    *good_path;
     pid_t   pid;
     t_file  *current_file;
-    t_cmd   *current_cmd = cmds;
+    t_cmd   *current_cmd;
 	
+    current_cmd = cmds;
     while (current_cmd)
     {
 		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "cd") == 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:10:49 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/04 16:58:56 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/21 17:43:44 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,73 @@ int	get_nbr_node(t_token *list)
 		current = current->next;
 	}
 	return (i);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*dest;
+
+	i = 0;
+	j = 0;
+	dest = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!dest)
+		return (NULL);
+	while (s1[i])
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		dest[i + j] = s2[j];
+		j++;
+	}
+	dest[j + i] = '\0';
+	return (dest);
+}
+
+char	*ft_re_strjoin(char *s1, char const *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*dest;
+
+	i = 0;
+	j = 0;
+	dest = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!dest)
+	{
+		return (NULL);
+	}
+	while (s1[i])
+	{
+		dest[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		dest[i + j] = s2[j];
+		j++;
+	}
+	dest[j + i] = '\0';
+	free(s1);
+	return (dest);
+}
+
+char	*ft_strcat(char *dest, char *src)
+{
+	int	i;
+	int	dlen;
+
+	i = 0;
+	dlen = ft_strlen(dest);
+	while (src[i])
+	{
+		dest[dlen + i] = src[i];
+		i++;
+	}
+	dest[dlen + i] = 0;
+	return (dest);
 }
