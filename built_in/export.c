@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:31:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/09 20:32:13 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/21 18:27:26 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,27 @@ int	check_export_compatibility(char *str)
 		return (1);
 }
 
-void	export(t_data *data)
+void	ft_export(t_cmd *cmd, t_data *data)
 {
-	if (get_nbr_node(data->list) == 1)
-			show_tab_export(data->envp);
-	else
+	int		i;
+	char	**args;
+
+	args = cmd->args;
+	if (count_args(cmd->args) == 1)
+		return (show_tab_export(data->envp));
+	i = 1;
+	while (args[i])
 	{
-		data->list = data->list->next;
-		while(data->list != NULL)
+		if (check_export_compatibility(cmd->args[1]) == 0)
 		{
-			if (check_export_compatibility(data->list->content) == 0)
-			{
-				printf("Good format!\n");
-				if (check_change(data, data->list->content) == 1)
-					return ;
-				else
-					data->envp = add_export(data, data->list->content);
-			}
+			printf("Good format!\n");
+			if (check_change(data, cmd->args[i]) == 1)
+				return ;
 			else
-				printf("Bad format!\n");
-			data->list = data->list->next;
+				data->envp = add_export(data, cmd->args[i]);
 		}
+		else
+			printf("Bad format!\n");
+		i++;
 	}
 }

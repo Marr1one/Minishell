@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 20:38:04 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/21 21:06:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ char	*new_test_commands(char **paths, char *str)
 {
 	int		i;
 	char	*path_test;
-	char	*good_path;
 	
 	i = 0;
 	//if (ft_empty(data) == 1)
@@ -30,9 +29,8 @@ char	*new_test_commands(char **paths, char *str)
 		path_test = ft_join(paths[i], str);
 		if (access(path_test, F_OK | X_OK) == 0)
 		{
-			good_path = ft_strdup(path_test);
 			// printf("good path founded : {%s}\n", good_path);
-			return (good_path);
+			return (path_test);
 		}
 		i++;
 	}
@@ -157,6 +155,12 @@ int execute_builtin(t_cmd *cmd)
 // }
 
 
+//Mini_shell$ pwd
+///home/maissat/Desktop/minishellm21/built_in			
+//Mini_shell$ pwd | cd ..
+//Mini_shell$ pwd
+///home/maissat/Desktop/minishellm21
+
 void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
 {
     int     fd_in = 0;
@@ -167,9 +171,14 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
     t_file  *current_file;
     t_cmd   *current_cmd;
 	
-    current_cmd = cmds;
     while (current_cmd)
     {
+		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "export") == 0)
+		{
+			ft_export(current_cmd, data);
+			//current_cmd = current_cmd->next;
+			continue;
+		}
 		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "cd") == 0)
 		{
 			ft_cd(current_cmd);
@@ -189,25 +198,6 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
         pid = fork();
         if (pid == 0)
         {
-            if (current_cmd->files)
-            {
-                current_file = current_cmd->files;
-                while (current_file)
-                {
-                    fd = open_file(current_file->path, current_file->mode);
-                    if (fd == -1)
-                    {
-                        perror("open");
-                        exit(1);
-                    }
-                    if (current_file->mode == INFILE || current_file->mode == HEREDOC)
-                        dup2(fd, STDIN_FILENO);
-                    else
-                        dup2(fd, STDOUT_FILENO);
-                    close(fd);
-                    current_file = current_file->next;
-                }
-            }
             if (current_cmd->next)
             {
                 dup2(fd_pipe[1], STDOUT_FILENO);
@@ -218,6 +208,25 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
             {
                 dup2(fd_in, STDIN_FILENO);
                 close(fd_in);
+            }
+            if (current_cmd->files)
+            {
+                current_file = current_cmd->files;
+                while (current_file)
+                {
+                    fd = open_file(current_file->path, current_file->mode);
+                    if (fd == -1)
+                    {
+                        perror("open");
+                        exit(1); // free and exit
+                    }
+                    if (current_file->mode == INFILE || current_file->mode == HEREDOC)
+                        dup2(fd, STDIN_FILENO);
+                    else
+                        dup2(fd, STDOUT_FILENO);
+                    close(fd);
+                    current_file = current_file->next;
+                }
             }
           	if (execute_builtin(current_cmd) == 1)
                 exit(0);

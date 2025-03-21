@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 17:57:40 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/21 18:37:16 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,10 +349,10 @@ int	check_builtin(t_data *data)
 		show_tab(data->envp);
 		return (1);
 	}
-	if (data->list && (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0))
-	{
-		export(data);
-		return (1);
-	}
+	//if (data->list && (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0))
+	//{
+	//	export(data);
+	//	return (1);
+	//}
 	return (0);
 }

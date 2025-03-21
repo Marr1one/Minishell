@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:14:14 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/21 18:35:49 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_cmd	*create_args(t_token *list_tkn, t_cmd *list_cmd)
 	{
 		if (current_tkn->type == CMD || current_tkn->type == ARG)
 		{
-			current_cmd->args[i++] = ft_strdup(current_tkn->content);
+			current_cmd->args[i++] = current_tkn->content;
 		} 
 		else if (current_tkn->type == PIPE)
 		{
@@ -113,8 +113,9 @@ t_cmd	*add_cmd_node(t_cmd *cmd_list)
 	new_cmd = ft_malloc(sizeof(t_cmd));
 	if (!new_cmd)
 		return (NULL);
+	
 	new_cmd->args = NULL;
-	new_cmd->files = NULL;
+	new_cmd->files = NULL; //mettre plutot b_zero
 	new_cmd->next = NULL;
 	if (!cmd_list)
 		return (new_cmd);
@@ -166,7 +167,7 @@ t_file *	add_file(t_file	*list_file, t_token *file_tkn, t_type mode)
 	if (!new_file)
 		return (NULL);
 	new_file->mode = mode;
-	new_file->path = ft_strdup(file_tkn->content);
+	new_file->path = file_tkn->content;
 	new_file->next = NULL;
 	if (list_file == NULL)
 		return (new_file);
@@ -258,6 +259,7 @@ int main(int argc, char **argv, char **envp)
 		input = ft_strdup(input);
         add_history(input);
 		list_tkn = tokenizer(input);
+		show_list(list_tkn);
 		// rm_qts_nodes(&data);
 		list_cmd = parse_cmd(list_tkn);
 		if (list_cmd == NULL)
