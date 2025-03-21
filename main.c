@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 17:54:35 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/21 18:35:49 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,8 +233,6 @@ t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 	return (list_cmd);
 }
 
-
-
 int main(int argc, char **argv, char **envp)
 {
 	
@@ -271,9 +269,12 @@ int main(int argc, char **argv, char **envp)
         }
 		list_cmd = create_args(list_tkn, list_cmd);
 		list_cmd = create_files(list_tkn, list_cmd);
+		// expand_var_command(list_cmd, data.exit_status, &data);
 		paths = ft_split(get_path_env(envp), ':');
     	paths = add_slash_all(paths);
+		expand_all(list_cmd, &data);
 		execute_cmds(&data, list_cmd, paths);
     }
     return (0);
 }
+

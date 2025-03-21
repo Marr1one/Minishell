@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 22:00:55 by braugust          #+#    #+#             */
-/*   Updated: 2025/03/18 15:29:09 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/21 17:35:52 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,81 +73,6 @@ char *get_cmd_path(const char *cmd, char **envp)
     if (access(path, X_OK) == 0)
         return (path);
     return (NULL);
-}
-
-t_pipex_pipe    *init_pipes(int nb_cmd)
-{
-        t_pipex_pipe    *pipes;
-        int             i;
-        int             p[2];
-
-        if (nb_cmd <= 1)
-                return (NULL);
-        pipes = ft_malloc((nb_cmd - 1) * sizeof(t_pipex_pipe));
-        if (!pipes)
-        {
-                perror("malloc pipes");
-                exit(EXIT_FAILURE);
-        }
-        i = 0;
-        while (i < nb_cmd - 1)
-        {
-                if (pipe(p) < 0)
-                {
-                        perror("pipe");
-                        exit(EXIT_FAILURE);
-                }
-                pipes[i].read = p[0];
-                pipes[i].write = p[1];
-                i++;
-        }
-        return (pipes);
-}
-
-void try_dup2(int oldfd, int newfd)
-{
-    if (dup2(oldfd, newfd) < 0)
-    {
-        perror("dup2");
-        exit(EXIT_FAILURE);
-    }
-}
-
-void child_redirection(int pos, int nb_cmd, t_pipex_pipe *pipes)
-{
-    if (nb_cmd == 1)
-    {
-        try_dup2(STDIN_FILENO, STDIN_FILENO);
-        try_dup2(STDOUT_FILENO, STDOUT_FILENO);
-    }
-    else if (pos == 0)
-    {
-        try_dup2(STDIN_FILENO, STDIN_FILENO);
-        try_dup2(pipes[pos].write, STDOUT_FILENO);
-    }
-    else if (pos == nb_cmd - 1)
-    {
-        try_dup2(pipes[pos - 1].read, STDIN_FILENO);
-        try_dup2(STDOUT_FILENO, STDOUT_FILENO);
-    }
-    else
-    {
-        try_dup2(pipes[pos - 1].read, STDIN_FILENO);
-        try_dup2(pipes[pos].write, STDOUT_FILENO);
-    }
-}
-
-void close_all_pipes(int nb_cmd, t_pipex_pipe *pipes)
-{
-    int j;
-
-    j = 0;
-    while (j < nb_cmd - 1)
-    {
-        close(pipes[j].read);
-        close(pipes[j].write);
-        j++;
-    }
 }
 
 // void execute_pipex(t_data *data)

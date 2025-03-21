@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:29:05 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/21 18:35:10 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,13 +178,7 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
     char    *good_path;
     pid_t   pid;
     t_file  *current_file;
-    t_cmd   *current_cmd = cmds;
-	
-
-	// command seul ? -> si oui -> es ce que c'est une builtin ? -> si oui -> faire la builtin dans le parent
-	//															-> si non -> execve
-
-	// pipeline ? -> si oui -> tout faire dans les enfants meme les builtins 
+    t_cmd   *current_cmd;
 	
     while (current_cmd)
     {

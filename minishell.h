@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:28:40 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/21 18:37:57 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,6 @@
 //	char			*value;
 //	struct s_env	*next;
 //}	t_env;
-
-typedef struct s_pipex_pipe
-{
-    int    read;
-    int    write;
-}    t_pipex_pipe;
 
 typedef struct s_malloc_node
 {
@@ -104,7 +98,6 @@ typedef struct s_data
 	int		exit_status;
 	
 }	t_data;
-
 
 char			*ft_substr(char *str,  int start, int end);
 void			show_list_cmd(t_cmd *list);
@@ -189,10 +182,7 @@ char			**custom_split(char *str, char c);
 //pipex
 char 			*ft_strchr(const char *s, int c);
 char 			*get_cmd_path(const char *cmd, char **envp);
-t_pipex_pipe	*init_pipes(int nb_cmd);
 void 			try_dup2(int oldfd, int newfd);
-void 			child_redirection(int pos, int nb_cmd, t_pipex_pipe *pipes);
-void 			close_all_pipes(int nb_cmd, t_pipex_pipe *pipes);
 void 			execute_pipex(t_data *data);
 void 			execute_simple_command(t_data *data);
 int 			count_tab(char **tab);
@@ -211,7 +201,12 @@ char			**add_export(t_data *data, char *str);
 void			show_tab_export(char **tab);
 int				check_change(t_data *data, char *str);
 
-int validate_input(const char *input);
-
+int 	validate_input(const char *input);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_re_strjoin(char *s1, char const *s2);
+char	*ft_strcpy(char *dest, char *src);
+char	*ft_strcat(char *dest, char *src);
+char *expand_string(const char *input);
+void	expand_all(t_cmd *cmd, t_data *data);
 
 #endif
