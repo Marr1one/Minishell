@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:35:49 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/21 21:34:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,49 @@ t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 	return (list_cmd);
 }
 
+char	*quoteless_string(char *str)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+
+	i = 0;
+	j = 0;
+	while(str[i])
+	{
+		if (str[i] != '"' && str[i] != '\'')
+			j++;
+		i++;
+	}
+	new_str = ft_malloc(sizeof(char) * (j + 1));
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] != '"' && str[i] != '\'')
+		{
+			new_str[j++] = str[i];
+		}
+		i++;
+	}
+	new_str[j] = '\0';
+	return (new_str);
+}
+
+void	remove_quotes(t_token *list_tkn)
+{
+	t_token *current_tkn;
+
+	current_tkn = list_tkn;
+	while (current_tkn)
+	{
+		current_tkn->content = quoteless_string(current_tkn->content);
+		current_tkn = current_tkn->next;
+	}
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	
@@ -260,6 +303,7 @@ int main(int argc, char **argv, char **envp)
         add_history(input);
 		list_tkn = tokenizer(input);
 		show_list(list_tkn);
+		remove_quotes(list_tkn);
 		// rm_qts_nodes(&data);
 		list_cmd = parse_cmd(list_tkn);
 		if (list_cmd == NULL)

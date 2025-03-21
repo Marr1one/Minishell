@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_parse.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:17:13 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/21 21:20:47 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ void	expand_all(t_cmd *cmd, t_data *data)
 			expanded = expand_string(current_cmd->args[i]);
 			free(current_cmd->args[i]);
 			current_cmd->args[i] = expanded;
-			i = i + 1;
+			i++;
 		}
 		current_file = current_cmd->files;
 		while (current_file)

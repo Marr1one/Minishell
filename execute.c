@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:35:10 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/21 21:10:29 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
     t_file  *current_file;
     t_cmd   *current_cmd;
 	
+	current_cmd = cmds;
     while (current_cmd)
     {
 		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "export") == 0)

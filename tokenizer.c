@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:29:28 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/21 21:43:08 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,10 @@ t_type	case_redirect(char *input, int	i)
 		return (UNKNOWN);
 	}
 }
-int is_word(char c)
+int is_word(char c, char quote)
 {
+	if (c != quote)
+		return (1);
 	if (is_space(c))
 		return (0);
 	if (is_redirect(c))
@@ -90,16 +92,15 @@ t_token	*tokenizer(char *input)
 	t_token		*list;
 	t_type		expect;
 	t_type		redirect;
-	//char		quote;
+	char		quote;
 	int			start;
 
 	i = 0;
 	expect = CMD;
 	list = NULL;
+	quote = 0;
 	if (!validate_input(input))
-	{
 		return(NULL);
-	}
 	while (input[i])
 	{
 		while (input[i] == ' ')
@@ -109,10 +110,12 @@ t_token	*tokenizer(char *input)
 			// printf("dans le cas ou il nya que des espaces!\n");
 			break;
 		}
-		if (is_word(input[i]) == 1)
+		if (is_word(input[i], 0) == 1)
 		{
 			start = i;
-			while(input[i] && is_word(input[i]) == 1)
+			if (input[i] == '"' || input[i] == '\'')
+				quote = input[i];
+			while(input[i] && is_word(input[i], quote) == 1)
 			{
 				i++;
 			}
