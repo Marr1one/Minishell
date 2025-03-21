@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:10:16 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:38:04 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ int is_builtin(char *cmd)
         ft_strlcmp(cmd, "cd") == 0 ||
         ft_strlcmp(cmd, "exit") == 0 ||
         ft_strlcmp(cmd, "export") == 0 ||
-        ft_strlcmp(cmd, "pwd") == 0)
+        ft_strlcmp(cmd, "pwd") == 0 ||
+        ft_strlcmp(cmd, "unset") == 0)
     {
         return (1);
     }
@@ -72,21 +73,11 @@ int execute_builtin(t_cmd *cmd)
         ft_echo(cmd);
         return (1);
     }
-    // else if (ft_strlcmp(cmd->args[0], "exit") == 0)
-    // {
-    //      ft_exit(cmd);
-    //      return (1);
-    // }
     else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
     {
         ft_pwd(cmd);
         return (1);
     }
-    // else if (ft_strlcmp(cmd->args[0], "env") == 0)
-    // {
-    //     show_tab(cmd->envp);
-    //     return (1);
-    // }
     return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:17:13 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/21 20:46:59 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char *expand_string(const char *input)
     char *var_value;
     
     result_size = 128;  /* Taille initiale du buffer */
-    result = malloc(result_size);
+    result = ft_malloc(result_size);
     if (!result)
         return NULL;
     result[0] = '\0';
@@ -70,7 +70,11 @@ char *expand_string(const char *input)
             {
                 result_size *= 2;
                 temp = realloc(result, result_size);
-                if (!temp) { free(result); return NULL; }
+                if (!temp)
+                {
+                    free(result);
+                    return NULL;
+                }
                 result = temp;
             }
             result[result_len] = input[i];
@@ -157,7 +161,7 @@ char *expand_string(const char *input)
 						}
                         result = temp;
                     }
-                    strcat(result, var_value);
+                    ft_strcat(result, var_value);
                     result_len += value_len;
                 }
             }
@@ -184,7 +188,7 @@ void	expand_all(t_cmd *cmd, t_data *data)
 			expanded = expand_string(current_cmd->args[i]);
 			free(current_cmd->args[i]);
 			current_cmd->args[i] = expanded;
-			i = i + 1;
+			i++;
 		}
 		current_file = current_cmd->files;
 		while (current_file)
