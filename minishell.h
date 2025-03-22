@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 17:27:36 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:25:20 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_data
 	t_type		expect;
 	t_malloc	*gc;
 	//t_env	*env_var;
+	int		in_quote;
 	char	**envp;
 	char 	**path;
 	int		pipe[2];
@@ -96,6 +97,7 @@ typedef struct s_data
 	char	**cmd_args;
 	char     quote;
 	int		quotes;
+	t_token		*list;
 	int		exit_status;
 	
 }	t_data;
@@ -114,7 +116,7 @@ t_token			*tokenizer(char *input, t_data *data);
 const char		*get_token_type_name(t_type type);
 // void			execute_cmds(t_cmd *cmds, char **paths);
 void 			execute_cmds(t_data *data, t_cmd *cmds, char **paths);
-int 			execute_builtin(t_cmd *cmd);
+int 			execute_builtin(t_cmd *cmd, t_data *data);
 void			show_env(char **tab);
 char	*ft_substr_qte(char *str,  int start, int end);
 

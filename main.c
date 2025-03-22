@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 17:34:53 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:20:51 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,7 +280,6 @@ int main(int argc, char **argv, char **envp)
 {
 	
     (void)argv;
-	(void)envp;
 	char	*input;
 	char	**paths;
 	t_cmd	*list_cmd;
@@ -289,7 +288,6 @@ int main(int argc, char **argv, char **envp)
 	
 	ft_memset(&data, 0, sizeof(data));
     data.envp = copy_env(envp);
-	data.exit_status = 0;
     if (argc != 1)
         return (printf("Usage : ./minishell\n"));
     signal(SIGINT, sigint_handler);

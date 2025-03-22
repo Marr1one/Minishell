@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 17:14:20 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:22:23 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,33 @@ int is_builtin(char *cmd)
     return (0);
 }
 
-int execute_builtin(t_cmd *cmd)
+int execute_builtin(t_cmd *cmd, t_data *data)
 {
     if (ft_strlcmp(cmd->args[0], "echo") == 0)
     {
         ft_echo(cmd);
         return (1);
     }
-    // else if (ft_strlcmp(cmd->args[0], "exit") == 0)
-    // {
-    //      ft_exit(cmd);
-    //      return (1);
-    // }
+	if (ft_strlcmp(cmd->args[0], "export") == 0)
+	{
+		ft_export(cmd, data);
+		return (1);
+	}
+	if (ft_strlcmp(cmd->args[0], "cd") == 0)
+	{
+		ft_cd(cmd);
+		return (1);
+	}
+	if (ft_strlcmp(cmd->args[0], "env") == 0)
+	{
+		show_env(data->envp);
+		return (1);	
+	}
+	else if (ft_strlcmp(cmd->args[0], "exit") == 0)
+	{
+		ft_exit(cmd);
+		return (1);
+	}
     else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
     {
         ft_pwd(cmd);
@@ -183,28 +198,11 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
 	current_cmd = cmds;
     while (current_cmd)
     {
-		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "export") == 0)
-		{
-			ft_export(current_cmd, data);
-			//current_cmd = current_cmd->next;
-			continue;
-		}
-		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "cd") == 0)
-		{
-			ft_cd(current_cmd);
-			current_cmd = current_cmd->next;
-			continue;
-		}
-		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "env") == 0)
-			show_env(data->envp);
-		else if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "exit") == 0)
-        {
-			printf("in exit if\n");
-            ft_exit(current_cmd);
-            return;
-        }
         if (current_cmd->next)
             pipe(fd_pipe);
+		else if (execute_builtin(current_cmd, data) == 1)
+			return ;
+			
         pid = fork();
         if (pid == 0)
         {
@@ -238,7 +236,7 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
                     current_file = current_file->next;
                 }
             }
-          	if (execute_builtin(current_cmd) == 1)
+          	if (execute_builtin(current_cmd, data) == 1)
                 exit(0);
             good_path = new_test_commands(paths, current_cmd->args[0]);
             if (good_path != NULL)
