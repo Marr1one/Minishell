@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 20:02:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/23 00:03:05 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,9 +297,10 @@ int main(int argc, char **argv, char **envp)
         input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
         if (!input)
             break;
-		input = ft_strdup(input);
         add_history(input);
 		list_tkn = tokenizer(input, &data);
+		if (list_tkn == NULL)
+			continue;
 		remove_quotes(list_tkn);
 		// rm_qts_nodes(&data);
 		list_cmd = parse_cmd(list_tkn);
@@ -313,6 +314,7 @@ int main(int argc, char **argv, char **envp)
 		// expand_var_command(list_cmd, data.exit_status, &data);
 		expand_all(list_cmd, &data);
 		execute_cmds(&data, list_cmd);
+		free(input);
     }
     return (0);
 }

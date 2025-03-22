@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 16:13:15 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 23:59:36 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,12 @@ void	show_list(t_token *list)
 	int	i;
 
 	i = 0;
+	if (!list)
+	{
+		printf("list meme pas alloue\n");
+		return ;
+		
+	}
 	while(list)
 	{
 		printf("noeud %d : {%s}, type = {%s}\n", i, list->content, get_token_type_name(list->type));
