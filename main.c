@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 21:34:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 17:34:53 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,7 @@ int main(int argc, char **argv, char **envp)
 	t_token *list_tkn;
 	t_data	data;
 	
+	ft_memset(&data, 0, sizeof(data));
     data.envp = copy_env(envp);
 	data.exit_status = 0;
     if (argc != 1)
@@ -301,7 +302,7 @@ int main(int argc, char **argv, char **envp)
             break;
 		input = ft_strdup(input);
         add_history(input);
-		list_tkn = tokenizer(input);
+		list_tkn = tokenizer(input, &data);
 		show_list(list_tkn);
 		remove_quotes(list_tkn);
 		// rm_qts_nodes(&data);

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 21:43:08 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 17:34:23 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,32 +73,35 @@ t_type	case_redirect(char *input, int	i)
 		return (UNKNOWN);
 	}
 }
-int is_word(char c, char quote)
+int is_word(char c, t_data *data)
 {
-	if (c != quote)
-		return (1);
-	if (is_space(c))
-		return (0);
-	if (is_redirect(c))
-		return (0);
-	if (is_pipe(c))
+	if (data->quote != 0)
+	{
+		if (c != data->quote)
+			return (1);
+		else
+		{
+			data->quote = 0;
+			return (1);
+		}
+	}
+	if (is_space(c) || is_redirect(c) || is_pipe(c))
 		return (0);
 	return (1);
 }
 
-t_token	*tokenizer(char *input)
+t_token	*tokenizer(char *input, t_data *data)
 {
 	int			i;
 	t_token		*list;
 	t_type		expect;
 	t_type		redirect;
-	char		quote;
 	int			start;
 
 	i = 0;
+	data->quote = 0;
 	expect = CMD;
 	list = NULL;
-	quote = 0;
 	if (!validate_input(input))
 		return(NULL);
 	while (input[i])
@@ -106,26 +109,21 @@ t_token	*tokenizer(char *input)
 		while (input[i] == ' ')
 			i++;
 		if (input[i] == '\0')
-		{
-			// printf("dans le cas ou il nya que des espaces!\n");
 			break;
-		}
-		if (is_word(input[i], 0) == 1)
-		{
-			start = i;
+		if (is_word(input[i], data) == 1)
+        {
+            start = i;
 			if (input[i] == '"' || input[i] == '\'')
-				quote = input[i];
-			while(input[i] && is_word(input[i], quote) == 1)
-			{
-				i++;
-			}
-			list = add_node(ft_substr(input, start, i), list, expect);
-			if (expect == CMD)
-				expect = ARG;
-			if (expect == FICHIER)
-				expect = ARG;
-			continue;
-		}
+				data->quote = input[i++];
+            while (input[i] && is_word(input[i], data) == 1)
+                i++;
+            list = add_node(ft_substr_qte(input, start, i - start), list, expect);
+            if (expect == CMD)
+                expect = ARG;
+            if (expect == FICHIER)
+                expect = ARG;
+            continue;
+        }
 		if (input[i] == '|')
 		{
 			if (case_pipe(input, i) > 1)

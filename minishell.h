@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:37:57 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 17:27:36 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ typedef struct s_cmd
 
 typedef struct s_data
 {
-	t_token	*list;
+	t_token		*list_tkn;
+	t_type		expect;
 	t_malloc	*gc;
 	//t_env	*env_var;
 	char	**envp;
@@ -93,7 +94,7 @@ typedef struct s_data
 	char	**args;
 	char	**skipped_qu;
 	char	**cmd_args;
-	int     in_quote;
+	char     quote;
 	int		quotes;
 	int		exit_status;
 	
@@ -109,7 +110,7 @@ int				is_digit(char c);
 int				is_redirect(char c);
 int				is_pipe(char c);
 int				is_space(char c);
-t_token			*tokenizer(char *input);
+t_token			*tokenizer(char *input, t_data *data);
 const char		*get_token_type_name(t_type type);
 // void			execute_cmds(t_cmd *cmds, char **paths);
 void 			execute_cmds(t_data *data, t_cmd *cmds, char **paths);

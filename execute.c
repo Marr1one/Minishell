@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 21:10:29 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 17:14:20 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
             good_path = new_test_commands(paths, current_cmd->args[0]);
             if (good_path != NULL)
             {
-                execve(good_path, current_cmd->args, NULL);
+                execve(good_path, current_cmd->args, data->envp);
  				perror("execve");
                 exit(data->exit_status);
             }
