@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 19:25:20 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:59:06 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,12 @@ int				is_space(char c);
 t_token			*tokenizer(char *input, t_data *data);
 const char		*get_token_type_name(t_type type);
 // void			execute_cmds(t_cmd *cmds, char **paths);
-void 			execute_cmds(t_data *data, t_cmd *cmds, char **paths);
+void 			execute_cmds(t_data *data, t_cmd *cmds);
 int 			execute_builtin(t_cmd *cmd, t_data *data);
 void			show_env(char **tab);
-char	*ft_substr_qte(char *str,  int start, int end);
+char			*ft_substr_qte(char *str,  int start, int end);
+char			**ft_unset(t_data *data, int	save);
+void			check_unset(t_data *data, char	*str);
 
 
 

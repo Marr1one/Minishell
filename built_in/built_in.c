@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 19:35:08 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:48:44 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ char	**add_export(t_data *data, char *str)
 	return (new_env);
 }
 
-char	**ft_unset(t_data *data, int	save)
+char	**ft_unset(t_data *data, int save)
 {
 	int		i;
 	int		j;
@@ -228,8 +228,7 @@ char	**ft_unset(t_data *data, int	save)
 		i++;
 	}
 	new_env[j] = NULL;
-	i = 0;
-	// while (data->envp[i])
+	// while (data->envp[i])	
 		// free(data->envp[i++]);
 	// free(data->envp);
 	// printf("nouvelle env ;\n");
@@ -243,24 +242,23 @@ char	*ft_joinunset(char *str)
 	int		i;
 	int		j;
 	int		len;
-	char	*join;
+	char	*joineg;
 
 	len = ft_strlen(str);
 	i = 0;
 	j = 0;
-	join = ft_malloc(sizeof(char) * (len + 2));
-	if (!join)
+	joineg = ft_malloc(sizeof(char) * (len + 2));
+	if (!joineg)
 		return (NULL);
 	while (str[i])
 	{
-		join[j] = str[i];	
+		joineg[j] = str[i];	
 		j++;
 		i++;
 	}
-	join[j] = '=';
-	j++;
-	join[j] = '\0';
-	return (join);
+	joineg[j++] = '=';
+	joineg[j] = '\0';
+	return (joineg);
 }
 
 void	check_unset(t_data *data, char	*str)
@@ -270,7 +268,6 @@ void	check_unset(t_data *data, char	*str)
 	
 	i = 0;
 	join_eg = ft_joinunset(str);
-	// printf("joineg = {%s}\n", join_eg);
 	while (data->envp[i])
 	{
 		if (ft_strncmp(data->envp[i], join_eg, ft_strlen(join_eg)) == 0)
@@ -282,7 +279,6 @@ void	check_unset(t_data *data, char	*str)
 		}
 		i++;
 	}
-	// free(join_eg);
 }
 
 int	count_args(char **args)

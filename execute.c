@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 19:22:23 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 20:05:51 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,9 @@ char	*new_test_commands(char **paths, char *str)
 	int		i;
 	char	*path_test;
 	
+	if (!paths)
+		return (NULL);
 	i = 0;
-	//if (ft_empty(data) == 1)
-	//	return (1);
-	//if (only_space(data->input) == 0)
-	//	return (1);
-	//if (data->path == NULL)
-	//	return (1);
 	while (paths[i])
 	{
 		path_test = ft_join(paths[i], str);
@@ -65,6 +61,20 @@ int is_builtin(char *cmd)
 
 int execute_builtin(t_cmd *cmd, t_data *data)
 {
+	int	i;
+	t_cmd *current_cmd;
+	
+	current_cmd = cmd;
+	if (ft_strlcmp(current_cmd->args[0], "unset") == 0)
+    {
+		if (current_cmd->args[1])
+		{
+			i =  1;
+			while (current_cmd->args[i])
+				check_unset(data, current_cmd->args[i++]);
+		}
+        return (1);
+    }
     if (ft_strlcmp(cmd->args[0], "echo") == 0)
     {
         ft_echo(cmd);
@@ -185,11 +195,12 @@ int execute_builtin(t_cmd *cmd, t_data *data)
 //Mini_shell$ pwd
 ///home/maissat/Desktop/minishellm21
 
-void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
+void	execute_cmds(t_data *data, t_cmd *cmds)
 {
     int     fd_in = 0;
     int     fd_pipe[2];
     int     fd;
+	char	**paths;
     char    *good_path;
     pid_t   pid;
     t_file  *current_file;
@@ -201,8 +212,7 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
         if (current_cmd->next)
             pipe(fd_pipe);
 		else if (execute_builtin(current_cmd, data) == 1)
-			return ;
-			
+			return ;	
         pid = fork();
         if (pid == 0)
         {
@@ -238,9 +248,12 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
             }
           	if (execute_builtin(current_cmd, data) == 1)
                 exit(0);
+			paths = ft_split(get_path_env(data->envp), ':');
+			paths = add_slash_all(paths);
             good_path = new_test_commands(paths, current_cmd->args[0]);
             if (good_path != NULL)
             {
+				
                 execve(good_path, current_cmd->args, data->envp);
  				perror("execve");
                 exit(data->exit_status);
