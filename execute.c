@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 20:05:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/23 02:20:36 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,6 @@ int execute_builtin(t_cmd *cmd, t_data *data)
         ft_pwd(cmd);
         return (1);
     }
-    // else if (ft_strlcmp(cmd->args[0], "env") == 0)
-    // {
-    //     show_tab(cmd->envp);
-    //     return (1);
-    // }
     return (0);
 }
 

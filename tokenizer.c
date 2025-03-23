@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 17:34:23 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/23 02:42:00 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int is_word(char c, t_data *data)
 			return (1);
 		}
 	}
-	if (is_space(c) || is_redirect(c) || is_pipe(c))
+	else if ((is_space(c) || is_redirect(c) || is_pipe(c)))
 		return (0);
 	return (1);
 }
@@ -113,10 +113,13 @@ t_token	*tokenizer(char *input, t_data *data)
 		if (is_word(input[i], data) == 1)
         {
             start = i;
-			if (input[i] == '"' || input[i] == '\'')
-				data->quote = input[i++];
             while (input[i] && is_word(input[i], data) == 1)
-                i++;
+			{
+				if (input[i] == '"' || input[i] == '\'')
+					data->quote = input[i];
+				i++;
+			}
+			printf("input de sortie {%c}\n", input[i]);
             list = add_node(ft_substr_qte(input, start, i - start), list, expect);
             if (expect == CMD)
                 expect = ARG;

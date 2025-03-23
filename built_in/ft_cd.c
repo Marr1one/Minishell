@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 21:49:50 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/23 02:20:22 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ void	ft_cd(t_cmd *cmd)
 		printf("minishell: cd: too many arguments\n");
 		return ;
 	}
-
 	if (!cmd->args[1])
 	{
 		target_dir = getenv("HOME");
