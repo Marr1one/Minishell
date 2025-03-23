@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 19:59:06 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/23 19:10:44 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,8 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_re_strjoin(char *s1, char const *s2);
 char	*ft_strcpy(char *dest, char *src);
 char	*ft_strcat(char *dest, char *src);
-char *expand_string(const char *input);
-void	expand_all(t_cmd *cmd, t_data *data);
+char    *expand_argument(const char *arg);
+void    expand_all(t_cmd *cmd);
+char	*expand_string(const char *arg);
 
 #endif

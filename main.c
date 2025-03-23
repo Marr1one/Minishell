@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 02:34:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/23 18:02:57 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,8 +312,7 @@ int main(int argc, char **argv, char **envp)
         }
 		list_cmd = create_args(list_tkn, list_cmd);
 		list_cmd = create_files(list_tkn, list_cmd);
-		// expand_var_command(list_cmd, data.exit_status, &data);
-		expand_all(list_cmd, &data);
+		expand_all(list_cmd);
 		execute_cmds(&data, list_cmd);
 		free(input);
     }

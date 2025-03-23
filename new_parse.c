@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 16:05:30 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/23 19:15:26 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,145 +33,124 @@ int	is_space(char c)
 	return (0);
 }
 
-/*
- * expand_string : traite une chaîne et effectue l'expansion des variables
- * selon les règles définies.
- * - Les '$' sont traités en comptant le nombre de '$' consécutifs.
- * - Si le nombre est pair, on insère (count/2) dollars littéraux.
- * - Si le nombre est impair, on insère ((count-1)/2) dollars littéraux,
- *   puis on lit le nom de la variable (lettres, chiffres, ou '_')
- *   et on remplace par sa valeur obtenue avec getenv.
- *
- * data n'est pas utilisé ici directement, mais vous pouvez l'ajouter
- * si vous avez une version personnalisée de getenv ou d'autres besoins.
- */
-char *expand_string(const char *input)
+char *expand_string(const char *arg)
 {
-    char *result;
-    int result_size;
-    int result_len;
-    int i, count, start;
-    char *temp;
-    char *var_value;
+    char    *result;
+    char    *var_value;
+    char    *var_name;
+    int     i;
+    int     j;
+    int     k;
+    int     start;
+    int     var_len;
+    int     final_len;
     
-    result_size = 128;  /* Taille initiale du buffer */
-    result = ft_malloc(result_size);
-    if (!result)
-        return NULL;
-    result[0] = '\0';
-    result_len = 0;
+
+    final_len = 0;
     i = 0;
-    while (input[i])
+    // Calcul de la longeur de la chaine final result
+    while (arg[i])
     {
-        if (input[i] != '$')
+        if (arg[i] != '$')
         {
-            /* Ajout du caractère courant */
-            if (result_len + 2 > result_size)
-            {
-                result_size *= 2;
-                temp = realloc(result, result_size);
-                if (!temp)
-                {
-                    free(result);
-                    return NULL;
-                }
-                result = temp;
-            }
-            result[result_len] = input[i];
-            result_len++;
-            result[result_len] = '\0';
+            final_len++;
             i++;
         }
         else
         {
-            /* On est sur un '$' : compter le nombre consécutif */
-            count = 0;
-            while (input[i] == '$')
-            {
-                count++;
+            i++;
+            start = i;
+            while (arg[i] && (isalnum((unsigned char)arg[i]) || arg[i] == '_'))
                 i++;
-            }
-            if (count % 2 == 0)
+            var_len = i - start;
+            if (var_len > 0)
             {
-                /* Nombre pair : insérer count/2 dollars littéraux */
-                int j = 0;
-                while (j < count / 2)
+                var_name = ft_malloc(var_len + 1);
+                if (!var_name)
+                    return(NULL);
+                k = 0;
+                while (k < var_len)
                 {
-                    if (result_len + 2 > result_size)
-                    {
-                        result_size *= 2;
-                        temp = realloc(result, result_size);
-                        if (!temp) 
-						{
-							free(result);
-							return (NULL);
-						}
-                        result = temp;
-                    }
-                    result[result_len] = '$';
-                    result_len++;
-                    j++;
+                    var_name[k] = arg[start + k];
+                    k++;
                 }
-                result[result_len] = '\0';
+                var_name[var_len] = '\0';
             }
             else
-            {
-                /* Nombre impair : insérer (count-1)/2 dollars littéraux */
-                int j = 0;
-                while (j < (count - 1) / 2)
-                {
-                    if (result_len + 2 > result_size)
-                    {
-                        result_size *= 2;
-                        temp = realloc(result, result_size);
-                        if (!temp) { free(result); return NULL; }
-                        result = temp;
-                    }
-                    result[result_len] = '$';
-                    result_len++;
-                    j++;
-                }
-                /* Maintenant, on effectue l'expansion.
-                 * On lit le nom de la variable (lettres, chiffres ou '_')
-                 */
-                start = i;
-                while (input[i] && (isalnum((unsigned char)input[i]) || input[i] == '_'))
-                    i++;
-                {
-                    int var_len = i - start;
-                    char *var_name = malloc(var_len + 1);
-                    if (!var_name) { free(result); return NULL; }
-                    strncpy(var_name, input + start, var_len);
-                    var_name[var_len] = '\0';
-                    /* Utilisation de getenv pour obtenir la valeur */
-                    var_value = getenv(var_name);
-                    free(var_name);
-                    if (!var_value)
-                        var_value = "";
-                    /* Ajouter var_value à result */
-                    int value_len = strlen(var_value);
-                    while (result_len + value_len + 1 > result_size)
-                    {
-                        result_size *= 2;
-                        temp = realloc(result, result_size);
-                        if (!temp) 
-						{ 
-							free(result);
-							return (NULL); 
-						}
-                        result = temp;
-                    }
-                    ft_strcat(result, var_value);
-                    result_len += value_len;
-                }
-            }
+                var_name = NULL;
+            if (var_name)
+                var_value = getenv(var_name);
+            else
+                var_value = NULL;
+            if (!var_value)
+                var_value = "";
+            final_len += (int)ft_strlen(var_value);
+            if (var_name)
+                free(var_name);
         }
     }
-    return result;
+    // on alloue resultat avec la taille final calcule 
+    result = ft_malloc(final_len + 1);
+	if (!result)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (arg[i])
+	{
+		if (arg[i] != '$')
+		{
+			result[j] = arg[i];
+			j++;
+			i++;
+		}
+		else
+		{
+			i++;
+			start = i;
+			while (arg[i] && (isalnum((unsigned char)arg[i]) || arg[i] == '_'))
+				i++;
+			var_len = i - start;
+			if (var_len > 0)
+			{
+				var_name = ft_malloc(var_len + 1);
+				if (!var_name)
+				{
+					free(result);
+					return (NULL);
+				}
+				k = 0;
+				while (k < var_len)
+				{
+					var_name[k] = arg[start + k];
+					k++;
+				}
+				var_name[var_len] = '\0';
+			}
+			else
+				var_name = NULL;
+			if (var_name)
+				var_value = getenv(var_name);
+			else
+				var_value = NULL;
+			if (!var_value)
+				var_value = "";
+			k = 0;
+			while (var_value[k])
+			{
+				result[j] = var_value[k];
+				j++;
+				k++;
+			}
+			if (var_name)
+				free(var_name);
+		}
+	}
+	result[j] = '\0';
+    return (result);
 }
 
 
-void	expand_all(t_cmd *cmd, t_data *data)
+void	expand_all(t_cmd *cmd)
 {
 	t_cmd	*current_cmd;
 	int		i;
@@ -179,16 +158,14 @@ void	expand_all(t_cmd *cmd, t_data *data)
 	t_file	*current_file;
 
 	current_cmd = cmd;
-	(void)data;
 	while (current_cmd)
 	{
-		i = 0;
-		while (current_cmd->args && current_cmd->args[i])
+		i = -1;
+		while (current_cmd->args && current_cmd->args[++i])
 		{
 			expanded = expand_string(current_cmd->args[i]);
 			free(current_cmd->args[i]);
 			current_cmd->args[i] = expanded;
-			i++;
 		}
 		current_file = current_cmd->files;
 		while (current_file)
@@ -201,3 +178,68 @@ void	expand_all(t_cmd *cmd, t_data *data)
 		current_cmd = current_cmd->next;
 	}
 }
+
+
+// char    *expand_argument(const char *arg)
+// {
+//     char    *result;
+//     char    *var_value;
+//     int     i;
+//     int     j;
+//     int     start;
+
+//     // Allouer une première version du résultat (max taille d'entrée)
+//     result = ft_malloc(strlen(arg) * 2 + 1);
+//     if (!result)
+//         return (NULL);
+//     i = 0;
+//     j = 0;
+//     while (arg[i])
+//     {
+//         if (arg[i] == '$')
+//         {
+//             i++;
+//             start = i;
+//             while (arg[i] && (isalnum((unsigned char)arg[i]) || arg[i] == '_'))
+//                 i++;
+//             if (i > start) // On a trouvé un nom de variable
+//             {
+//                 char var_name[i - start + 1];
+//                 strncpy(var_name, arg + start, i - start);
+//                 var_name[i - start] = '\0';
+//                 var_value = getenv(var_name);
+//                 if (!var_value)
+//                     var_value = "";
+//                 ft_strcpy(result + j, var_value);
+//                 j += ft_strlen(var_value);
+//             }
+//             else // Juste un dollar isolé
+//                 result[j++] = '$';
+//         }
+//         else
+//             result[j++] = arg[i++];
+//     }
+//     result[j] = '\0';
+//     return (result);
+// }
+
+// void    expand_all(t_cmd *cmd)
+// {
+//     t_cmd   *current_cmd;
+//     int     i;
+//     char    *expanded;
+
+//     current_cmd = cmd;
+//     while (current_cmd)
+//     {
+//         i = 0;
+//         while (current_cmd->args && current_cmd->args[i])
+//         {
+//             expanded = expand_argument(current_cmd->args[i]);
+//             free(current_cmd->args[i]);
+//             current_cmd->args[i] = expanded;
+//             i++;
+//         }
+//         current_cmd = current_cmd->next;
+//     }
+// }
