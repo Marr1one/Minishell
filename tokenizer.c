@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 22:27:20 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/23 02:52:12 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,71 +73,61 @@ t_type	case_redirect(char *input, int	i)
 		return (UNKNOWN);
 	}
 }
-int is_word(char c)
+int is_word(char c, t_data *data)
 {
-	if (is_space(c))
-		return (0);
-	if (is_redirect(c))
-		return (0);
-	if (is_pipe(c))
+	if (data->quote != 0)
+	{
+		if (c != data->quote)
+			return (1);
+		else
+		{
+			data->quote = -1;
+			return (1);
+		}
+	}
+	else if ((is_space(c) || is_redirect(c) || is_pipe(c)))
 		return (0);
 	return (1);
 }
 
-t_token	*tokenizer(char *input)
+t_token	*tokenizer(char *input, t_data *data)
 {
 	int			i;
 	t_token		*list;
 	t_type		expect;
 	t_type		redirect;
-	char		quote;
 	int			start;
 
 	i = 0;
+	data->quote = 0;
 	expect = CMD;
 	list = NULL;
 	if (!validate_input(input))
-	{
 		return(NULL);
-	}
 	while (input[i])
 	{
 		while (input[i] == ' ')
 			i++;
 		if (input[i] == '\0')
-		{
-			// printf("dans le cas ou il nya que des espaces!\n");
 			break;
-		}
-		if (input[i] == '"' || input[i] == '\'')
-		{
-			quote = input[i];
-			start = ++i;
-			while (input[i] && input[i] != quote)
-				i++;
-			if (input[i] == '\0')
+		if (is_word(input[i], data) == 1)
+        {
+            start = i;
+            while (input[i] && is_word(input[i], data) == 1) //"salut les gars"youpi youpo
 			{
-				printf("Erreur : Quote non fermée\n");
-				return (NULL);
-			}
-			list = add_node(ft_substr_qte(input, start, i - start), list, expect);
-			i++;
-			if (expect == CMD)
-				expect = ARG;
-			continue;
-		}
-		if (is_word(input[i]) == 1)
-		{
-			start = i;
-			while(input[i] && is_word(input[i]) == 1)
+				if ((input[i] == '"' || input[i] == '\'') && data->quote == 0)
+					data->quote = input[i];
+				if (data->quote == -1)
+					data->quote = 0;
 				i++;
-			list = add_node(ft_substr(input, start, i), list, expect);
-			if (expect == CMD)
-				expect = ARG;
-			if (expect == FICHIER)
-				expect = ARG;
-			continue;
-		}
+			}
+            list = add_node(ft_substr_qte(input, start, i - start), list, expect);
+            if (expect == CMD)
+                expect = ARG;
+            if (expect == FICHIER)
+                expect = ARG;
+            continue;
+        }
 		if (input[i] == '|')
 		{
 			if (case_pipe(input, i) > 1)

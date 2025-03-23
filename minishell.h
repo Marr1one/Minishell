@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:13:45 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/22 19:59:06 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,11 @@ typedef struct s_cmd
 
 typedef struct s_data
 {
-	t_token	*list;
+	t_token		*list_tkn;
+	t_type		expect;
 	t_malloc	*gc;
 	//t_env	*env_var;
+	int		in_quote;
 	char	**envp;
 	char 	**path;
 	int		pipe[2];
@@ -93,8 +95,9 @@ typedef struct s_data
 	char	**args;
 	char	**skipped_qu;
 	char	**cmd_args;
-	int     in_quote;
+	char     quote;
 	int		quotes;
+	t_token		*list;
 	int		exit_status;
 	
 }	t_data;
@@ -109,13 +112,15 @@ int				is_digit(char c);
 int				is_redirect(char c);
 int				is_pipe(char c);
 int				is_space(char c);
-t_token			*tokenizer(char *input);
+t_token			*tokenizer(char *input, t_data *data);
 const char		*get_token_type_name(t_type type);
 // void			execute_cmds(t_cmd *cmds, char **paths);
-void 			execute_cmds(t_data *data, t_cmd *cmds, char **paths);
-int 			execute_builtin(t_cmd *cmd);
+void 			execute_cmds(t_data *data, t_cmd *cmds);
+int 			execute_builtin(t_cmd *cmd, t_data *data);
 void			show_env(char **tab);
-char	*ft_substr_qte(char *str,  int start, int end);
+char			*ft_substr_qte(char *str,  int start, int end);
+char			**ft_unset(t_data *data, int	save);
+void			check_unset(t_data *data, char	*str);
 
 
 
@@ -196,7 +201,7 @@ char			**cut_last(char **tab, int	i);
 int				list_len(t_token *list);
 int				only_space(char *input);
 void			ft_pwd(t_cmd *cmd);
-void			export(t_data *data);
+void			ft_export(t_cmd *cmd, t_data *data);
 char			**add_export(t_data *data, char *str);
 void			show_tab_export(char **tab);
 int				check_change(t_data *data, char *str);

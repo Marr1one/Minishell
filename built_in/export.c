@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:31:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/09 20:32:13 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:55:58 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	check_export_compatibility(char *str)
 	
 	i = 0;
 	quote = 0;
-	while (is_alpha(str[i]) == 0)
+	while (is_alpha(str[i]))
 		i++;
 	if (str[i] == '=')
 		i++;
@@ -28,7 +28,7 @@ int	check_export_compatibility(char *str)
 	if (str[i] == '"')
 		quote = 1;
 	i++;
-	while (is_alpha(str[i]) == 0 || str[i] == '/')
+	while (is_alpha(str[i]) || str[i] == '/')
 		i++;
 	if (str[i] == '\0')
 		return (0);
@@ -38,26 +38,26 @@ int	check_export_compatibility(char *str)
 		return (1);
 }
 
-void	export(t_data *data)
+void	ft_export(t_cmd *cmd, t_data *data)
 {
-	if (get_nbr_node(data->list) == 1)
-			show_tab_export(data->envp);
-	else
+	int		i;
+	char	**args;
+
+	args = cmd->args;
+	if (count_args(args) == 1)
+		return (show_tab_export(data->envp));
+	i = 1;
+	while (args[i])
 	{
-		data->list = data->list->next;
-		while(data->list != NULL)
+		if (check_export_compatibility(args[i]) == 0)
 		{
-			if (check_export_compatibility(data->list->content) == 0)
-			{
-				printf("Good format!\n");
-				if (check_change(data, data->list->content) == 1)
-					return ;
-				else
-					data->envp = add_export(data, data->list->content);
-			}
+			if (check_change(data, cmd->args[i]) == 1)
+				return ;
 			else
-				printf("Bad format!\n");
-			data->list = data->list->next;
+				data->envp = add_export(data, cmd->args[i]);
 		}
+		else
+			printf("Bad format!\n");
+		i++;
 	}
 }

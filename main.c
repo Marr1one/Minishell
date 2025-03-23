@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 18:14:14 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/23 02:34:43 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_cmd	*create_args(t_token *list_tkn, t_cmd *list_cmd)
 	{
 		if (current_tkn->type == CMD || current_tkn->type == ARG)
 		{
-			current_cmd->args[i++] = ft_strdup(current_tkn->content);
+			current_cmd->args[i++] = current_tkn->content;
 		} 
 		else if (current_tkn->type == PIPE)
 		{
@@ -113,8 +113,9 @@ t_cmd	*add_cmd_node(t_cmd *cmd_list)
 	new_cmd = ft_malloc(sizeof(t_cmd));
 	if (!new_cmd)
 		return (NULL);
+	
 	new_cmd->args = NULL;
-	new_cmd->files = NULL;
+	new_cmd->files = NULL; //mettre plutot b_zero
 	new_cmd->next = NULL;
 	if (!cmd_list)
 		return (new_cmd);
@@ -166,7 +167,7 @@ t_file *	add_file(t_file	*list_file, t_token *file_tkn, t_type mode)
 	if (!new_file)
 		return (NULL);
 	new_file->mode = mode;
-	new_file->path = ft_strdup(file_tkn->content);
+	new_file->path = file_tkn->content;
 	new_file->next = NULL;
 	if (list_file == NULL)
 		return (new_file);
@@ -232,19 +233,60 @@ t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 	return (list_cmd);
 }
 
+char	*quoteless_string(char *str)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+
+	i = 0;
+	j = 0;
+	while(str[i])
+	{
+		if (str[i] != '"' && str[i] != '\'')
+			j++;
+		i++;
+	}
+	new_str = ft_malloc(sizeof(char) * (j + 1));
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] != '"' && str[i] != '\'')
+		{
+			new_str[j++] = str[i];
+		}
+		i++;
+	}
+	new_str[j] = '\0';
+	return (new_str);
+}
+
+void	remove_quotes(t_token *list_tkn)
+{
+	t_token *current_tkn;
+
+	current_tkn = list_tkn;
+	while (current_tkn)
+	{
+		current_tkn->content = quoteless_string(current_tkn->content);
+		current_tkn = current_tkn->next;
+	}
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	
     (void)argv;
-	(void)envp;
 	char	*input;
-	char	**paths;
 	t_cmd	*list_cmd;
 	t_token *list_tkn;
 	t_data	data;
 	
+	ft_memset(&data, 0, sizeof(data));
     data.envp = copy_env(envp);
-	data.exit_status = 0;
     if (argc != 1)
         return (printf("Usage : ./minishell\n"));
     signal(SIGINT, sigint_handler);
@@ -255,9 +297,12 @@ int main(int argc, char **argv, char **envp)
         input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
         if (!input)
             break;
-		input = ft_strdup(input);
         add_history(input);
-		list_tkn = tokenizer(input);
+		list_tkn = tokenizer(input, &data);
+		show_list(list_tkn);
+		if (list_tkn == NULL)
+			continue;
+		remove_quotes(list_tkn);
 		// rm_qts_nodes(&data);
 		list_cmd = parse_cmd(list_tkn);
 		if (list_cmd == NULL)
@@ -268,10 +313,9 @@ int main(int argc, char **argv, char **envp)
 		list_cmd = create_args(list_tkn, list_cmd);
 		list_cmd = create_files(list_tkn, list_cmd);
 		// expand_var_command(list_cmd, data.exit_status, &data);
-		paths = ft_split(get_path_env(envp), ':');
-    	paths = add_slash_all(paths);
 		expand_all(list_cmd, &data);
-		execute_cmds(&data, list_cmd, paths);
+		execute_cmds(&data, list_cmd);
+		free(input);
     }
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 20:38:04 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/23 16:04:41 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,17 @@ char	*new_test_commands(char **paths, char *str)
 {
 	int		i;
 	char	*path_test;
-	char	*good_path;
 	
+	if (!paths)
+		return (NULL);
 	i = 0;
-	//if (ft_empty(data) == 1)
-	//	return (1);
-	//if (only_space(data->input) == 0)
-	//	return (1);
-	//if (data->path == NULL)
-	//	return (1);
 	while (paths[i])
 	{
 		path_test = ft_join(paths[i], str);
 		if (access(path_test, F_OK | X_OK) == 0)
 		{
-			good_path = ft_strdup(path_test);
 			// printf("good path founded : {%s}\n", good_path);
-			return (good_path);
+			return (path_test);
 		}
 		i++;
 	}
@@ -66,8 +60,22 @@ int is_builtin(char *cmd)
     return (0);
 }
 
-int execute_builtin(t_cmd *cmd)
+int execute_builtin(t_cmd *cmd, t_data *data)
 {
+	int	i;
+	t_cmd *current_cmd;
+	
+	current_cmd = cmd;
+	if (ft_strlcmp(current_cmd->args[0], "unset") == 0)
+    {
+		if (current_cmd->args[1])
+		{
+			i =  1;
+			while (current_cmd->args[i])
+				check_unset(data, current_cmd->args[i++]);
+		}
+        return (1);
+    }
     if (ft_strlcmp(cmd->args[0], "echo") == 0)
     {
         ft_echo(cmd);
@@ -157,57 +165,33 @@ int execute_builtin(t_cmd *cmd)
 // }
 
 
-void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
+//Mini_shell$ pwd
+///home/maissat/Desktop/minishellm21/built_in			
+//Mini_shell$ pwd | cd ..
+//Mini_shell$ pwd
+///home/maissat/Desktop/minishellm21
+
+void	execute_cmds(t_data *data, t_cmd *cmds)
 {
     int     fd_in = 0;
     int     fd_pipe[2];
     int     fd;
+	char	**paths;
     char    *good_path;
     pid_t   pid;
     t_file  *current_file;
     t_cmd   *current_cmd;
 	
-    current_cmd = cmds;
+	current_cmd = cmds;
     while (current_cmd)
     {
-		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "cd") == 0)
-		{
-			ft_cd(current_cmd);
-			current_cmd = current_cmd->next;
-			continue;
-		}
-		if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "env") == 0)
-			show_env(data->envp);
-		else if (!current_cmd->next && ft_strlcmp(current_cmd->args[0], "exit") == 0)
-        {
-			printf("in exit if\n");
-            ft_exit(current_cmd);
-            return;
-        }
         if (current_cmd->next)
             pipe(fd_pipe);
+		else if (execute_builtin(current_cmd, data) == 1)
+			return ;	
         pid = fork();
         if (pid == 0)
         {
-            if (current_cmd->files)
-            {
-                current_file = current_cmd->files;
-                while (current_file)
-                {
-                    fd = open_file(current_file->path, current_file->mode);
-                    if (fd == -1)
-                    {
-                        perror("open");
-                        exit(1);
-                    }
-                    if (current_file->mode == INFILE || current_file->mode == HEREDOC)
-                        dup2(fd, STDIN_FILENO);
-                    else
-                        dup2(fd, STDOUT_FILENO);
-                    close(fd);
-                    current_file = current_file->next;
-                }
-            }
             if (current_cmd->next)
             {
                 dup2(fd_pipe[1], STDOUT_FILENO);
@@ -219,12 +203,34 @@ void	execute_cmds(t_data *data, t_cmd *cmds, char **paths)
                 dup2(fd_in, STDIN_FILENO);
                 close(fd_in);
             }
-          	if (execute_builtin(current_cmd) == 1)
+            if (current_cmd->files)
+            {
+                current_file = current_cmd->files;
+                while (current_file)
+                {
+                    fd = open_file(current_file->path, current_file->mode);
+                    if (fd == -1)
+                    {
+                        perror("open");
+                        exit(1); // free and exit
+                    }
+                    if (current_file->mode == INFILE || current_file->mode == HEREDOC)
+                        dup2(fd, STDIN_FILENO);
+                    else
+                        dup2(fd, STDOUT_FILENO);
+                    close(fd);
+                    current_file = current_file->next;
+                }
+            }
+          	if (execute_builtin(current_cmd, data) == 1)
                 exit(0);
+			paths = ft_split(get_path_env(data->envp), ':');
+			paths = add_slash_all(paths);
             good_path = new_test_commands(paths, current_cmd->args[0]);
             if (good_path != NULL)
             {
-                execve(good_path, current_cmd->args, NULL);
+				
+                execve(good_path, current_cmd->args, data->envp);
  				perror("execve");
                 exit(data->exit_status);
             }

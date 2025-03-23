@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 17:57:40 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/22 19:48:44 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ int	is_numeric(char	*str)
 
 int	check_change(t_data *data, char *str)
 {
-	//printf("in check change\n");
 	char 	**env;
 	int		i;
 	int		len;
@@ -168,10 +167,7 @@ int	check_change(t_data *data, char *str)
 
 	
 	name = take_before(str, '=');
-	//printf("name = %s\n", name);
 	len = ft_strlen(name) + 1;
-	//printf("name + '=' = %s\n", ft_joinchar(name, '=', 0));
-	//printf("len de name = %d\n", len);
 	env = data->envp;
 	found = 0;
 	i = 0;
@@ -179,8 +175,6 @@ int	check_change(t_data *data, char *str)
 	{
 		if (ft_strncmp(env[i], ft_joinchar(name, '=', 0), len) == 0)
 		{
-			//printf("on trouve un truc qui existe et qui se nomme deja comme ca\n");
-			//printf("env[i] = %s\n", env[i]);
 			env[i] = ft_strdup(str);
 			found = 1;
 		}
@@ -204,13 +198,13 @@ char	**add_export(t_data *data, char *str)
 		new_env[i] = ft_strdup(data->envp[i]);
 		i++;
 	}
-	new_env[i] = ft_strdup(str);
+	new_env[i] = str;
 	i++;
 	new_env[i] = NULL;
 	return (new_env);
 }
 
-char	**ft_unset(t_data *data, int	save)
+char	**ft_unset(t_data *data, int save)
 {
 	int		i;
 	int		j;
@@ -234,8 +228,7 @@ char	**ft_unset(t_data *data, int	save)
 		i++;
 	}
 	new_env[j] = NULL;
-	i = 0;
-	// while (data->envp[i])
+	// while (data->envp[i])	
 		// free(data->envp[i++]);
 	// free(data->envp);
 	// printf("nouvelle env ;\n");
@@ -249,24 +242,23 @@ char	*ft_joinunset(char *str)
 	int		i;
 	int		j;
 	int		len;
-	char	*join;
+	char	*joineg;
 
 	len = ft_strlen(str);
 	i = 0;
 	j = 0;
-	join = ft_malloc(sizeof(char) * (len + 2));
-	if (!join)
+	joineg = ft_malloc(sizeof(char) * (len + 2));
+	if (!joineg)
 		return (NULL);
 	while (str[i])
 	{
-		join[j] = str[i];	
+		joineg[j] = str[i];	
 		j++;
 		i++;
 	}
-	join[j] = '=';
-	j++;
-	join[j] = '\0';
-	return (join);
+	joineg[j++] = '=';
+	joineg[j] = '\0';
+	return (joineg);
 }
 
 void	check_unset(t_data *data, char	*str)
@@ -276,7 +268,6 @@ void	check_unset(t_data *data, char	*str)
 	
 	i = 0;
 	join_eg = ft_joinunset(str);
-	// printf("joineg = {%s}\n", join_eg);
 	while (data->envp[i])
 	{
 		if (ft_strncmp(data->envp[i], join_eg, ft_strlen(join_eg)) == 0)
@@ -288,7 +279,6 @@ void	check_unset(t_data *data, char	*str)
 		}
 		i++;
 	}
-	// free(join_eg);
 }
 
 int	count_args(char **args)
@@ -316,43 +306,44 @@ void	show_tab_export(char **tab)
 //la on verifie le premier argument, si cest parmis un builtin on lance la fonction adequates.
 int	check_builtin(t_data *data)
 {
-	if (data->list && (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0))
-	{
-		//printf("dans mon pwd a moi\n");
-		destroy_node_quotes(data); //detruit les noeuds ou ya juste des guillemets ; pwd "" devient pwd.
-		// ft_pwd(data);
-		return (1);
-	}
-	if (data->list && (ft_strlcmp(data->list->content, "unset") == 0 ||ft_strlcmp(data->list->content, "\"unset\"") == 0))
-	{
-		data->list = data->list->next;
-		check_unset(data, data->list->content);	
-		return (1);
-	}
-	// if (data->list && (ft_strlcmp(data->list->content, "exit") == 0 ||ft_strlcmp(data->list->content, "\"exit\"") == 0))
-	// {
-	// 	ft_exit(data);
-	// 	return (1);
-	// }
-	// if (data->list && (ft_strlcmp(data->list->content, "echo") == 0 ||ft_strlcmp(data->list->content, "\"echo\"") == 0))
-	// {
-	// 	ft_echo(*data);
-	// 	return (1);
-	// }
-	// if (data->list && (ft_strlcmp(data->list->content, "cd") == 0 ||ft_strlcmp(data->list->content, "\"cd\"") == 0))
-	// {
-	// 	ft_cd(data);
-	// 	return (1);
-	// }
-	if (data->list && (ft_strlcmp(data->args[0], "env") == 0 ||ft_strlcmp(data->args[0], "\"env\"") == 0))
-	{
-		show_tab(data->envp);
-		return (1);
-	}
-	if (data->list && (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0))
-	{
-		export(data);
-		return (1);
-	}
+	(void)data;
+// 	// if (data->list && (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0))
+// 	// {
+// 	// 	//printf("dans mon pwd a moi\n");
+// 	// 	destroy_node_quotes(data); //detruit les noeuds ou ya juste des guillemets ; pwd "" devient pwd.
+// 	// 	// ft_pwd(data);
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->list->content, "unset") == 0 ||ft_strlcmp(data->list->content, "\"unset\"") == 0))
+// 	// {
+// 	// 	data->list = data->list->next;
+// 	// 	check_unset(data, data->list->content);	
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->list->content, "exit") == 0 ||ft_strlcmp(data->list->content, "\"exit\"") == 0))
+// 	// {
+// 	// 	ft_exit(data);
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->list->content, "echo") == 0 ||ft_strlcmp(data->list->content, "\"echo\"") == 0))
+// 	// {
+// 	// 	ft_echo(*data);
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->list->content, "cd") == 0 ||ft_strlcmp(data->list->content, "\"cd\"") == 0))
+// 	// {
+// 	// 	ft_cd(data);
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->args[0], "env") == 0 ||ft_strlcmp(data->args[0], "\"env\"") == 0))
+// 	// {
+// 	// 	show_tab(data->envp);
+// 	// 	return (1);
+// 	// }
+// 	//if (data->list && (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0))
+// 	//{
+// 	//	export(data);
+// 	//	return (1);
+// 	//}
 	return (0);
 }
