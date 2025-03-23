@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 02:52:12 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/23 13:34:53 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,10 @@ t_token	*tokenizer(char *input, t_data *data)
 		if (input[i] == '|')
 		{
 			if (case_pipe(input, i) > 1)
-				break;
+			{
+				printf("minishell: syntax error near unexpected token `|'");
+				return (NULL);
+			}
 			list = add_node("|", list, PIPE);
 			expect = CMD;
 			i++;
@@ -143,7 +146,7 @@ t_token	*tokenizer(char *input, t_data *data)
 			if (redirect == UNKNOWN)
 			{
 				printf("erreur de redirect\n");
-				break;
+				return (NULL);
 			}
 			if (input[i] == '<')
 				list = add_node("<", list, redirect);
