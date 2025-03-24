@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 13:34:53 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/25 00:18:31 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,17 +90,70 @@ int is_word(char c, t_data *data)
 	return (1);
 }
 
+t_token *case_redir(char *input, int *i, t_data *data, t_token *list)
+{
+	t_type redirect;
+	
+	redirect = case_redirect(input, *i);
+	if (redirect == UNKNOWN)
+	{
+		printf("erreur de redirect\n");
+		return (NULL);
+	}
+	if (input[*i] == '<')
+		list = add_node("<", list, redirect);
+	else
+		list = add_node(">", list, redirect);
+	if (redirect == INFILE || redirect == OUTFILE_TRUNC)
+		(*i)++;
+	else if (redirect == HEREDOC || redirect == OUTFILE_APPEND)
+		*i += 2;
+	data->expect = FICHIER;
+	return (list);
+}
+
+t_token	*case_word(int *i, t_data *data, t_token *list, char *input)
+{
+	int	start;
+	
+	start = *i;
+	while (input[*i] && is_word(input[*i], data) == 1) //"salut les gars"youpi youpo
+	{
+		if ((input[*i] == '"' || input[*i] == '\'') && data->quote == 0)
+			data->quote = input[*i];
+		if (data->quote == -1)
+			data->quote = 0;
+		(*i)++;
+	}
+	list = add_node(ft_substr_qte(input, start, *i - start), list, data->expect);
+	if (data->expect == CMD)
+		data->expect = ARG;
+	if (data->expect == FICHIER)
+		data->expect = ARG;
+	return (list);
+}
+
+t_token *input_pipe(int *i, char *input, t_data *data, t_token *list)
+{
+	if (case_pipe(input, *i) > 1)
+	{
+		printf("minishell: syntax error near unexpected token `|'\n");
+		return (NULL);
+	}
+	list = add_node("|", list, PIPE);
+	data->expect = CMD;
+	(*i)++;
+	return (list);
+}
+
 t_token	*tokenizer(char *input, t_data *data)
 {
 	int			i;
 	t_token		*list;
-	t_type		expect;
-	t_type		redirect;
-	int			start;
 
 	i = 0;
 	data->quote = 0;
-	expect = CMD;
+	data->expect = CMD;
 	list = NULL;
 	if (!validate_input(input))
 		return(NULL);
@@ -112,51 +165,17 @@ t_token	*tokenizer(char *input, t_data *data)
 			break;
 		if (is_word(input[i], data) == 1)
         {
-            start = i;
-            while (input[i] && is_word(input[i], data) == 1) //"salut les gars"youpi youpo
-			{
-				if ((input[i] == '"' || input[i] == '\'') && data->quote == 0)
-					data->quote = input[i];
-				if (data->quote == -1)
-					data->quote = 0;
-				i++;
-			}
-            list = add_node(ft_substr_qte(input, start, i - start), list, expect);
-            if (expect == CMD)
-                expect = ARG;
-            if (expect == FICHIER)
-                expect = ARG;
+			list = case_word(&i, data, list, input);
             continue;
         }
 		if (input[i] == '|')
 		{
-			if (case_pipe(input, i) > 1)
-			{
-				printf("minishell: syntax error near unexpected token `|'");
-				return (NULL);
-			}
-			list = add_node("|", list, PIPE);
-			expect = CMD;
-			i++;
+			list = input_pipe(&i, input, data, list);
 			continue;
 		}
 		if (input[i] == '<' || input[i] == '>')
 		{
-			redirect = case_redirect(input, i);
-			if (redirect == UNKNOWN)
-			{
-				printf("erreur de redirect\n");
-				return (NULL);
-			}
-			if (input[i] == '<')
-				list = add_node("<", list, redirect);
-			else
-				list = add_node(">", list, redirect);
-			if (redirect == INFILE || redirect == OUTFILE_TRUNC)
-                i++;
-            else if (redirect == HEREDOC || redirect == OUTFILE_APPEND)
-                i += 2;
-			expect = FICHIER;
+			list = case_redir(input, &i, data, list);
 			continue;
 		}
 		if (list && findlast_token(list)->type == PIPE)

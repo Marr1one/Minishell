@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 16:24:09 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/24 15:05:48 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,6 @@ int main(int argc, char **argv, char **envp)
             break;
         add_history(input);
 		list_tkn = tokenizer(input, &data);
-		// show_list(list_tkn);
 		if (list_tkn == NULL)
 			continue;
 		remove_quotes(list_tkn);

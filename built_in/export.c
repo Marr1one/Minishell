@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:31:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 19:55:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/24 15:07:04 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,18 @@ int	check_export_compatibility(char *str)
 		return (0);
 	else
 		return (1);
+}
+
+void	show_tab_export(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		printf("export %s\n", tab[i]);
+		i++;
+	}
 }
 
 void	ft_export(t_cmd *cmd, t_data *data)
