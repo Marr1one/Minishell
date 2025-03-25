@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 02:20:22 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/25 14:53:28 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,12 +154,10 @@ void	ft_cd(t_cmd *cmd)
 
 	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
 	{
-		perror("getcwd");
+		perror("minishell: getcwd");
 		return ;
 	}
 
 	if (chdir(target_dir) != 0)
-	{
-		perror("cd");
-	}
+		perror("minishell: cd");
 }

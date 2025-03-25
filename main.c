@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 03:01:38 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/25 03:06:04 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,7 +386,6 @@ int main(int argc, char **argv, char **envp)
     initialize_data(&data, envp);
     setup_signals();
     shell_loop(&data);
-
     return (0);
 }
 

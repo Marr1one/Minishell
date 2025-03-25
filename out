@@ -1,1 +1,27 @@
-a
+in exec builtin child
+Makefile
+add_slash.c
+built_in
+chaining.c
+comment.c
+dossiertest
+env_var.c
+exec.c
+execute.c
+file
+ft_show.c
+garbage_collector
+heredoc.c
+main.c
+minishell
+minishell.h
+new_parse.c
+obj
+out
+parsing.c
+pipex.c
+ramzy.supp
+signals.c
+tokenizer.c
+truc qui manque
+utils
