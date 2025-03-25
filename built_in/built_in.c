@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 19:48:44 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/24 15:06:56 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,17 +291,7 @@ int	count_args(char **args)
 	return (i);
 }
 
-void	show_tab_export(char **tab)
-{
-	int	i;
 
-	i = 0;
-	while (tab[i])
-	{
-		printf("export %s\n", tab[i]);
-		i++;
-	}
-}
 
 //la on verifie le premier argument, si cest parmis un builtin on lance la fonction adequates.
 int	check_builtin(t_data *data)
