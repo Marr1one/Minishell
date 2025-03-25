@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 03:43:00 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:47:57 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,45 +231,78 @@ t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 	return (list_cmd);
 }
 
-char	*quoteless_string(char *str)
-{
-	int		i;
-	int		j;
-	char	*new_str;
+// char	*quoteless_string(char *str)
+// {
+// 	int		i;
+// 	int		j;
+// 	char	*new_str;
 
-	i = 0;
-	j = 0;
-	while(str[i])
-	{
-		if (str[i] != '"' && str[i] != '\'')
-			j++;
-		i++;
-	}
-	new_str = ft_malloc(sizeof(char) * (j + 1));
-	if (!new_str)
+// 	i = 0;
+// 	j = 0;
+// 	while(str[i])
+// 	{
+// 		if (str[i] != '"' && str[i] != '\'')
+// 			j++;
+// 		i++;
+// 	}
+// 	new_str = ft_malloc(sizeof(char) * (j + 1));
+// 	if (!new_str)
+// 		return (NULL);
+// 	i = 0;
+// 	j = 0;
+// 	while (str[i])
+// 	{
+// 		if (str[i] != '"' && str[i] != '\'')
+// 			new_str[j++] = str[i];
+// 		i++;
+// 	}
+// 	new_str[j] = '\0';
+// 	return (new_str);
+// }
+
+// void	remove_quotes(t_token *list_tkn)
+// {
+// 	t_token *current_tkn;
+
+// 	current_tkn = list_tkn;
+// 	while (current_tkn)
+// 	{
+// 		current_tkn->content = quoteless_string(current_tkn->content);
+// 		current_tkn = current_tkn->next;
+// 	}
+// }
+
+
+char	*quoteless_string_cmd(char *str)
+{
+	int	len;
+
+	if (!str)
 		return (NULL);
-	i = 0;
-	j = 0;
-	while (str[i])
+	len = ft_strlen(str);
+	if (len >= 2 && ((str[0] == '\'' && str[len - 1] == '\'') ||
+	                 (str[0] == '"' && str[len - 1] == '"')))
 	{
-		if (str[i] != '"' && str[i] != '\'')
-			new_str[j++] = str[i];
-		i++;
+		return (ft_substr(str, 1, len - 1));
 	}
-	new_str[j] = '\0';
-	return (new_str);
+	else
+	{
+		return (ft_strdup(str));
+	}
 }
-
-void	remove_quotes(t_token *list_tkn)
+void remove_quotes_from_cmd(t_cmd *cmd)
 {
-	t_token *current_tkn;
+    int i;
+    char *new_arg;
 
-	current_tkn = list_tkn;
-	while (current_tkn)
-	{
-		current_tkn->content = quoteless_string(current_tkn->content);
-		current_tkn = current_tkn->next;
-	}
+    i = 0;
+    while (cmd->args && cmd->args[i])
+    {
+        new_arg = quoteless_string_cmd(cmd->args[i]);
+        free(cmd->args[i]);
+        cmd->args[i] = new_arg;
+        i++;
+    }
 }
 
 // int main(int argc, char **argv, char **envp)
@@ -347,13 +380,13 @@ void process_command(char *input, t_data *data)
     list_tkn = tokenizer(input, data);
     if (list_tkn == NULL)
         return ;
-    remove_quotes(list_tkn);
     list_cmd = parse_cmd(list_tkn);
     if (list_cmd == NULL)
         return ;
     list_cmd = create_args(list_tkn, list_cmd);
     list_cmd = create_files(list_tkn, list_cmd);
     expand_all(list_cmd, data);
+	remove_quotes_from_cmd(list_cmd);
     execute_cmds(data, list_cmd);
 
     return ;

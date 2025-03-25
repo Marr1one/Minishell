@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 03:21:20 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:39:53 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_token
 {
 	t_type			type;
 	char			*content;
+	char			quote;
 	int				index;
 	struct	s_token	*next;
 }	t_token;
@@ -76,7 +77,7 @@ typedef struct s_file
 typedef struct s_cmd
 {
 	char **args;
-	t_file *files;	
+	t_file *files;
 	struct	s_cmd	*next;
 }	t_cmd;
 
@@ -215,10 +216,13 @@ int				check_change(t_data *data, char *str);
 int 	validate_input(const char *input);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_re_strjoin(char *s1, char const *s2);
+int 	handle_quotes(char c, t_data *data);
 char	*ft_strcpy(char *dest, char *src);
 char	*ft_strcat(char *dest, char *src);
 char    *expand_argument(const char *arg);
-void    expand_all(t_cmd *cmd, t_data *data);
+void	expand_all(t_cmd *cmd, t_data *data);
 char	*expand_string(const char *arg, t_data *data);
+void remove_quotes_from_cmd(t_cmd *cmd);
+char *quoteless_string_cmd(char *str);
 
 #endif
