@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 00:18:31 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/25 01:34:24 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,37 +41,47 @@ int	case_pipe(char *input, int	i)
 	return (count);
 	
 }
-t_type	case_redirect(char *input, int	i)
+
+t_type case_infile(char *input, int i)
+{
+	int count ;
+
+	count = 0;
+	while (input[i] == '<')
+	{
+		i++;
+		count++;
+	}
+	if (count == 1)
+		return (INFILE);
+	if (count == 2)
+		return (HEREDOC);
+	return (UNKNOWN);
+}
+
+t_type case_outfile(char *input, int i)
 {
 	int	count;
-	
+
 	count = 0;
+	while (input[i] == '>')
+	{
+		i++;
+		count++;
+	}
+	if (count == 1)
+		return (OUTFILE_TRUNC);
+	if (count == 2)
+		return (OUTFILE_APPEND);
+	return (UNKNOWN);
+}
+
+t_type	case_redirect(char *input, int	i)
+{
 	if (input[i] == '<')
-	{
-		while (input[i] == '<')
-		{
-			i++;
-			count++;
-		}
-		if (count == 1)
-			return (INFILE);
-		if (count == 2)
-			return (HEREDOC);
-		return (UNKNOWN);
-	}
+		return (case_infile(input, i));
 	else
-	{
-		while (input[i] == '>')
-		{
-			i++;
-			count++;
-		}
-		if (count == 1)
-			return (OUTFILE_TRUNC);
-		if (count == 2)
-			return (OUTFILE_APPEND);
-		return (UNKNOWN);
-	}
+		return (case_outfile(input, i));
 }
 int is_word(char c, t_data *data)
 {

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/24 15:05:48 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/25 01:45:33 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,7 @@ t_cmd	*create_args(t_token *list_tkn, t_cmd *list_cmd)
 	while (current_tkn && current_cmd)
 	{
 		if (current_tkn->type == CMD || current_tkn->type == ARG)
-		{
 			current_cmd->args[i++] = current_tkn->content;
-		} 
 		else if (current_tkn->type == PIPE)
 		{
 			current_cmd->args[i] = NULL;	
@@ -255,9 +253,7 @@ char	*quoteless_string(char *str)
 	while (str[i])
 	{
 		if (str[i] != '"' && str[i] != '\'')
-		{
 			new_str[j++] = str[i];
-		}
 		i++;
 	}
 	new_str[j] = '\0';
@@ -276,21 +272,97 @@ void	remove_quotes(t_token *list_tkn)
 	}
 }
 
-int main(int argc, char **argv, char **envp)
+// int main(int argc, char **argv, char **envp)
+// {
+	
+//     (void)argv;
+// 	char	*input;
+// 	t_cmd	*list_cmd;
+// 	t_token *list_tkn;
+// 	t_data	data;
+	
+//     if (argc != 1)
+//         return (printf("Usage : ./minishell\n"));
+// 	ft_memset(&data, 0, sizeof(data));
+//     data.envp = copy_env(envp);
+//     signal(SIGINT, sigint_handler);
+//     signal(SIGQUIT, SIG_IGN);
+
+//     while (1)
+//     {
+//         input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
+//         if (!input)
+//             break;
+//         add_history(input);
+// 		list_tkn = tokenizer(input, &data);
+// 		if (list_tkn == NULL)
+// 			continue;
+// 		remove_quotes(list_tkn);
+// 		list_cmd = parse_cmd(list_tkn);
+// 		if (list_cmd == NULL)
+//         {
+//             free(input);
+//             continue;
+//         }
+// 		list_cmd = create_args(list_tkn, list_cmd);
+// 		list_cmd = create_files(list_tkn, list_cmd);
+// 		// expand_var_command(list_cmd, data.exit_status, &data);
+// 		expand_all(list_cmd, &data);
+// 		execute_cmds(&data, list_cmd);
+// 		free(input);
+//     }
+//     return (0);
+// }
+
+void initialize_data(t_data *data, char **envp)
 {
-	
-    (void)argv;
-	char	*input;
-	t_cmd	*list_cmd;
-	t_token *list_tkn;
-	t_data	data;
-	
-	ft_memset(&data, 0, sizeof(data));
-    data.envp = copy_env(envp);
-    if (argc != 1)
-        return (printf("Usage : ./minishell\n"));
+    ft_memset(data, 0, sizeof(*data));
+    data->envp = copy_env(envp);
+}
+
+/* Configure les signaux */
+void setup_signals(void)
+{
     signal(SIGINT, sigint_handler);
     signal(SIGQUIT, SIG_IGN);
+}
+
+/* Vérifie les arguments */
+int check_arguments(int argc)
+{
+    if (argc != 1)
+    {
+        printf("Usage : ./minishell\n");
+        return (0);
+    }
+    return (1);
+}
+
+/* Prépare et traite une commande */
+void process_command(char *input, t_data *data)
+{
+    t_token *list_tkn;
+    t_cmd *list_cmd;
+
+    list_tkn = tokenizer(input, data);
+    if (list_tkn == NULL)
+        return ;
+    remove_quotes(list_tkn);
+    list_cmd = parse_cmd(list_tkn);
+    if (list_cmd == NULL)
+        return ;
+    list_cmd = create_args(list_tkn, list_cmd);
+    list_cmd = create_files(list_tkn, list_cmd);
+    expand_all(list_cmd, data);
+    execute_cmds(data, list_cmd);
+
+    return ;
+}
+
+/* Boucle principale du shell */
+void shell_loop(t_data *data)
+{
+    char *input;
 
     while (1)
     {
@@ -298,23 +370,23 @@ int main(int argc, char **argv, char **envp)
         if (!input)
             break;
         add_history(input);
-		list_tkn = tokenizer(input, &data);
-		if (list_tkn == NULL)
-			continue;
-		remove_quotes(list_tkn);
-		list_cmd = parse_cmd(list_tkn);
-		if (list_cmd == NULL)
-        {
-            free(input);
-            continue;
-        }
-		list_cmd = create_args(list_tkn, list_cmd);
-		list_cmd = create_files(list_tkn, list_cmd);
-		// expand_var_command(list_cmd, data.exit_status, &data);
-		expand_all(list_cmd, &data);
-		execute_cmds(&data, list_cmd);
-		free(input);
+        process_command(input, data);
+        free(input);
     }
+}
+
+/* Fonction principale */
+int main(int argc, char **argv, char **envp)
+{
+    t_data data;
+
+    (void)argv;
+    if (!check_arguments(argc))
+        return (1);
+    initialize_data(&data, envp);
+    setup_signals();
+    shell_loop(&data);
+
     return (0);
 }
 
