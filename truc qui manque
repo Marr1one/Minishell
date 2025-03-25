@@ -1,11 +1,6 @@
 Mini_shell$ /bin/ls
 minishell: /bin/ls: command not found
 
-Mini_shell$ echo -n -n -n salut
--n -n salutMini_shell$
-
-- Try ctrl-\ in a prompt after you wrote some stuff should quit minishell --> RELAUNCH!
-pas sur car en bash posix ca fait la meme chose que mon code !
-
+poser la question pour cat | cat | cat | ls
 
 expand
