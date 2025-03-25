@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 17:47:57 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/25 18:23:22 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,22 +273,24 @@ t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 // }
 
 
-char	*quoteless_string_cmd(char *str)
+char *quoteless_string_cmd(char *str)
 {
-	int	len;
+    int len;
 
-	if (!str)
-		return (NULL);
-	len = ft_strlen(str);
-	if (len >= 2 && ((str[0] == '\'' && str[len - 1] == '\'') ||
-	                 (str[0] == '"' && str[len - 1] == '"')))
-	{
-		return (ft_substr(str, 1, len - 1));
-	}
-	else
-	{
-		return (ft_strdup(str));
-	}
+    if (!str)
+        return (NULL);
+    len = ft_strlen(str);
+    if (len >= 4 && str[0] == '"' && str[len - 1] == '"' &&
+        str[1] == '\'' && str[len - 2] == '\'')
+    {
+        return (ft_substr(str, 1, len - 1));
+    }
+    if (len >= 2 && ((str[0] == '\'' && str[len - 1] == '\'') ||
+                     (str[0] == '"' && str[len - 1] == '"')))
+    {
+        return (ft_substr(str, 1, len - 1));
+    }
+    return (ft_strdup(str));
 }
 void remove_quotes_from_cmd(t_cmd *cmd)
 {
@@ -298,9 +300,17 @@ void remove_quotes_from_cmd(t_cmd *cmd)
     i = 0;
     while (cmd->args && cmd->args[i])
     {
-        new_arg = quoteless_string_cmd(cmd->args[i]);
-        free(cmd->args[i]);
-        cmd->args[i] = new_arg;
+        while (1)
+        {
+            new_arg = quoteless_string_cmd(cmd->args[i]);
+            if (ft_strcmp(new_arg, cmd->args[i]) == 0)
+            {
+                free(new_arg);
+                break;
+            }
+            free(cmd->args[i]);
+            cmd->args[i] = new_arg;
+        }
         i++;
     }
 }
