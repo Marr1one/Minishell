@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 18:02:57 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/25 03:27:13 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,7 +312,7 @@ int main(int argc, char **argv, char **envp)
         }
 		list_cmd = create_args(list_tkn, list_cmd);
 		list_cmd = create_files(list_tkn, list_cmd);
-		expand_all(list_cmd);
+		expand_all(list_cmd, &data);
 		execute_cmds(&data, list_cmd);
 		free(input);
     }

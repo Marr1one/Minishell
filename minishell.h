@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 19:10:44 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/25 03:21:20 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,12 @@ typedef struct s_cmd
 	t_file *files;	
 	struct	s_cmd	*next;
 }	t_cmd;
+
+typedef struct s_idx
+{
+	int	*i;
+	int	*j;
+}	t_idx;
 
 typedef struct s_data
 {
@@ -212,7 +218,7 @@ char	*ft_re_strjoin(char *s1, char const *s2);
 char	*ft_strcpy(char *dest, char *src);
 char	*ft_strcat(char *dest, char *src);
 char    *expand_argument(const char *arg);
-void    expand_all(t_cmd *cmd);
-char	*expand_string(const char *arg);
+void    expand_all(t_cmd *cmd, t_data *data);
+char	*expand_string(const char *arg, t_data *data);
 
 #endif
