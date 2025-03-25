@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 01:34:24 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/25 02:26:24 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,47 +156,47 @@ t_token *input_pipe(int *i, char *input, t_data *data, t_token *list)
 	return (list);
 }
 
-t_token	*tokenizer(char *input, t_data *data)
-{
-	int			i;
-	t_token		*list;
+// t_token	*tokenizer(char *input, t_data *data)
+// {
+// 	int			i;
+// 	t_token		*list;
 
-	i = 0;
-	data->quote = 0;
-	data->expect = CMD;
-	list = NULL;
-	if (!validate_input(input))
-		return(NULL);
-	while (input[i])
-	{
-		while (input[i] == ' ')
-			i++;
-		if (input[i] == '\0')
-			break;
-		if (is_word(input[i], data) == 1)
-        {
-			list = case_word(&i, data, list, input);
-            continue;
-        }
-		if (input[i] == '|')
-		{
-			list = input_pipe(&i, input, data, list);
-			continue;
-		}
-		if (input[i] == '<' || input[i] == '>')
-		{
-			list = case_redir(input, &i, data, list);
-			continue;
-		}
-		if (list && findlast_token(list)->type == PIPE)
-		{
-			printf("Pipe not closed\n");
-			return (NULL);
-		}
-		i++;
-	}
-	return (list);
-}
+// 	i = 0;
+// 	data->quote = 0;
+// 	data->expect = CMD;
+// 	list = NULL;
+// 	if (!validate_input(input))
+// 		return(NULL);
+// 	while (input[i])
+// 	{
+// 		while (input[i] == ' ')
+// 			i++;
+// 		if (input[i] == '\0')
+// 			break;
+// 		if (is_word(input[i], data) == 1)
+//         {
+// 			list = case_word(&i, data, list, input);
+//             continue;
+//         }
+// 		if (input[i] == '|')
+// 		{
+// 			list = input_pipe(&i, input, data, list);
+// 			continue;
+// 		}
+// 		if (input[i] == '<' || input[i] == '>')
+// 		{
+// 			list = case_redir(input, &i, data, list);
+// 			continue;
+// 		}
+// 		if (list && findlast_token(list)->type == PIPE)
+// 		{
+// 			printf("Pipe not closed\n");
+// 			return (NULL);
+// 		}
+// 		i++;
+// 	}
+// 	return (list);
+// }
 
 int validate_input(const char *input)
 {
@@ -230,4 +230,85 @@ int validate_input(const char *input)
         return (0);
     }
     return (1);
+}
+
+// t_token *tokenizer(char *input, t_data *data)
+// {
+//     int i;
+//     t_token *list;
+
+//     data->quote = 0;
+//     data->expect = CMD;
+// 	i = 0;
+// 	list = NULL;
+//     if (!validate_input(input))
+//         return (NULL);
+//     while (input[i])
+//     {
+//         while (input[i] == ' ')
+//             i++;
+//         if (input[i] == '\0')
+//             break;
+//         if (is_word(input[i], data) == 1)
+//             list = case_word(&i, data, list, input);
+//         else if (input[i] == '|')
+//             list = input_pipe(&i, input, data, list);
+//         else if (input[i] == '<' || input[i] == '>')
+//             list = case_redir(input, &i, data, list);
+//         else if (list && findlast_token(list)->type == PIPE)
+//         {
+//             printf("Pipe not closed\n");
+//             return (NULL);
+//         }
+//         else
+//             i++;
+//     }
+//     return (list);
+// }
+
+t_token *handle_token_cases(char *input, int *i, t_data *data, t_token *list)
+{
+    if (is_word(input[*i], data))
+	{
+		list = case_word(i, data, list, input);
+		return (list);
+	}
+    if (input[*i] == '|')
+	{
+		list = input_pipe(i, input, data, list);
+        return (list);
+	}
+    if (input[*i] == '<' || input[*i] == '>')
+	{
+        list = case_redir(input, i, data, list);
+		return (list);
+	}
+    return (list);
+}
+
+t_token *tokenizer(char *input, t_data *data)
+{
+    int i;
+    t_token *list;
+
+    data->quote = 0;
+    data->expect = CMD;
+	i = 0;
+	list = NULL;
+    if (!validate_input(input))
+        return NULL;
+    while (input[i])
+    {
+        while (input[i] == ' ')
+            i++;
+        if (input[i] == '\0')
+            break;
+        list = handle_token_cases(input, &i, data, list);
+    }
+	if (list && findlast_token(list)->type == PIPE)
+        {
+            printf("Pipe not closed\n");
+            return (NULL);
+        }
+    return list;
 }
