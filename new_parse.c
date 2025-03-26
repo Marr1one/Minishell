@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/26 03:13:56 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/26 03:18:43 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	is_space(char c)
 	return (0);
 }
 
+// Calcule la longueur finale de la chaîne après expansion
 int calc_final_len(const char *arg, t_data *data)
 {
 	int i;
@@ -54,6 +55,7 @@ int calc_final_len(const char *arg, t_data *data)
 	return (len);
 }
 
+// Ajoute la valeur développée d'une variable dans la chaîne de destination
 void	append_var_value(char *result, int *j, char *var_name, t_data *data)
 {
 	char	*var_value;
@@ -78,7 +80,7 @@ void	append_var_value(char *result, int *j, char *var_name, t_data *data)
 			result[(*j)++] = var_value[k++];
 	}
 }
-
+// Gère l'expansion des signes dollar en interprétant les variables d'environnement ou spéciales
 void handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data)
 {
     int		dollar_count;
@@ -100,7 +102,7 @@ void handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data)
     }
 }
 
-
+// Construit la chaîne finale après les expansions à partir de la chaîne d'entrée
 void	build_final_string(char *result, const char *arg, t_data *data)
 {
     t_idx idx;
@@ -120,7 +122,7 @@ void	build_final_string(char *result, const char *arg, t_data *data)
     result[idx.j] = '\0';
 }
 
-
+// Compte les signes dollar consécutifs à partir d'une position donnée
 int	get_dollar_count(const char *arg, int *i)
 {
 	int count;
@@ -134,6 +136,7 @@ int	get_dollar_count(const char *arg, int *i)
 	return (count);
 }
 
+// Extrait un nom de variable à partir d'une position donnée dans une chaîne
 char	*extract_var_name(const char *arg, int *i)
 {
 	int		start;
@@ -160,6 +163,7 @@ char	*extract_var_name(const char *arg, int *i)
 	return (var_name);
 }
 
+// Mise en place grace a toute les fonctions
 char	*expand_string(const char *arg, t_data *data)
 {
 	char	*result;
