@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 15:10:06 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/26 02:14:56 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,10 +360,23 @@ void handle_single_builtin(t_data *data, t_cmd *current_cmd)
 
 }
 
+int	test_relative_path(char *path_test)
+{
+	if (access(path_test, F_OK | X_OK) == 0)
+			return (0);
+	return (1);
+}
+
 void execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 {
     char *good_path;
-
+	
+	if(test_relative_path(current_cmd->args[0]) == 0)
+	{
+		execve(current_cmd->args[0], current_cmd->args, data->envp);
+		perror("execve");
+		exit(data->exit_status);	
+	}
     good_path = new_test_commands(paths, current_cmd->args[0]);
     if (good_path != NULL)
     {
