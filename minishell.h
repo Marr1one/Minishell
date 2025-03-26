@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 17:39:53 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/26 03:12:33 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ typedef struct s_cmd
 
 typedef struct s_idx
 {
-	int	*i;
-	int	*j;
+	int	i;
+	int	j;
 }	t_idx;
 
 typedef struct s_data
@@ -213,6 +213,7 @@ char			**add_export(t_data *data, char *str);
 void			show_tab_export(char **tab);
 int				check_change(t_data *data, char *str);
 
+//expand
 int 	validate_input(const char *input);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_re_strjoin(char *s1, char const *s2);
@@ -224,5 +225,11 @@ void	expand_all(t_cmd *cmd, t_data *data);
 char	*expand_string(const char *arg, t_data *data);
 void remove_quotes_from_cmd(t_cmd *cmd);
 char *quoteless_string_cmd(char *str);
+void	append_var_value(char *result, int *j, char *var_name, t_data *data);
+void 	handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data);
+void	build_final_string(char *result, const char *arg, t_data *data);
+int	get_dollar_count(const char *arg, int *i);
+char	*extract_var_name(const char *arg, int *i);
+int calc_final_len(const char *arg, t_data *data);
 
 #endif
