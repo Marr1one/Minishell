@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/27 03:37:41 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:59:29 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int execute_builtin_child(t_cmd *cmd, t_data *data)
 			while (current_cmd->args[i])
 				check_unset(data, current_cmd->args[i++]);
 		}
-        return (1);
+        return (1); 
     }
     if (ft_strlcmp(cmd->args[0], "echo") == 0)
     {
