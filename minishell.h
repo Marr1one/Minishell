@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/26 03:12:33 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/27 03:36:41 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,5 +231,6 @@ void	build_final_string(char *result, const char *arg, t_data *data);
 int	get_dollar_count(const char *arg, int *i);
 char	*extract_var_name(const char *arg, int *i);
 int calc_final_len(const char *arg, t_data *data);
+t_file *get_last_heredoc(t_file *file);
 
 #endif

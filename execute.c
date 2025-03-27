@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 03:41:48 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/27 03:37:41 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,9 @@ int open_file(char *path, t_type mode)
         fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     else if (mode == OUTFILE_APPEND)
         fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    else if (mode == HEREDOC)
+        fd = heredoc_input(path);
     return fd;
-}
-
-
-int is_builtin(char *cmd)
-{
-    if (ft_strlcmp(cmd, "echo") == 0 ||
-        ft_strlcmp(cmd, "cd") == 0 ||
-        ft_strlcmp(cmd, "exit") == 0 ||
-        ft_strlcmp(cmd, "export") == 0 ||
-        ft_strlcmp(cmd, "pwd") == 0 ||
-        ft_strlcmp(cmd, "unset") == 0)
-    {
-        return (1);
-    }
-    return (0);
 }
 
 int execute_builtin_child(t_cmd *cmd, t_data *data)
