@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/26 03:18:43 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/27 18:31:11 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,73 @@ int	is_space(char c)
 	return (0);
 }
 
-// Calcule la longueur finale de la chaîne après expansion
-int calc_final_len(const char *arg, t_data *data)
+static int	len_exit_status(t_data *data)
 {
-	int i;
-	int len;
+	char	*exit_str;
+	int		len;
+
+	exit_str = ft_itoa(data->exit_status);
+	if (!exit_str)
+		return (0);
+	len = ft_strlen(exit_str);
+	free(exit_str);
+	return (len);
+}
+
+static int	len_var_value(const char *arg, int *i)
+{
+	char	*var_name;
+	char	*var_value;
+	int		len;
+
+	var_name = extract_var_name(arg, i);
+	if (!var_name)
+		return (1);
+	var_value = getenv(var_name);
+	if (!var_value)
+		var_value = "";
+	len = ft_strlen(var_value);
+	free(var_name);
+	return (len);
+}
+
+static int	handle_dollar_len(const char *arg, int *i, t_data *data)
+{
+	int	len;
+
+	len = 0;
+	if (arg[*i] == '?')
+	{
+		len = len_exit_status(data);
+		(*i)++;
+	}
+	else
+		len = len_var_value(arg, i);
+	return (len);
+}
+
+int	calc_final_len(const char *arg, t_data *data)
+{
+	int	i;
+	int	final_len;
 
 	i = 0;
-	len = 0;
+	final_len = 0;
 	data->in_quote = 0;
 	while (arg[i])
 	{
-		if (handle_quotes(arg[i], data))
-			len++;
-		else if (arg[i] == '$' && data->in_quote != 2)
-			len += 1;
+		if (arg[i] == '$' && data->in_quote != 2)
+		{
+			i++;
+			final_len += handle_dollar_len(arg, &i, data);
+		}
 		else
-			len++;
-		i++;
+		{
+			final_len++;
+			i++;
+		}
 	}
-	return (len);
+	return (final_len);
 }
 
 // Ajoute la valeur développée d'une variable dans la chaîne de destination
