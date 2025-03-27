@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/27 14:43:55 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:01:33 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,7 +420,7 @@ int	count_word2(char *str)
 			in_word = 0;
 		}
 		i++;
-	}frufrhgrhugrjipr
+	}
 	return (count);
 }
 

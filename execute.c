@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/27 14:59:29 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:09:00 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,13 +338,19 @@ void handle_single_builtin(t_data *data, t_cmd *current_cmd)
     stdout_backup = dup(STDOUT_FILENO);
 
     handle_file_redirections(current_cmd);
+    if (ft_strcmp(current_cmd->args[0], "exit") == 0)
+    {
+        dup2(stdin_backup, STDIN_FILENO);
+        dup2(stdout_backup, STDOUT_FILENO);
+        close(stdin_backup);
+        close(stdout_backup);    
+    }
     execute_builtin_child(current_cmd, data);
 
     dup2(stdin_backup, STDIN_FILENO);
     dup2(stdout_backup, STDOUT_FILENO);
     close(stdin_backup);
     close(stdout_backup);
-
 }
 
 void execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
