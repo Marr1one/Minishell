@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/27 03:36:41 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/28 06:07:11 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ typedef struct s_token
 
 typedef struct s_file
 {
-	t_type mode;
-	char *path;
+	t_type	mode;
+	char	*path;
 	struct s_file *next;
 } t_file;
 
@@ -194,14 +194,20 @@ char			**custom_split(char *str, char c);
 //pipex
 char 			*ft_strchr(const char *s, int c);
 char 			*get_cmd_path(const char *cmd, char **envp);
-void 			try_dup2(int oldfd, int newfd);
-void 			execute_pipex(t_data *data);
-void 			execute_simple_command(t_data *data);
 int 			count_tab(char **tab);
-int				is_builtin(char *cmd);
 // void			execute_builtin(t_data *data, char **args);
 // heredoc
-int 			heredoc_input(char *delimiter);
+void handle_heredoc(t_cmd *current_cmd);
+t_file *find_last_heredoc(t_file *files);
+char *heredoc_loop(char *delimiter, char *prompt);
+char *execute_last_heredoc(t_cmd *cmd);
+int contains_heredoc(t_cmd *cmd);
+t_file *find_last_node(t_file *node);
+t_file *find_existing_heredoc(t_file *node);
+t_file *add_or_replace_heredoc(t_file *files, t_token *heredoc_token);
+t_file *create_new_heredoc_node(t_token *token);
+char *read_heredoc_from_tty(char *delimiter, char *prompt);
+t_file *add_or_replace_heredoc(t_file *files, t_token *heredoc_token);
 char 			*ft_strstr(const char *haystack, const char *needle);
 char			**list_to_args(t_data *data);
 char			**cut_last(char **tab, int	i);

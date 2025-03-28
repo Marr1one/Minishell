@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/27 15:01:33 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/28 05:44:46 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,32 +151,6 @@ int	case_redirection(t_data *data)
             if (input_fd == -1) 
 			{
                 perror("open");
-                if (output_fd != -1)
-                    close(output_fd);
-                return (0);
-            }
-        }
-		else if (ft_strlcmp(list->content, "<<") == 0)
-        {
-            if (!list->next || !(*list->next->content))
-            {
-                printf("minishell: syntax error near unexpected token `newline'\n");
-                if (input_fd != -1)
-                    close(input_fd);
-                if (output_fd != -1)
-                    close(output_fd);
-                return (0);
-            }
-            if (has_redir == 0) 
-            {
-                first_redir = list;
-                has_redir = 1;
-            }
-            if (input_fd != -1)
-                close(input_fd);
-            input_fd = heredoc_input(list->next->content);
-            if (input_fd == -1)
-            {
                 if (output_fd != -1)
                     close(output_fd);
                 return (0);

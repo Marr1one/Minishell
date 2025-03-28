@@ -6,31 +6,32 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/27 15:09:00 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/28 06:18:01 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*new_test_commands(char **paths, char *str)
+char *new_test_commands(char **paths, char *str)
 {
-	int		i;
-	char	*path_test;
-	
-	if (!paths)
-		return (NULL);
-	if (!*str)
-		return (NULL);
-	i = 0;
-	while (paths[i])
-	{
-		path_test = ft_join(paths[i], str);
-		if (access(path_test, F_OK | X_OK) == 0)
-			return (path_test);
-		i++;
-	}
-	return (NULL);
+    int i;
+    char *path_test;
+
+    if (paths == NULL)
+        return (NULL);
+    if (str == NULL)
+        return (NULL);
+    i = 0;
+    while (paths[i])
+    {
+        path_test = ft_join(paths[i], str);
+        if (access(path_test, F_OK | X_OK) == 0)
+            return (path_test);
+        i++;
+    }
+    return (NULL);
 }
+
 
 int open_file(char *path, t_type mode)
 {
@@ -41,8 +42,6 @@ int open_file(char *path, t_type mode)
         fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     else if (mode == OUTFILE_APPEND)
         fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    else if (mode == HEREDOC)
-        fd = heredoc_input(path);
     return fd;
 }
 
@@ -307,22 +306,24 @@ void handle_file_redirections(t_cmd *current_cmd)
 
     if (!current_cmd->files)
         return;
-
     current_file = current_cmd->files;
     while (current_file)
     {
+        if (current_file->mode == HEREDOC)
+        {
+            current_file = current_file->next;
+            continue;
+        }
         fd = open_file(current_file->path, current_file->mode);
         if (fd == -1)
         {
             perror("open");
             exit(1);
         }
-
         if (current_file->mode == INFILE || current_file->mode == HEREDOC)
             dup2(fd, STDIN_FILENO);
         else
             dup2(fd, STDOUT_FILENO);
-
         close(fd);
         current_file = current_file->next;
     }
@@ -371,7 +372,29 @@ void execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
     }
 }
 
-/* Prépare et exécute une commande dans un processus enfant */
+void handle_heredoc(t_cmd *current_cmd)
+{
+    int heredoc_pipe[2];
+    char *heredoc_content;
+
+    if (contains_heredoc(current_cmd)) {
+        heredoc_content = execute_last_heredoc(current_cmd);
+        if (heredoc_content != NULL) {
+            if (pipe(heredoc_pipe) == -1) {
+                perror("pipe");
+                exit(1);
+            }
+            /* Écriture du contenu heredoc dans le pipe */
+            write(heredoc_pipe[1], heredoc_content, ft_strlen(heredoc_content));
+            close(heredoc_pipe[1]);
+            /* Rediriger STDIN vers le pipe qui contient le heredoc */
+            dup2(heredoc_pipe[0], STDIN_FILENO);
+            close(heredoc_pipe[0]);
+            free(heredoc_content);
+        }
+    }
+}
+
 void execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_pipe)
 {
     char **paths;
@@ -387,12 +410,16 @@ void execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_
         dup2(fd_in, STDIN_FILENO);
         close(fd_in);
     }
+    if(current_cmd->next == NULL && contains_heredoc(current_cmd))
+        handle_heredoc(current_cmd);
     handle_file_redirections(current_cmd);
+    if (current_cmd->args == NULL || current_cmd->args[0] == NULL)
+        exit(0);
     if (execute_builtin_child(current_cmd, data) == 1)
         exit(0);
     paths = ft_split(get_path_env(data->envp), ':');
     paths = add_slash_all(paths);
-	execute_command_path(data, paths, current_cmd);
+    execute_command_path(data, paths, current_cmd);
 }
 
 void handle_parent_process(int *fd_in, int *fd_pipe, t_cmd *current_cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 02:26:24 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/28 06:31:37 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,12 @@ t_token *case_redir(char *input, int *i, t_data *data, t_token *list)
 	redirect = case_redirect(input, *i);
 	if (redirect == UNKNOWN)
 	{
-		printf("erreur de redirect\n");
-		return (NULL);
+        printf("erreur de redirect\n");
+        while (input[*i] && (input[*i] == '<' || input[*i] == '>'))
+        {
+            (*i)++;
+        }
+        return (list);
 	}
 	if (input[*i] == '<')
 		list = add_node("<", list, redirect);

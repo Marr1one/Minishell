@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 18:23:22 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/28 05:56:38 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,30 +205,30 @@ t_type save_mode(t_token current_tkn)
 
 t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 {
-	t_token *current_tkn;
-	t_cmd 	*current_cmd;
-	t_type	save;
+    t_token *current_tkn = list_tkn;
+    t_cmd *current_cmd = list_cmd;
+    t_type save = UNKNOWN;
 
-	current_tkn = list_tkn;
-	save = UNKNOWN;
-	current_cmd = list_cmd;
-	while (current_tkn && current_cmd)
-	{
-		if (is_redirect(current_tkn->content[0]))
-			save = save_mode(*current_tkn);
-		if (current_tkn->type == FICHIER)
-		{
-			current_cmd->files = add_file(current_cmd->files, current_tkn, save);
-			save = UNKNOWN;
-		}
-		if (current_tkn->type == PIPE)
-		{
-			current_cmd = current_cmd->next;
-			save = UNKNOWN;
-		}
-		current_tkn = current_tkn->next;
-	}
-	return (list_cmd);
+    while (current_tkn && current_cmd)
+    {
+        if (is_redirect(current_tkn->content[0]))
+            save = save_mode(*current_tkn);
+
+        if (current_tkn->type == FICHIER)
+        {
+            if (save == HEREDOC)
+            {
+                current_cmd->files = add_or_replace_heredoc(current_cmd->files, current_tkn);
+            }
+            else
+                current_cmd->files = add_file(current_cmd->files, current_tkn, save);
+            save = UNKNOWN;
+        }
+        if (current_tkn->type == PIPE)
+            current_cmd = current_cmd->next;
+        current_tkn = current_tkn->next;
+    }
+    return (list_cmd);
 }
 
 // char	*quoteless_string(char *str)
