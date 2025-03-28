@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/28 23:30:09 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/28 23:38:30 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,8 +306,6 @@ int handle_file_redirections(t_cmd *current_cmd)
 
     if (!current_cmd->files)
         return (0);
-
-        return;
     current_file = current_cmd->files;
     while (current_file)
     {
@@ -330,6 +328,14 @@ int handle_file_redirections(t_cmd *current_cmd)
         current_file = current_file->next;
     }
 	return (0);
+}
+
+
+int	test_relative_path(char *path_test)
+{
+	if (access(path_test, F_OK | X_OK) == 0)
+			return (0);
+	return (1);
 }
 
 /* Gère l'exécution des built-ins à part */

@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/28 06:07:11 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/28 23:39:17 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ typedef struct s_data
 	
 }	t_data;
 
+
+int				test_relative_path(char *path_test);
 char			*ft_substr(char *str,  int start, int end);
 void			show_list_cmd(t_cmd *list);
 void			show_tab(char **tab);
