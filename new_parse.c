@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 21:20:47 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/28 16:36:46 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char *expand_string(const char *input)
     char *var_value;
     
     result_size = 128;  /* Taille initiale du buffer */
-    result = malloc(result_size);
+    result = ft_malloc(result_size);
     if (!result)
         return NULL;
     result[0] = '\0';
@@ -135,7 +135,7 @@ char *expand_string(const char *input)
                     i++;
                 {
                     int var_len = i - start;
-                    char *var_name = malloc(var_len + 1);
+                    char *var_name = ft_malloc(var_len + 1);
                     if (!var_name) { free(result); return NULL; }
                     strncpy(var_name, input + start, var_len);
                     var_name[var_len] = '\0';

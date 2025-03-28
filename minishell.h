@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 19:59:06 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/28 16:55:43 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct s_data
 {
 	t_token		*list_tkn;
 	t_type		expect;
-	t_malloc	*gc;
+	t_malloc	**gc;
 	//t_env	*env_var;
 	int		in_quote;
 	char	**envp;
@@ -179,9 +179,9 @@ void			destroy_node_quotes(t_data *data);
 char			**skip_quotes(t_data *data);
 void			check_exit_status(t_data *data);
 int				return_exit_status(t_data *data);
-void			ft_exit(t_cmd *cmd);
+void			ft_exit(t_cmd *cmd, t_data *data);
 int				is_numeric(char	*str);
-void			free_all(t_malloc *gc);
+void			free_all(t_malloc **gc);
 void 			destroy_empty_node(t_data *data);
 char			**custom_split(char *str, char c);
 //pipex

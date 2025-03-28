@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 19:38:38 by braugust          #+#    #+#             */
-/*   Updated: 2025/03/17 13:59:39 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/28 16:30:18 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	exec_command(t_data *data)
 		signal(SIGINT, SIG_DFL);
 		execve(data->command_path, data->args, data->envp);
 		perror("execve");
+		free_all(data->gc);
 		exit(127);
 	}	
 	waitpid(pid, &status, 0);

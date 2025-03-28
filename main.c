@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 03:06:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/28 16:45:10 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,7 @@ void initialize_data(t_data *data, char **envp)
 {
     ft_memset(data, 0, sizeof(*data));
     data->envp = copy_env(envp);
+	data->gc = get_gc();
 }
 
 /* Configure les signaux */
@@ -353,7 +354,7 @@ void process_command(char *input, t_data *data)
         return ;
     list_cmd = create_args(list_tkn, list_cmd);
     list_cmd = create_files(list_tkn, list_cmd);
-    expand_all(list_cmd, data);
+    // expand_all(list_cmd, data);
     execute_cmds(data, list_cmd);
 
     return ;
@@ -368,7 +369,10 @@ void shell_loop(t_data *data)
     {
         input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
         if (!input)
+		{
+			free_all(data->gc);
             break;
+		}
         add_history(input);
         process_command(input, data);
         free(input);

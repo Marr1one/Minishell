@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/26 02:14:56 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/28 16:41:09 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int execute_builtin_child(t_cmd *cmd, t_data *data)
 	}
 	else if (ft_strlcmp(cmd->args[0], "exit") == 0)
 	{
-		ft_exit(cmd);
+		ft_exit(cmd, data);
 		return (1);
 	}
     else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
@@ -159,7 +159,7 @@ int execute_builtin0(t_cmd *cmd, t_data *data)
 	}
 	else if (ft_strlcmp(cmd->args[0], "exit") == 0)
 	{
-		ft_exit(cmd);
+		ft_exit(cmd, data);
 		return (1);
 	}
     else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
@@ -375,6 +375,7 @@ void execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 	{
 		execve(current_cmd->args[0], current_cmd->args, data->envp);
 		perror("execve");
+		free_all(data->gc);
 		exit(data->exit_status);	
 	}
     good_path = new_test_commands(paths, current_cmd->args[0]);
@@ -382,11 +383,13 @@ void execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
     {
         execve(good_path, current_cmd->args, data->envp);
         perror("execve");
+		free_all(data->gc);
         exit(data->exit_status);
     }
     else
     {
         printf("minishell: %s: command not found\n", current_cmd->args[0]);
+		free_all(data->gc);
         exit(127);
     }
 }
@@ -409,7 +412,10 @@ void execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_
     }
     handle_file_redirections(current_cmd);
     if (execute_builtin_child(current_cmd, data) == 1)
+	{
+		free_all(data->gc);
         exit(0);
+	}
     paths = ft_split(get_path_env(data->envp), ':');
     paths = add_slash_all(paths);
 	execute_command_path(data, paths, current_cmd);

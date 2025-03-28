@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:46:56 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 00:08:19 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/28 16:35:44 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 // 	return (0);
 // }
 
-void	ft_exit(t_cmd *cmd)
+void	ft_exit(t_cmd *cmd, t_data *data)
 {
 	int	status;
 
@@ -72,6 +72,6 @@ void	ft_exit(t_cmd *cmd)
 		}
 	}
 	// show_malloc_list(data->gc);  A FAIRE PLUS TARD
-	// free_all(data->gc);
+	free_all(data->gc);
 	exit(status);
 }
