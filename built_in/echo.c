@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 18:48:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/23 00:08:13 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/25 20:50:59 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,43 +47,37 @@
 // }
 
 
+int	is_option_n(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[0] == '-' && str[1] == 'n')
+	{
+		i = 2;
+		while (str[i] && str[i] == 'n')
+			i++;
+		if (str[i] != '\0')
+			return (1);
+		return (0);
+	}
+	return (1);
+}
+
 void ft_echo(t_cmd *current_cmd)
 {
     int     option_n;
-    char	**args;  // on suppose que data.list pointe sur "echo"
+    char	**args;
 	int		i;
 
 	args = current_cmd->args;
 	option_n = 0;
-    // Traitement des options -n
-    // while (args && args[1][0] == '-' && args[1][1] == 'n')
-    // {
-    //     int j = 1;
-    //     while (token->content[j])
-    //     {
-    //         if (token->content[j] != 'n')
-    //             break;
-    //         j++;
-    //     }
-    //     if (token->content[j] != '\0')
-    //         break;
-    //     option_n = 1;
-    //     token = token->next;
-    // }
-	if (args[1] && args[1][0] == '-' && args[1][1] == 'n')		//truc a ajouter, faire que echo -n -n salut marche bien
+	i = 1;
+	while (args[i] && is_option_n(args[i]) == 0)
 	{
-		i = 2;
-		while (args && args[1][i] == 'n')
-			i++;
-		if (args[1][i] == '\0' || args[1][i] == ' ')
-			option_n = 1;
-		else
-			option_n = 0;
+		i++;
+		option_n = 1;
 	}
-	if (option_n == 0)
-		i= 1;
-	else
-		i = 2;
     while (args[i])
     {
         printf("%s", args[i]);

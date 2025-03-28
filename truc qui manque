@@ -1,0 +1,6 @@
+Mini_shell$ /bin/ls
+minishell: /bin/ls: command not found
+
+poser la question pour cat | cat | cat | ls
+
+expand

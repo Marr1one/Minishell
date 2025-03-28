@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/28 05:56:38 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/28 23:30:17 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,7 +429,6 @@ int main(int argc, char **argv, char **envp)
     initialize_data(&data, envp);
     setup_signals();
     shell_loop(&data);
-
     return (0);
 }
 
