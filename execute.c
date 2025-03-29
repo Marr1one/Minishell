@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/28 16:41:09 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/29 15:44:43 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*new_test_commands(char **paths, char *str)
 	return (NULL);
 }
 
-int open_file(char *path, t_type mode)
+int	open_file(char *path, t_type mode)
 {
     int fd = -1;
     if (mode == INFILE)
@@ -45,7 +45,7 @@ int open_file(char *path, t_type mode)
 }
 
 
-int is_builtin(char *cmd)
+int	is_builtin(char *cmd)
 {
     if (ft_strlcmp(cmd, "echo") == 0 ||
         ft_strlcmp(cmd, "cd") == 0 ||
@@ -58,10 +58,10 @@ int is_builtin(char *cmd)
     return (0);
 }
 
-int execute_builtin_child(t_cmd *cmd, t_data *data)
+int	execute_builtin_child(t_cmd *cmd, t_data *data)
 {
-	int	i;
-	t_cmd *current_cmd;
+	int		i;
+	t_cmd	*current_cmd;
 	
 	current_cmd = cmd;
 	if (ft_strlcmp(current_cmd->args[0], "unset") == 0)
@@ -74,40 +74,22 @@ int execute_builtin_child(t_cmd *cmd, t_data *data)
 		}
         return (1);
     }
-    if (ft_strlcmp(cmd->args[0], "echo") == 0)
-    {
-        ft_echo(cmd);
-        return (1);
-    }
-	if (ft_strlcmp(cmd->args[0], "export") == 0)
-	{
-		ft_export(cmd, data);
-		return (1);
-	}
+	if (ft_strlcmp(cmd->args[0], "echo") == 0)
+		return (ft_echo(cmd), 1);
+    if (ft_strlcmp(cmd->args[0], "export") == 0)
+		return (ft_export(cmd, data), 1);
 	if (ft_strlcmp(cmd->args[0], "cd") == 0)
-	{
-		ft_cd(cmd);
-		return (1);
-	}
+		return (ft_cd(cmd), 1);
 	if (ft_strlcmp(cmd->args[0], "env") == 0)
-	{
-		show_env(data->envp);
-		return (1);	
-	}
-	else if (ft_strlcmp(cmd->args[0], "exit") == 0)
-	{
-		ft_exit(cmd, data);
-		return (1);
-	}
+		return (show_env(data->envp), 1);
+	if (ft_strlcmp(cmd->args[0], "exit") == 0)
+		return (ft_exit(cmd, data), 1);
     else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
-    {
-        ft_pwd(cmd);
-        return (1);
-    }
+        return (ft_pwd(cmd), 1);
     return (0);
 }
 
-int ncheck_builtin(t_cmd *cmd)
+int	ncheck_builtin(t_cmd *cmd)
 {
 	if (ft_strlcmp(cmd->args[0], "echo") == 0)
         return (1);
@@ -123,50 +105,6 @@ int ncheck_builtin(t_cmd *cmd)
 		return (1);
     else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
         return (1);
-    return (0);
-}
-
-int execute_builtin0(t_cmd *cmd, t_data *data)
-{
-	int	i;
-	t_cmd *current_cmd;
-	
-	current_cmd = cmd;
-	if (ft_strlcmp(current_cmd->args[0], "unset") == 0)
-    {
-		if (current_cmd->args[1])
-		{
-			i =  1;
-			while (current_cmd->args[i])
-				check_unset(data, current_cmd->args[i++]);
-		}
-        return (1);
-    }
-	if (ft_strlcmp(cmd->args[0], "export") == 0)
-	{
-		ft_export(cmd, data);
-		return (1);
-	}
-	if (ft_strlcmp(cmd->args[0], "cd") == 0)
-	{
-		ft_cd(cmd);
-		return (1);
-	}
-	if (ft_strlcmp(cmd->args[0], "env") == 0)
-	{
-		show_env(data->envp);
-		return (1);	
-	}
-	else if (ft_strlcmp(cmd->args[0], "exit") == 0)
-	{
-		ft_exit(cmd, data);
-		return (1);
-	}
-    else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
-    {
-        ft_pwd(cmd);
-        return (1);
-    }
     return (0);
 }
 
@@ -312,7 +250,7 @@ int	count_cmds(t_cmd *list_cmds)
 //     }
 // }
 
-int handle_file_redirections(t_cmd *current_cmd)
+int	handle_file_redirections(t_cmd *current_cmd)
 {
     t_file *current_file;
     int fd;
@@ -342,10 +280,10 @@ int handle_file_redirections(t_cmd *current_cmd)
 }
 
 /* Gère l'exécution des built-ins à part */
-void handle_single_builtin(t_data *data, t_cmd *current_cmd)
+void	handle_single_builtin(t_data *data, t_cmd *current_cmd)
 {
-    int stdin_backup;
-    int stdout_backup;
+    int	stdin_backup;
+    int	stdout_backup;
 
     stdin_backup = dup(STDIN_FILENO);
     stdout_backup = dup(STDOUT_FILENO);
@@ -357,7 +295,6 @@ void handle_single_builtin(t_data *data, t_cmd *current_cmd)
     dup2(stdout_backup, STDOUT_FILENO);
     close(stdin_backup);
     close(stdout_backup);
-
 }
 
 int	test_relative_path(char *path_test)
@@ -367,10 +304,10 @@ int	test_relative_path(char *path_test)
 	return (1);
 }
 
-void execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
+void	execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 {
-    char *good_path;
-	
+	char	*good_path;
+
 	if(test_relative_path(current_cmd->args[0]) == 0)
 	{
 		execve(current_cmd->args[0], current_cmd->args, data->envp);
@@ -378,26 +315,26 @@ void execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 		free_all(data->gc);
 		exit(data->exit_status);	
 	}
-    good_path = new_test_commands(paths, current_cmd->args[0]);
-    if (good_path != NULL)
-    {
-        execve(good_path, current_cmd->args, data->envp);
-        perror("execve");
+	good_path = new_test_commands(paths, current_cmd->args[0]);
+	if (good_path != NULL)
+	{
+		execve(good_path, current_cmd->args, data->envp);
+		perror("execve");
 		free_all(data->gc);
-        exit(data->exit_status);
-    }
-    else
-    {
-        printf("minishell: %s: command not found\n", current_cmd->args[0]);
+		exit(data->exit_status);
+	}
+	else
+	{
+		printf("minishell: %s: command not found\n", current_cmd->args[0]);
 		free_all(data->gc);
-        exit(127);
-    }
+		exit(127);
+	}
 }
 
 /* Prépare et exécute une commande dans un processus enfant */
-void execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_pipe)
+void	execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_pipe)
 {
-    char **paths;
+    char	**paths;
 
     if (current_cmd->next)
     {
@@ -421,7 +358,7 @@ void execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_
 	execute_command_path(data, paths, current_cmd);
 }
 
-void handle_parent_process(int *fd_in, int *fd_pipe, t_cmd *current_cmd)
+void	handle_parent_process(int *fd_in, int *fd_pipe, t_cmd *current_cmd)
 {
     waitpid(0, NULL, 0);
     if (*fd_in != 0)
@@ -434,29 +371,29 @@ void handle_parent_process(int *fd_in, int *fd_pipe, t_cmd *current_cmd)
 }
 
 /* Fonction principale de gestion des commandes */
-void execute_cmds(t_data *data, t_cmd *cmds)
+void	execute_cmds(t_data *data, t_cmd *cmds)
 {
-    int fd_in;
-    int fd_pipe[2];
-    pid_t pid;
-    t_cmd *current_cmd;
+	int		fd_in;
+	int		fd_pipe[2];
+	pid_t	pid;
+	t_cmd	*current_cmd;
 
 	fd_in = 0;
-    current_cmd = cmds;
-    while (current_cmd)
-    {
-        if (current_cmd->next)
-            pipe(fd_pipe);
-        else if (count_cmds(cmds) == 1 && ncheck_builtin(current_cmd) == 1)
-        {
-            handle_single_builtin(data, current_cmd);		//ls | grep mini | wc -l
-            return;
-        }
-        pid = fork();
-        if (pid == 0)
-            execute_child_process(data, current_cmd, fd_in, fd_pipe);
-        else if (pid > 0)
+	current_cmd = cmds;
+	while (current_cmd)
+	{
+		if (current_cmd->next)
+			pipe(fd_pipe);
+		else if (count_cmds(cmds) == 1 && ncheck_builtin(current_cmd) == 1)
+		{
+			handle_single_builtin(data, current_cmd);		//ls | grep mini | wc -l
+			return;
+		}
+		pid = fork();
+		if (pid == 0)
+			execute_child_process(data, current_cmd, fd_in, fd_pipe);
+		else if (pid > 0)
 			handle_parent_process(&fd_in, fd_pipe, current_cmd);
-        current_cmd = current_cmd->next;
-    }
+		current_cmd = current_cmd->next;
+	}
 }

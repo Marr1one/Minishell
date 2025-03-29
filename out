@@ -1,14 +1,11 @@
-in exec builtin child
 Makefile
 add_slash.c
 built_in
 chaining.c
 comment.c
-dossiertest
 env_var.c
 exec.c
 execute.c
-file
 ft_show.c
 garbage_collector
 heredoc.c

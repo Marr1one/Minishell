@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 17:18:27 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/28 16:57:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/29 18:26:49 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ void	free_all(t_malloc **gc)
 {
 	t_malloc_node	*current;
 	t_malloc_node	*tmp;
-	int				i;
 
-	i = 0;
 	if (!gc || !*gc)
 	{
 		printf("gc est null\n");
@@ -40,9 +38,7 @@ void	free_all(t_malloc **gc)
 		free(current->addr);
 		free(current);
 		current = tmp;
-		i++;
 	}
-	printf("nombre d'adresse libere : %d\n", i);
 	(*gc)->first = NULL;
     free(*gc);
     *gc = NULL;

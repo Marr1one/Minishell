@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/28 16:45:10 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/29 15:45:04 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_substr_qte(char *str,  int start, int len)
 {
-	int	i;
+	int		i;
 	char	*new_str;
 
 	i = 0;
@@ -24,16 +24,14 @@ char	*ft_substr_qte(char *str,  int start, int len)
 	if (new_str == NULL)
 		return (NULL);
 	while (str[start] && i < len)
-	{
 		new_str[i++] = str[start++];
-	}
 	new_str[i] = '\0';
 	return (new_str);
 }
 
 char	*ft_substr(char *str,  int start, int end)
 {
-	int	i;
+	int		i;
 	char	*new_str;
 
 	i = 0;
@@ -43,15 +41,13 @@ char	*ft_substr(char *str,  int start, int end)
 	if (new_str == NULL)
 		return (NULL);
 	while (str[start] && start < end)
-	{
 		new_str[i++] = str[start++];
-	}
 	new_str[i] = '\0';
 	return (new_str);
 }
 
 
-int		count_arguments(t_token *list)
+int	count_arguments(t_token *list)
 {
 	int		count;
 	t_token	*current;
@@ -105,16 +101,14 @@ t_cmd	*create_args(t_token *list_tkn, t_cmd *list_cmd)
 
 t_cmd	*add_cmd_node(t_cmd *cmd_list)
 {
-	t_cmd *new_cmd;
-	t_cmd *last;
+	t_cmd	*new_cmd;
+	t_cmd	*last;
 
 	new_cmd = ft_malloc(sizeof(t_cmd));
 	if (!new_cmd)
 		return (NULL);
 	
-	new_cmd->args = NULL;
-	new_cmd->files = NULL; //mettre plutot b_zero
-	new_cmd->next = NULL;
+	ft_memset(new_cmd, 0, sizeof(t_cmd));	
 	if (!cmd_list)
 		return (new_cmd);
 	else
@@ -130,11 +124,9 @@ t_cmd	*add_cmd_node(t_cmd *cmd_list)
 
 t_cmd	*parse_cmd(t_token *list)
 {
-	t_token *current;
+	t_token	*current;
 	t_cmd	*list_cmd;
-	int		count;
 
-	count = 0;
 	list_cmd = NULL;
 	list_cmd = add_cmd_node(list_cmd);
 	current = list;
@@ -148,7 +140,6 @@ t_cmd	*parse_cmd(t_token *list)
 				return (NULL);
 			}
 			list_cmd = add_cmd_node(list_cmd);
-			count++;
 		}
 		current = current->next;
 	}
@@ -158,8 +149,8 @@ t_cmd	*parse_cmd(t_token *list)
 
 t_file *	add_file(t_file	*list_file, t_token *file_tkn, t_type mode)
 {
-	t_file *new_file;
-	t_file *last_file;
+	t_file	*new_file;
+	t_file	*last_file;
 
 	new_file = ft_malloc(sizeof(t_file));
 	if (!new_file)
@@ -179,9 +170,9 @@ t_file *	add_file(t_file	*list_file, t_token *file_tkn, t_type mode)
 	return (list_file);
 }
 
-t_type save_mode(t_token current_tkn)
+t_type	save_mode(t_token current_tkn)
 {
-	t_type save;
+	t_type	save;
 
 	save = UNKNOWN;
 	if (current_tkn.type == HEREDOC)
@@ -262,7 +253,7 @@ char	*quoteless_string(char *str)
 
 void	remove_quotes(t_token *list_tkn)
 {
-	t_token *current_tkn;
+	t_token	*current_tkn;
 
 	current_tkn = list_tkn;
 	while (current_tkn)
@@ -328,36 +319,33 @@ void setup_signals(void)
     signal(SIGQUIT, SIG_IGN);
 }
 
-/* Vérifie les arguments */
 int check_arguments(int argc)
 {
-    if (argc != 1)
-    {
-        printf("Usage : ./minishell\n");
-        return (0);
-    }
-    return (1);
+	if (argc != 1)
+	{
+		printf("Usage : ./minishell\n");
+		return (0);
+	}
+	return (1);
 }
 
 /* Prépare et traite une commande */
 void process_command(char *input, t_data *data)
 {
-    t_token *list_tkn;
-    t_cmd *list_cmd;
+	t_token	*list_tkn;
+	t_cmd	*list_cmd;
 
-    list_tkn = tokenizer(input, data);
-    if (list_tkn == NULL)
-        return ;
-    remove_quotes(list_tkn);
-    list_cmd = parse_cmd(list_tkn);
-    if (list_cmd == NULL)
-        return ;
-    list_cmd = create_args(list_tkn, list_cmd);
-    list_cmd = create_files(list_tkn, list_cmd);
-    // expand_all(list_cmd, data);
-    execute_cmds(data, list_cmd);
-
-    return ;
+	list_tkn = tokenizer(input, data);
+	if (list_tkn == NULL)
+		return ;
+	remove_quotes(list_tkn);
+	list_cmd = parse_cmd(list_tkn);
+	if (list_cmd == NULL)
+		return ;
+	list_cmd = create_args(list_tkn, list_cmd);
+	list_cmd = create_files(list_tkn, list_cmd);
+	// expand_all(list_cmd, data);
+	execute_cmds(data, list_cmd);
 }
 
 /* Boucle principale du shell */
@@ -367,10 +355,11 @@ void shell_loop(t_data *data)
 
     while (1)
     {
-        input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
+        input = readline("\033[0;32mminishell\033[0m ");
         if (!input)
 		{
 			free_all(data->gc);
+			free(input);
             break;
 		}
         add_history(input);
@@ -382,14 +371,14 @@ void shell_loop(t_data *data)
 /* Fonction principale */
 int main(int argc, char **argv, char **envp)
 {
-    t_data data;
+	t_data data;
 
-    (void)argv;
-    if (!check_arguments(argc))
-        return (1);
-    initialize_data(&data, envp);
-    setup_signals();
-    shell_loop(&data);
-    return (0);
+	(void)argv;
+	if (!check_arguments(argc))
+		return (1);
+	initialize_data(&data, envp);
+	setup_signals();
+	shell_loop(&data);
+	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 02:26:24 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/29 14:39:06 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ t_token	*add_node(char *str, t_token *list,  t_type type)
 		findlast_token(list)->next = new_node;
 	return (list);
 }
-int	case_pipe(char *input, int	i)
+int	case_pipe(char *input, int i)
 {	
 	int	count;
-	
+
 	count = 0;
 	while(input[i] == '|')
 	{
@@ -39,7 +39,6 @@ int	case_pipe(char *input, int	i)
 		i++;
 	}
 	return (count);
-	
 }
 
 t_type case_infile(char *input, int i)
@@ -102,8 +101,8 @@ int is_word(char c, t_data *data)
 
 t_token *case_redir(char *input, int *i, t_data *data, t_token *list)
 {
-	t_type redirect;
-	
+	t_type	redirect;
+
 	redirect = case_redirect(input, *i);
 	if (redirect == UNKNOWN)
 	{
@@ -200,36 +199,30 @@ t_token *input_pipe(int *i, char *input, t_data *data, t_token *list)
 
 int validate_input(const char *input)
 {
-    char quote;
-    int i;
+	char	quote;
+	int		i;
 
 	i = 0;
 	quote = 0;
-    while (input[i])
-    {
-        if (input[i] == '\'' || input[i] == '"')
-        {
-            if (quote == 0)
-                quote = input[i];
-            else if (quote == input[i])
-                quote = 0;
-        }
-        else if (quote == 0)
-        {
-            if (input[i] == '\\' || input[i] == ';')
-            {
-                fprintf(stderr, "Erreur de parsing : caractère spécial\n");
-                return (0);
-			}
-        }
-        i++;
-    }
-    if (quote != 0)
-    {
-        fprintf(stderr, "Erreur de parsing : quote non fermée\n");
-        return (0);
-    }
-    return (1);
+	while (input[i])
+	{
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			if (quote == 0)
+				quote = input[i];
+			else if (quote == input[i])
+				quote = 0;
+		}
+		else if (quote == 0)
+		{
+			if (input[i] == '\\' || input[i] == ';')
+				return (fprintf(stderr, "Erreur de parsing : caractère spécial\n"), 0);
+		}
+		i++;
+	}
+	if (quote != 0)
+		return (fprintf(stderr, "Erreur de parsing : quote non fermée\n"), 0);
+	return (1);
 }
 
 // t_token *tokenizer(char *input, t_data *data)
@@ -288,27 +281,27 @@ t_token *handle_token_cases(char *input, int *i, t_data *data, t_token *list)
 
 t_token *tokenizer(char *input, t_data *data)
 {
-    int i;
-    t_token *list;
+    int		i;
+    t_token	*list;
 
     data->quote = 0;
     data->expect = CMD;
 	i = 0;
 	list = NULL;
     if (!validate_input(input))
-        return NULL;
+        return (NULL);
     while (input[i])
     {
         while (input[i] == ' ')
             i++;
         if (input[i] == '\0')
-            break;
+            break ;
         list = handle_token_cases(input, &i, data, list);
     }
 	if (list && findlast_token(list)->type == PIPE)
         {
-            printf("Pipe not closed\n");
+            printf("minishell: Pipe not closed\n");
             return (NULL);
         }
-    return list;
+    return (list);
 }
