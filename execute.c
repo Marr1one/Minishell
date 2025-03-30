@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/29 15:44:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/30 15:23:25 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	is_builtin(char *cmd)
 int	execute_builtin_child(t_cmd *cmd, t_data *data)
 {
 	int		i;
+	int		exit_status;
 	t_cmd	*current_cmd;
 	
 	current_cmd = cmd;
@@ -68,24 +69,47 @@ int	execute_builtin_child(t_cmd *cmd, t_data *data)
     {
 		if (current_cmd->args[1])
 		{
+			exit_status = 0;
 			i =  1;
 			while (current_cmd->args[i])
+			{
 				check_unset(data, current_cmd->args[i++]);
+				if (data->exit_status == 1)
+					exit_status = 1;
+			}
+			data->exit_status = exit_status;
 		}
+		else 
+			(data->exit_status = 0);
         return (1);
     }
 	if (ft_strlcmp(cmd->args[0], "echo") == 0)
+	{
+		data->exit_status = 0;
 		return (ft_echo(cmd), 1);
+	}
     if (ft_strlcmp(cmd->args[0], "export") == 0)
-		return (ft_export(cmd, data), 1);
+	{
+		data->exit_status = ft_export(cmd, data);
+		return (1);
+	}
 	if (ft_strlcmp(cmd->args[0], "cd") == 0)
-		return (ft_cd(cmd), 1);
+	{
+		data->exit_status = ft_cd(cmd);
+		return (1);
+	}
 	if (ft_strlcmp(cmd->args[0], "env") == 0)
-		return (show_env(data->envp), 1);
+	{
+		data->exit_status = show_env(data->envp);
+		return (1);
+	}
 	if (ft_strlcmp(cmd->args[0], "exit") == 0)
 		return (ft_exit(cmd, data), 1);
-    else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
-        return (ft_pwd(cmd), 1);
+	if (ft_strlcmp(cmd->args[0], "pwd") == 0)
+	{
+		data->exit_status = ft_pwd(cmd);
+		return (1);
+	}
     return (0);
 }
 
@@ -313,7 +337,7 @@ void	execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 		execve(current_cmd->args[0], current_cmd->args, data->envp);
 		perror("execve");
 		free_all(data->gc);
-		exit(data->exit_status);	
+		exit(1);	
 	}
 	good_path = new_test_commands(paths, current_cmd->args[0]);
 	if (good_path != NULL)
@@ -321,7 +345,7 @@ void	execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 		execve(good_path, current_cmd->args, data->envp);
 		perror("execve");
 		free_all(data->gc);
-		exit(data->exit_status);
+		exit(1);
 	}
 	else
 	{
@@ -358,9 +382,19 @@ void	execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_
 	execute_command_path(data, paths, current_cmd);
 }
 
-void	handle_parent_process(int *fd_in, int *fd_pipe, t_cmd *current_cmd)
+void	handle_parent_process(t_data *data, int *fd_in, int *fd_pipe, t_cmd *current_cmd)
 {
-    waitpid(0, NULL, 0);
+	int status;
+	
+    waitpid(0, &status, 0);
+	if (WIFEXITED(status))
+	{
+        data->exit_status = WEXITSTATUS(status);
+    } else if (WIFSIGNALED(status)) 
+	{
+        // 128 + signal pour les terminaisons par signal
+        data->exit_status = 128 + WTERMSIG(status);
+	}
     if (*fd_in != 0)
         close(*fd_in);
     if (current_cmd->next)
@@ -393,7 +427,7 @@ void	execute_cmds(t_data *data, t_cmd *cmds)
 		if (pid == 0)
 			execute_child_process(data, current_cmd, fd_in, fd_pipe);
 		else if (pid > 0)
-			handle_parent_process(&fd_in, fd_pipe, current_cmd);
+			handle_parent_process(data, &fd_in, fd_pipe, current_cmd);
 		current_cmd = current_cmd->next;
 	}
 }

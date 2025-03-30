@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/24 15:06:56 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/30 07:10:36 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,6 +266,7 @@ void	check_unset(t_data *data, char	*str)
 	int		i;
 	char	*join_eg;
 	
+	
 	i = 0;
 	join_eg = ft_joinunset(str);
 	while (data->envp[i])
@@ -274,11 +275,11 @@ void	check_unset(t_data *data, char	*str)
 		{
 			// printf("FOUNDED");
 			data->envp = ft_unset(data, i);
-			data->exit_status = 0;
 			break;
 		}
 		i++;
 	}
+	data->exit_status = 0;
 }
 
 int	count_args(char **args)

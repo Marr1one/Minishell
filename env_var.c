@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 19:36:08 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/30 15:37:06 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 int	is_alpha(char c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c<= 'Z'))
+		return (1);
+	else
+		return (0);
+}
+
+int	is_alphanum(char c)
+{
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c<= 'Z') ||
+		(c >= '0' && c <= '9'))
 		return (1);
 	else
 		return (0);

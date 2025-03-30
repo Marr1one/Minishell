@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/29 15:45:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/30 05:46:39 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,6 +364,7 @@ void shell_loop(t_data *data)
 		}
         add_history(input);
         process_command(input, data);
+		printf("exit status = %d\n", data->exit_status);
         free(input);
     }
 }
