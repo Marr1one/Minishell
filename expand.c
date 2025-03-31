@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 16:38:11 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:59:00 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	is_space(char c)
 	return (0);
 }
 
-static int	len_exit_status(t_data *data)
+int	len_exit_status(t_data *data)
 {
 	char	*exit_str;
 	int		len;
@@ -42,11 +42,10 @@ static int	len_exit_status(t_data *data)
 	if (!exit_str)
 		return (0);
 	len = ft_strlen(exit_str);
-	free(exit_str);
 	return (len);
 }
 
-static int	len_var_value(const char *arg, int *i)
+int	len_var_value(const char *arg, int *i, t_data *data)
 {
 	char	*var_name;
 	char	*var_value;
@@ -55,15 +54,14 @@ static int	len_var_value(const char *arg, int *i)
 	var_name = extract_var_name(arg, i);
 	if (!var_name)
 		return (1);
-	var_value = getenv(var_name);
+	var_value = check_env(data, var_name);
 	if (!var_value)
 		var_value = "";
 	len = ft_strlen(var_value);
-	free(var_name);
 	return (len);
 }
 
-static int	handle_dollar_len(const char *arg, int *i, t_data *data)
+int	handle_dollar_len(const char *arg, int *i, t_data *data)
 {
 	int	len;
 
@@ -74,7 +72,7 @@ static int	handle_dollar_len(const char *arg, int *i, t_data *data)
 		(*i)++;
 	}
 	else
-		len = len_var_value(arg, i);
+		len = len_var_value(arg, i, data);
 	return (len);
 }
 
@@ -102,11 +100,12 @@ int	calc_final_len(const char *arg, t_data *data)
 	return (final_len);
 }
 
-int check_variable_in_env(const char *var_name)
+int check_variable_in_env(char *var_name, t_data *data)
 {
     char *value;
 
-    value = getenv(var_name);
+    value = check_env(data, var_name);
+	printf("value = {%s}\n", value);
     if (value == NULL)
         return (0);
     return (1);
@@ -126,14 +125,13 @@ int	append_var_value(char *result, int *j, char *var_name, t_data *data)
 		k = 0;
 		while (exit_str[k])
 			result[(*j)++] = exit_str[k++];
-		free(exit_str);
 		return(0);
 	}
 	else
 	{
-		if (check_variable_in_env(var_name) == 0)
+		if (check_variable_in_env(var_name, data) == 0)
 			return (1);
-		var_value = getenv(var_name);
+		var_value = check_env(data, var_name);
 		if (!var_value)
 			var_value = "";
 		k = 0;
@@ -270,14 +268,14 @@ void	expand_all(t_cmd *cmd, t_data *data)
 		while (current_cmd->args && current_cmd->args[++i])
 		{
 			expanded = expand_string(current_cmd->args[i], data);
-			free(current_cmd->args[i]);
+			//free(current_cmd->args[i]);
 			current_cmd->args[i] = expanded;
 		}
 		current_file = current_cmd->files;
 		while (current_file)
 		{
 			expanded = expand_string(current_file->path, data);
-			free(current_file->path);
+			//free(current_file->path);
 			current_file->path = expanded;
 			current_file = current_file->next;
 		}

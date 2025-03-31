@@ -6,34 +6,33 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 15:55:18 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:59:43 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *new_test_commands(char **paths, char *str)
+char	*new_test_commands(char **paths, char *str)
 {
-    int i;
-    char *path_test;
-
-    if (paths == NULL)
-        return (NULL);
-    if (str == NULL)
-        return (NULL);
-    i = 0;
-    while (paths[i])
-    {
-        path_test = ft_join(paths[i], str);
-        if (access(path_test, F_OK | X_OK) == 0)
-            return (path_test);
-        i++;
-    }
-    return (NULL);
+	int		i;
+	char	*path_test;
+	
+	if (!paths)
+		return (NULL);
+	if (!*str)
+		return (NULL);
+	i = 0;
+	while (paths[i])
+	{
+		path_test = ft_join(paths[i], str);
+		if (access(path_test, F_OK | X_OK) == 0)
+			return (path_test);
+		i++;
+	}
+	return (NULL);
 }
 
-
-int open_file(char *path, t_type mode)
+int	open_file(char *path, t_type mode)
 {
     int fd = -1;
     if (mode == INFILE)
@@ -45,56 +44,76 @@ int open_file(char *path, t_type mode)
     return fd;
 }
 
-int execute_builtin_child(t_cmd *cmd, t_data *data)
+
+int	is_builtin(char *cmd)
 {
-	int	i;
-	t_cmd *current_cmd;
+    if (ft_strlcmp(cmd, "echo") == 0 ||
+        ft_strlcmp(cmd, "cd") == 0 ||
+        ft_strlcmp(cmd, "exit") == 0 ||
+        ft_strlcmp(cmd, "export") == 0 ||
+        ft_strlcmp(cmd, "pwd") == 0)
+    {
+        return (1);
+    }
+    return (0);
+}
+
+int	execute_builtin_child(t_cmd *cmd, t_data *data)
+{
+	int		i;
+	int		exit_status;
+	t_cmd	*current_cmd;
 	
 	current_cmd = cmd;
 	if (ft_strlcmp(current_cmd->args[0], "unset") == 0)
     {
 		if (current_cmd->args[1])
 		{
+			exit_status = 0;
 			i =  1;
 			while (current_cmd->args[i])
+			{
 				check_unset(data, current_cmd->args[i++]);
+				if (data->exit_status == 1)
+					exit_status = 1;
+			}
+			data->exit_status = exit_status;
 		}
-        return (1); 
-    }
-    if (ft_strlcmp(cmd->args[0], "echo") == 0)
-    {
-        ft_echo(cmd);
+		else 
+			(data->exit_status = 0);
         return (1);
     }
-	if (ft_strlcmp(cmd->args[0], "export") == 0)
+	if (ft_strlcmp(cmd->args[0], "echo") == 0)
 	{
-		ft_export(cmd, data);
+		data->exit_status = 0;
+		return (ft_echo(cmd), 1);
+	}
+    if (ft_strlcmp(cmd->args[0], "export") == 0)
+	{
+		data->exit_status = ft_export(cmd, data);
 		return (1);
 	}
 	if (ft_strlcmp(cmd->args[0], "cd") == 0)
 	{
-		ft_cd(cmd);
+		data->exit_status = ft_cd(cmd);
 		return (1);
 	}
 	if (ft_strlcmp(cmd->args[0], "env") == 0)
 	{
-		show_env(data->envp);
-		return (1);	
-	}
-	else if (ft_strlcmp(cmd->args[0], "exit") == 0)
-	{
-		ft_exit(cmd);
+		data->exit_status = show_env(data->envp);
 		return (1);
 	}
-    else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
-    {
-        ft_pwd(cmd);
-        return (1);
-    }
+	if (ft_strlcmp(cmd->args[0], "exit") == 0)
+		return (ft_exit(cmd, data), 1);
+	if (ft_strlcmp(cmd->args[0], "pwd") == 0)
+	{
+		data->exit_status = ft_pwd(cmd);
+		return (1);
+	}
     return (0);
 }
 
-int ncheck_builtin(t_cmd *cmd)
+int	ncheck_builtin(t_cmd *cmd)
 {
 	if (ft_strlcmp(cmd->args[0], "echo") == 0)
         return (1);
@@ -110,50 +129,6 @@ int ncheck_builtin(t_cmd *cmd)
 		return (1);
     else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
         return (1);
-    return (0);
-}
-
-int execute_builtin0(t_cmd *cmd, t_data *data)
-{
-	int	i;
-	t_cmd *current_cmd;
-	
-	current_cmd = cmd;
-	if (ft_strlcmp(current_cmd->args[0], "unset") == 0)
-    {
-		if (current_cmd->args[1])
-		{
-			i =  1;
-			while (current_cmd->args[i])
-				check_unset(data, current_cmd->args[i++]);
-		}
-        return (1);
-    }
-	if (ft_strlcmp(cmd->args[0], "export") == 0)
-	{
-		ft_export(cmd, data);
-		return (1);
-	}
-	if (ft_strlcmp(cmd->args[0], "cd") == 0)
-	{
-		ft_cd(cmd);
-		return (1);
-	}
-	if (ft_strlcmp(cmd->args[0], "env") == 0)
-	{
-		show_env(data->envp);
-		return (1);	
-	}
-	else if (ft_strlcmp(cmd->args[0], "exit") == 0)
-	{
-		ft_exit(cmd);
-		return (1);
-	}
-    else if (ft_strlcmp(cmd->args[0], "pwd") == 0)
-    {
-        ft_pwd(cmd);
-        return (1);
-    }
     return (0);
 }
 
@@ -299,17 +274,18 @@ int	count_cmds(t_cmd *list_cmds)
 //     }
 // }
 
-int handle_file_redirections(t_cmd *current_cmd)
+int	handle_file_redirections(t_cmd *current_cmd)
 {
     t_file *current_file;
     int fd;
 
     if (!current_cmd->files)
         return (0);
+
     current_file = current_cmd->files;
     while (current_file)
     {
-        if (current_file->mode == HEREDOC)
+		 if (current_file->mode == HEREDOC)
         {
             current_file = current_file->next;
             continue;
@@ -320,16 +296,44 @@ int handle_file_redirections(t_cmd *current_cmd)
             perror("open");
             return (1);
         }
+
         if (current_file->mode == INFILE || current_file->mode == HEREDOC)
             dup2(fd, STDIN_FILENO);
         else
             dup2(fd, STDOUT_FILENO);
+
         close(fd);
         current_file = current_file->next;
     }
 	return (0);
 }
 
+/* Gère l'exécution des built-ins à part */
+void	handle_single_builtin(t_data *data, t_cmd *current_cmd)
+{
+    int	stdin_backup;
+    int	stdout_backup;
+
+    stdin_backup = dup(STDIN_FILENO);
+    stdout_backup = dup(STDOUT_FILENO);
+
+    if (handle_file_redirections(current_cmd) == 0)
+	{
+		 if (ft_strcmp(current_cmd->args[0], "exit") == 0)
+    	{
+			dup2(stdin_backup, STDIN_FILENO);
+			dup2(stdout_backup, STDOUT_FILENO);
+			close(stdin_backup);
+			close(stdout_backup);    
+    	}
+    	execute_builtin_child(current_cmd, data);
+	}
+
+    dup2(stdin_backup, STDIN_FILENO);
+    dup2(stdout_backup, STDOUT_FILENO);
+    close(stdin_backup);
+    close(stdout_backup);
+}
 
 int	test_relative_path(char *path_test)
 {
@@ -338,81 +342,37 @@ int	test_relative_path(char *path_test)
 	return (1);
 }
 
-/* Gère l'exécution des built-ins à part */
-void handle_single_builtin(t_data *data, t_cmd *current_cmd)
+void	execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 {
-    int stdin_backup;
-    int stdout_backup;
+	char	*good_path;
 
-    stdin_backup = dup(STDIN_FILENO);
-    stdout_backup = dup(STDOUT_FILENO);
-
-    // if (handle_file_redirections(current_cmd) == 0)
-    if (ft_strcmp(current_cmd->args[0], "exit") == 0)
-    {
-        dup2(stdin_backup, STDIN_FILENO);
-        dup2(stdout_backup, STDOUT_FILENO);
-        close(stdin_backup);
-        close(stdout_backup);    
-    }
-    	execute_builtin_child(current_cmd, data);
-
-    dup2(stdin_backup, STDIN_FILENO);
-    dup2(stdout_backup, STDOUT_FILENO);
-    close(stdin_backup);
-    close(stdout_backup);
-}
-
-void execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
-{
-    char *good_path;
-	
 	if(test_relative_path(current_cmd->args[0]) == 0)
 	{
 		execve(current_cmd->args[0], current_cmd->args, data->envp);
 		perror("execve");
-		exit(data->exit_status);	
+		free_all(data->gc);
+		exit(1);	
 	}
-    good_path = new_test_commands(paths, current_cmd->args[0]);
-    if (good_path != NULL)
-    {
-        execve(good_path, current_cmd->args, data->envp);
-        perror("execve");
-        exit(data->exit_status);
-    }
-    else
-    {
-        printf("minishell: %s: command not found\n", current_cmd->args[0]);
-        exit(127);
-    }
+	good_path = new_test_commands(paths, current_cmd->args[0]);
+	if (good_path != NULL)
+	{
+		execve(good_path, current_cmd->args, data->envp);
+		perror("execve");
+		free_all(data->gc);
+		exit(1);
+	}
+	else
+	{
+		printf("minishell: %s: command not found\n", current_cmd->args[0]);
+		free_all(data->gc);
+		exit(127);
+	}
 }
 
-void handle_heredoc(t_cmd *current_cmd)
+/* Prépare et exécute une commande dans un processus enfant */
+void	execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_pipe)
 {
-    int heredoc_pipe[2];
-    char *heredoc_content;
-
-    if (contains_heredoc(current_cmd)) {
-        heredoc_content = execute_last_heredoc(current_cmd);
-        if (heredoc_content != NULL) {
-            if (pipe(heredoc_pipe) == -1) {
-                perror("pipe");
-                exit(1);
-            }
-            /* Écriture du contenu heredoc dans le pipe */
-            write(heredoc_pipe[1], heredoc_content, ft_strlen(heredoc_content));
-            close(heredoc_pipe[1]);
-            /* Rediriger STDIN vers le pipe qui contient le heredoc */
-            dup2(heredoc_pipe[0], STDIN_FILENO);
-            close(heredoc_pipe[0]);
-            free(heredoc_content);
-        }
-    }
-}
-
-void execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_pipe)
-{
-    char **paths;
+    char	**paths;
 
     if (current_cmd->next)
     {
@@ -425,21 +385,37 @@ void execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_
         dup2(fd_in, STDIN_FILENO);
         close(fd_in);
     }
-    if(current_cmd->next == NULL && contains_heredoc(current_cmd))
-        handle_heredoc(current_cmd);
+	if(current_cmd->next == NULL && contains_heredoc(current_cmd))
+		handle_heredoc(current_cmd);
     handle_file_redirections(current_cmd);
-    if (current_cmd->args == NULL || current_cmd->args[0] == NULL)
+	if (current_cmd->args == NULL || current_cmd->args[0] == NULL)
+	{
+		free_all(data->gc);
         exit(0);
+	}
     if (execute_builtin_child(current_cmd, data) == 1)
+	{
+		free_all(data->gc);
         exit(0);
+	}
     paths = ft_split(get_path_env(data->envp), ':');
     paths = add_slash_all(paths);
-    execute_command_path(data, paths, current_cmd);
+	execute_command_path(data, paths, current_cmd);
 }
 
-void handle_parent_process(int *fd_in, int *fd_pipe, t_cmd *current_cmd)
+void	handle_parent_process(t_data *data, int *fd_in, int *fd_pipe, t_cmd *current_cmd)
 {
-    waitpid(0, NULL, 0);
+	int status;
+	
+    waitpid(0, &status, 0);
+	if (WIFEXITED(status))
+	{
+        data->exit_status = WEXITSTATUS(status);
+    } else if (WIFSIGNALED(status)) 
+	{
+        // 128 + signal pour les terminaisons par signal
+        data->exit_status = 128 + WTERMSIG(status);
+	}
     if (*fd_in != 0)
         close(*fd_in);
     if (current_cmd->next)
@@ -450,29 +426,29 @@ void handle_parent_process(int *fd_in, int *fd_pipe, t_cmd *current_cmd)
 }
 
 /* Fonction principale de gestion des commandes */
-void execute_cmds(t_data *data, t_cmd *cmds)
+void	execute_cmds(t_data *data, t_cmd *cmds)
 {
-    int fd_in;
-    int fd_pipe[2];
-    pid_t pid;
-    t_cmd *current_cmd;
+	int		fd_in;
+	int		fd_pipe[2];
+	pid_t	pid;
+	t_cmd	*current_cmd;
 
 	fd_in = 0;
-    current_cmd = cmds;
-    while (current_cmd)
-    {
-        if (current_cmd->next)
-            pipe(fd_pipe);
-        else if (count_cmds(cmds) == 1 && ncheck_builtin(current_cmd) == 1)
-        {
-            handle_single_builtin(data, current_cmd);		//ls | grep mini | wc -l
-            return;
-        }
-        pid = fork();
-        if (pid == 0)
-            execute_child_process(data, current_cmd, fd_in, fd_pipe);
-        else if (pid > 0)
-			handle_parent_process(&fd_in, fd_pipe, current_cmd);
-        current_cmd = current_cmd->next;
-    }
+	current_cmd = cmds;
+	while (current_cmd)
+	{
+		if (current_cmd->next)
+			pipe(fd_pipe);
+		else if (count_cmds(cmds) == 1 && ncheck_builtin(current_cmd) == 1)
+		{
+			handle_single_builtin(data, current_cmd);		//ls | grep mini | wc -l
+			return;
+		}
+		pid = fork();
+		if (pid == 0)
+			execute_child_process(data, current_cmd, fd_in, fd_pipe);
+		else if (pid > 0)
+			handle_parent_process(data, &fd_in, fd_pipe, current_cmd);
+		current_cmd = current_cmd->next;
+	}
 }

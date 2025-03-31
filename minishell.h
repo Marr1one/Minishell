@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 16:38:36 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:58:35 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@
 //	char			*value;
 //	struct s_env	*next;
 //}	t_env;
+
+typedef struct s_idx
+{
+	int	i;
+	int	j;
+}	t_idx;
 
 typedef struct s_malloc_node
 {
@@ -62,36 +68,29 @@ typedef struct s_token
 {
 	t_type			type;
 	char			*content;
-	char			quote;
 	int				index;
 	struct	s_token	*next;
 }	t_token;
 
 typedef struct s_file
 {
-	t_type	mode;
-	char	*path;
+	t_type mode;
+	char *path;
 	struct s_file *next;
 } t_file;
 
 typedef struct s_cmd
 {
 	char **args;
-	t_file *files;
+	t_file *files;	
 	struct	s_cmd	*next;
 }	t_cmd;
-
-typedef struct s_idx
-{
-	int	i;
-	int	j;
-}	t_idx;
 
 typedef struct s_data
 {
 	t_token		*list_tkn;
 	t_type		expect;
-	t_malloc	*gc;
+	t_malloc	**gc;
 	//t_env	*env_var;
 	int		in_quote;
 	char	**envp;
@@ -109,8 +108,24 @@ typedef struct s_data
 	
 }	t_data;
 
-
-int				test_relative_path(char *path_test);
+char			*check_env(t_data *data, char *str);
+int				check_variable_in_env(char *var_name, t_data *data);
+void 			handle_heredoc(t_cmd *current_cmd);
+void			expand_all(t_cmd *cmd, t_data *data);
+int 			handle_quotes(char c, t_data *data);
+int				is_redirect(char c);
+int				is_pipe(char c);
+int				is_space(char c);
+ int			len_exit_status(t_data *data);
+ int			len_var_value(const char *arg, int *i, t_data *data);
+ int			handle_dollar_len(const char *arg, int *i, t_data *data);
+int				calc_final_len(const char *arg, t_data *data);
+int			append_var_value(char *result, int *j, char *var_name, t_data *data);
+int			handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data);
+int			build_final_string(char *result, const char *arg, t_data *data);
+int				get_dollar_count(const char *arg, int *i);
+char			*extract_var_name(const char *arg, int *i);
+char			*expand_string(const char *arg, t_data *data);
 char			*ft_substr(char *str,  int start, int end);
 void			show_list_cmd(t_cmd *list);
 void			show_tab(char **tab);
@@ -126,14 +141,14 @@ const char		*get_token_type_name(t_type type);
 // void			execute_cmds(t_cmd *cmds, char **paths);
 void 			execute_cmds(t_data *data, t_cmd *cmds);
 int 			execute_builtin(t_cmd *cmd, t_data *data);
-void			show_env(char **tab);
+int				show_env(char **tab);
 char			*ft_substr_qte(char *str,  int start, int end);
 char			**ft_unset(t_data *data, int	save);
 void			check_unset(t_data *data, char	*str);
+int				is_alphanum(char c);
 
 
-
-void			parsing(char **envp, t_data *data);
+// void			parsing(char **envp, t_data *data);
 char			**copy_env(char **envp);
 int				test_commands(t_data *data);
 char			*take_before(char *str, char c);
@@ -164,7 +179,7 @@ char			*take_after(char *str, char c);
 int				ft_strncmp(char *s1, char *s2, int n);
 char			*ft_itoa(int n);
 void			*ft_malloc(size_t size);
-void			ft_cd(t_cmd *cmd);
+int				ft_cd(t_cmd *cmd);
 int				ft_strcmp(char *s1, char *s2);
 int				ft_strlcmp(char *s1, char *s2);
 int				return_exit_status(t_data *data);
@@ -188,58 +203,39 @@ void			destroy_node_quotes(t_data *data);
 char			**skip_quotes(t_data *data);
 void			check_exit_status(t_data *data);
 int				return_exit_status(t_data *data);
-void			ft_exit(t_cmd *cmd);
+void			ft_exit(t_cmd *cmd, t_data *data);
 int				is_numeric(char	*str);
-void			free_all(t_malloc *gc);
+void			free_all(t_malloc **gc);
 void 			destroy_empty_node(t_data *data);
 char			**custom_split(char *str, char c);
 //pipex
 char 			*ft_strchr(const char *s, int c);
 char 			*get_cmd_path(const char *cmd, char **envp);
+void 			try_dup2(int oldfd, int newfd);
+void 			execute_pipex(t_data *data);
+void 			execute_simple_command(t_data *data);
 int 			count_tab(char **tab);
+int				is_builtin(char *cmd);
 // void			execute_builtin(t_data *data, char **args);
 // heredoc
-void handle_heredoc(t_cmd *current_cmd);
-t_file *find_last_heredoc(t_file *files);
-char *heredoc_loop(char *delimiter, char *prompt);
-char *execute_last_heredoc(t_cmd *cmd);
-int contains_heredoc(t_cmd *cmd);
-t_file *find_last_node(t_file *node);
-t_file *find_existing_heredoc(t_file *node);
-t_file *add_or_replace_heredoc(t_file *files, t_token *heredoc_token);
-t_file *create_new_heredoc_node(t_token *token);
-char *read_heredoc_from_tty(char *delimiter, char *prompt);
-t_file *add_or_replace_heredoc(t_file *files, t_token *heredoc_token);
+int				contains_heredoc(t_cmd *cmd);
+char 			*execute_last_heredoc(t_cmd *cmd);
+int 			heredoc_input(char *delimiter);
 char 			*ft_strstr(const char *haystack, const char *needle);
 char			**list_to_args(t_data *data);
 char			**cut_last(char **tab, int	i);
 int				list_len(t_token *list);
 int				only_space(char *input);
-void			ft_pwd(t_cmd *cmd);
-void			ft_export(t_cmd *cmd, t_data *data);
+int				ft_pwd(t_cmd *cmd);
+int				ft_export(t_cmd *cmd, t_data *data);
 char			**add_export(t_data *data, char *str);
 void			show_tab_export(char **tab);
 int				check_change(t_data *data, char *str);
 
-//expand
 int 	validate_input(const char *input);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_re_strjoin(char *s1, char const *s2);
-int 	handle_quotes(char c, t_data *data);
 char	*ft_strcpy(char *dest, char *src);
 char	*ft_strcat(char *dest, char *src);
-char    *expand_argument(const char *arg);
-void	expand_all(t_cmd *cmd, t_data *data);
-char	*expand_string(const char *arg, t_data *data);
-void remove_quotes_from_cmd(t_cmd *cmd);
-char *quoteless_string_cmd(char *str);
-int check_variable_in_env(const char *var_name);
-int	append_var_value(char *result, int *j, char *var_name, t_data *data);
-int 	handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data);
-int	build_final_string(char *result, const char *arg, t_data *data);
-int	get_dollar_count(const char *arg, int *i);
-char	*extract_var_name(const char *arg, int *i);
-int calc_final_len(const char *arg, t_data *data);
-t_file *get_last_heredoc(t_file *file);
 
 #endif

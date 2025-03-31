@@ -6,11 +6,34 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 05:13:51 by braugust          #+#    #+#             */
-/*   Updated: 2025/03/28 06:16:39 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:00:14 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void handle_heredoc(t_cmd *current_cmd)
+{
+    int heredoc_pipe[2];
+    char *heredoc_content;
+
+    if (contains_heredoc(current_cmd)) {
+        heredoc_content = execute_last_heredoc(current_cmd);
+        if (heredoc_content != NULL) {
+            if (pipe(heredoc_pipe) == -1) {
+                perror("pipe");
+                exit(1);
+            }
+            /* Écriture du contenu heredoc dans le pipe */
+            write(heredoc_pipe[1], heredoc_content, ft_strlen(heredoc_content));
+            close(heredoc_pipe[1]);
+            /* Rediriger STDIN vers le pipe qui contient le heredoc */
+            dup2(heredoc_pipe[0], STDIN_FILENO);
+            close(heredoc_pipe[0]);
+            //free(heredoc_content);
+        }
+    }
+}
 
 // Vérifie si une commande contient au moins un heredoc.
 int contains_heredoc(t_cmd *cmd)
@@ -58,10 +81,10 @@ char *heredoc_loop(char *delimiter, char *prompt)
         }
         tmp = content;
         content = ft_strjoin(content, line);
-        free(tmp);
+        //free(tmp);
         tmp = content;
         content = ft_strjoin(content, "\n");
-        free(tmp);
+        //free(tmp);
         free(line);
     }
     return (content);
@@ -132,7 +155,7 @@ t_file *add_or_replace_heredoc(t_file *files, t_token *heredoc_token)
     found = find_existing_heredoc(files);
     if (found != NULL)
     {
-        free(found->path);
+        //free(found->path);
         found->path = ft_strdup(heredoc_token->content);
         return (files);
     }
