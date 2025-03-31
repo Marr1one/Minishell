@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:26:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 16:11:28 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/31 20:05:31 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,22 @@
 
 char	**copy_env(char **envp)
 {
-	int	i;
+	// int	i;
 	char	**new_env;
 
-	i = 0;
-	while(envp[i])
-		i++;
-	new_env = ft_malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	while (envp[i])
-	{
-		new_env[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	new_env[i] = NULL;
+	// i = 0;
+	// while(envp[i])
+	// 	i++;
+	// new_env = ft_malloc(sizeof(char *) * (i + 1));
+	// i = 0;
+	// while (envp[i])
+	// {
+	// 	new_env[i] = ft_strdup(envp[i]);
+	// 	i++;
+	// }
+	// new_env[i] = NULL;
+	new_env = envp;
+	
 	return (new_env);
 }
 

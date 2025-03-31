@@ -29,23 +29,14 @@
 // 	}
 // }
 
-void ft_pwd(t_cmd *cmd)
+int ft_pwd(t_cmd *cmd)
 {
     char cwd[1024];
 
-    // Si vous souhaitez vérifier la présence d'arguments et éventuellement afficher une erreur :
     if (cmd->args[1] != NULL)
-    {
-        printf("ft_pwd: too many arguments\n");
-        return;
-    }
-
+        return (printf("ft_pwd: too many arguments\n"), 1);
     if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        printf("%s\n", cwd);
-    }
+        return (printf("%s\n", cwd), 0);
     else
-    {
-        perror("ft_pwd");
-    }
+        return (perror("ft_pwd"), 1);
 }

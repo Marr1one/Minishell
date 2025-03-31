@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_show.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/22 23:59:36 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/31 20:09:08 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,19 @@ void	show_list_cmd(t_cmd *list)
 	}
 }
 
-void	show_env(char **tab)
+int	show_env(char **env)
 {
 	int	i;
 
 	i = 0;
-	while (tab[i])
+	if (!env)
+		return (1);
+	while (env[i])
 	{
-		printf("%s\n", tab[i]);
+		printf("%s\n", env[i]);
 		i++;
 	}
+	return (0);
 }
 
 void	show_tab(char **tab)

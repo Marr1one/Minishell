@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/28 23:30:17 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:07:22 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_substr_qte(char *str,  int start, int len)
 {
-	int	i;
+	int		i;
 	char	*new_str;
 
 	i = 0;
@@ -24,16 +24,14 @@ char	*ft_substr_qte(char *str,  int start, int len)
 	if (new_str == NULL)
 		return (NULL);
 	while (str[start] && i < len)
-	{
 		new_str[i++] = str[start++];
-	}
 	new_str[i] = '\0';
 	return (new_str);
 }
 
 char	*ft_substr(char *str,  int start, int end)
 {
-	int	i;
+	int		i;
 	char	*new_str;
 
 	i = 0;
@@ -43,15 +41,13 @@ char	*ft_substr(char *str,  int start, int end)
 	if (new_str == NULL)
 		return (NULL);
 	while (str[start] && start < end)
-	{
 		new_str[i++] = str[start++];
-	}
 	new_str[i] = '\0';
 	return (new_str);
 }
 
 
-int		count_arguments(t_token *list)
+int	count_arguments(t_token *list)
 {
 	int		count;
 	t_token	*current;
@@ -105,16 +101,14 @@ t_cmd	*create_args(t_token *list_tkn, t_cmd *list_cmd)
 
 t_cmd	*add_cmd_node(t_cmd *cmd_list)
 {
-	t_cmd *new_cmd;
-	t_cmd *last;
+	t_cmd	*new_cmd;
+	t_cmd	*last;
 
 	new_cmd = ft_malloc(sizeof(t_cmd));
 	if (!new_cmd)
 		return (NULL);
 	
-	new_cmd->args = NULL;
-	new_cmd->files = NULL; //mettre plutot b_zero
-	new_cmd->next = NULL;
+	ft_memset(new_cmd, 0, sizeof(t_cmd));	
 	if (!cmd_list)
 		return (new_cmd);
 	else
@@ -130,11 +124,9 @@ t_cmd	*add_cmd_node(t_cmd *cmd_list)
 
 t_cmd	*parse_cmd(t_token *list)
 {
-	t_token *current;
+	t_token	*current;
 	t_cmd	*list_cmd;
-	int		count;
 
-	count = 0;
 	list_cmd = NULL;
 	list_cmd = add_cmd_node(list_cmd);
 	current = list;
@@ -148,7 +140,6 @@ t_cmd	*parse_cmd(t_token *list)
 				return (NULL);
 			}
 			list_cmd = add_cmd_node(list_cmd);
-			count++;
 		}
 		current = current->next;
 	}
@@ -158,8 +149,8 @@ t_cmd	*parse_cmd(t_token *list)
 
 t_file *	add_file(t_file	*list_file, t_token *file_tkn, t_type mode)
 {
-	t_file *new_file;
-	t_file *last_file;
+	t_file	*new_file;
+	t_file	*last_file;
 
 	new_file = ft_malloc(sizeof(t_file));
 	if (!new_file)
@@ -179,9 +170,9 @@ t_file *	add_file(t_file	*list_file, t_token *file_tkn, t_type mode)
 	return (list_file);
 }
 
-t_type save_mode(t_token current_tkn)
+t_type	save_mode(t_token current_tkn)
 {
-	t_type save;
+	t_type	save;
 
 	save = UNKNOWN;
 	if (current_tkn.type == HEREDOC)
@@ -205,73 +196,79 @@ t_type save_mode(t_token current_tkn)
 
 t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 {
-    t_token *current_tkn = list_tkn;
-    t_cmd *current_cmd = list_cmd;
-    t_type save = UNKNOWN;
+	t_token *current_tkn;
+	t_cmd 	*current_cmd;
+	t_type	save;
 
-    while (current_tkn && current_cmd)
-    {
-        if (is_redirect(current_tkn->content[0]))
-            save = save_mode(*current_tkn);
-
-        if (current_tkn->type == FICHIER)
-        {
-            if (save == HEREDOC)
-            {
-                current_cmd->files = add_or_replace_heredoc(current_cmd->files, current_tkn);
-            }
-            else
-                current_cmd->files = add_file(current_cmd->files, current_tkn, save);
-            save = UNKNOWN;
-        }
-        if (current_tkn->type == PIPE)
-            current_cmd = current_cmd->next;
-        current_tkn = current_tkn->next;
-    }
-    return (list_cmd);
+	current_tkn = list_tkn;
+	save = UNKNOWN;
+	current_cmd = list_cmd;
+	while (current_tkn && current_cmd)
+	{
+		if (is_redirect(current_tkn->content[0]))
+			save = save_mode(*current_tkn);
+		if (current_tkn->type == FICHIER)
+		{
+			current_cmd->files = add_file(current_cmd->files, current_tkn, save);
+			save = UNKNOWN;
+		}
+		if (current_tkn->type == PIPE)
+		{
+			current_cmd = current_cmd->next;
+			save = UNKNOWN;
+		}
+		current_tkn = current_tkn->next;
+	}
+	return (list_cmd);
 }
 
-// char	*quoteless_string(char *str)
-// {
-// 	int		i;
-// 	int		j;
-// 	char	*new_str;
+char	*quoteless_string(char *str)
+{
+	int		i;
+	int		j;
+	char	*new_str;
 
-// 	i = 0;
-// 	j = 0;
-// 	while(str[i])
-// 	{
-// 		if (str[i] != '"' && str[i] != '\'')
-// 			j++;
-// 		i++;
-// 	}
-// 	new_str = ft_malloc(sizeof(char) * (j + 1));
-// 	if (!new_str)
-// 		return (NULL);
-// 	i = 0;
-// 	j = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] != '"' && str[i] != '\'')
-// 			new_str[j++] = str[i];
-// 		i++;
-// 	}
-// 	new_str[j] = '\0';
-// 	return (new_str);
-// }
+	i = 0;
+	j = 0;
+	while(str[i])
+	{
+		if (str[i] != '"' && str[i] != '\'')
+			j++;
+		i++;
+	}
+	new_str = ft_malloc(sizeof(char) * (j + 1));
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] != '"' && str[i] != '\'')
+			new_str[j++] = str[i];
+		i++;
+	}
+	new_str[j] = '\0';
+	return (new_str);
+}
 
-// void	remove_quotes(t_token *list_tkn)
-// {
-// 	t_token *current_tkn;
+void	remove_quotes(t_cmd *list_cmd)
+{
+	t_cmd	*current_cmd;
+	int	i;
 
-// 	current_tkn = list_tkn;
-// 	while (current_tkn)
-// 	{
-// 		current_tkn->content = quoteless_string(current_tkn->content);
-// 		current_tkn = current_tkn->next;
-// 	}
-// }
-
+	i = 0;\
+	current_cmd = list_cmd;
+	while (current_cmd)
+	{
+		i = 0;
+		while (current_cmd->args && current_cmd->args[i])
+		{
+            current_cmd->args[i] = quoteless_string(current_cmd->args[i]);
+			i++;
+		}
+		current_cmd = current_cmd->next;
+    }	
+}
 
 char *quoteless_string_cmd(char *str)
 {
@@ -292,75 +289,34 @@ char *quoteless_string_cmd(char *str)
     }
     return (ft_strdup(str));
 }
-void remove_quotes_from_cmd(t_cmd *cmd)
-{
-    int i;
-    char *new_arg;
+//void remove_quotes_from_cmd(t_cmd *cmd)
+//{
+//    int i;
+//    char *new_arg;
 
-    i = 0;
-    while (cmd->args && cmd->args[i])
-    {
-        while (1)
-        {
-            new_arg = quoteless_string_cmd(cmd->args[i]);
-            if (ft_strcmp(new_arg, cmd->args[i]) == 0)
-            {
-                free(new_arg);
-                break;
-            }
-            free(cmd->args[i]);
-            cmd->args[i] = new_arg;
-        }
-        i++;
-    }
-}
-
-// int main(int argc, char **argv, char **envp)
-// {
-	
-//     (void)argv;
-// 	char	*input;
-// 	t_cmd	*list_cmd;
-// 	t_token *list_tkn;
-// 	t_data	data;
-	
-//     if (argc != 1)
-//         return (printf("Usage : ./minishell\n"));
-// 	ft_memset(&data, 0, sizeof(data));
-//     data.envp = copy_env(envp);
-//     signal(SIGINT, sigint_handler);
-//     signal(SIGQUIT, SIG_IGN);
-
-//     while (1)
-//     {
-//         input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
-//         if (!input)
-//             break;
-//         add_history(input);
-// 		list_tkn = tokenizer(input, &data);
-// 		if (list_tkn == NULL)
-// 			continue;
-// 		remove_quotes(list_tkn);
-// 		list_cmd = parse_cmd(list_tkn);
-// 		if (list_cmd == NULL)
-//         {
-//             free(input);
-//             continue;
-//         }
-// 		list_cmd = create_args(list_tkn, list_cmd);
-// 		list_cmd = create_files(list_tkn, list_cmd);
-// 		// expand_var_command(list_cmd, data.exit_status, &data);
-// 		expand_all(list_cmd, &data);
-// 		execute_cmds(&data, list_cmd);
-// 		free(input);
-//     }
-//     return (0);
-// }
+//    i = 0;
+//    while (cmd->args && cmd->args[i])
+//    {
+//        while (1)
+//        {
+//            new_arg = quoteless_string_cmd(cmd->args[i]);
+//            if (ft_strcmp(new_arg, cmd->args[i]) == 0)
+//            {
+//                //free(new_arg);
+//                break;
+//            }
+//            //free(cmd->args[i]);
+//            cmd->args[i] = new_arg;
+//        }
+//        i++;
+//    }
+//}
 
 void initialize_data(t_data *data, char **envp)
 {
     ft_memset(data, 0, sizeof(*data));
     data->envp = copy_env(envp);
+	data->gc = get_gc();
 }
 
 /* Configure les signaux */
@@ -370,50 +326,53 @@ void setup_signals(void)
     signal(SIGQUIT, SIG_IGN);
 }
 
-/* Vérifie les arguments */
 int check_arguments(int argc)
 {
-    if (argc != 1)
-    {
-        printf("Usage : ./minishell\n");
-        return (0);
-    }
-    return (1);
+	if (argc != 1)
+	{
+		printf("Usage : ./minishell\n");
+		return (0);
+	}
+	return (1);
 }
 
 /* Prépare et traite une commande */
 void process_command(char *input, t_data *data)
 {
-    t_token *list_tkn;
-    t_cmd *list_cmd;
+	t_token	*list_tkn;
+	t_cmd	*list_cmd;
 
-    list_tkn = tokenizer(input, data);
-    if (list_tkn == NULL)
-        return ;
-    list_cmd = parse_cmd(list_tkn);
-    if (list_cmd == NULL)
-        return ;
-    list_cmd = create_args(list_tkn, list_cmd);
-    list_cmd = create_files(list_tkn, list_cmd);
-    expand_all(list_cmd, data);
-	remove_quotes_from_cmd(list_cmd);
+	list_tkn = tokenizer(input, data);
+	if (list_tkn == NULL)
+		return ;
+	list_cmd = parse_cmd(list_tkn);
+	if (list_cmd == NULL)
+		return ;
+	list_cmd = create_args(list_tkn, list_cmd);
+	list_cmd = create_files(list_tkn, list_cmd);
+	//show_list_cmd(list_cmd);
+	expand_all(list_cmd, data);
+	remove_quotes(list_cmd);
     execute_cmds(data, list_cmd);
-
-    return ;
 }
 
 /* Boucle principale du shell */
 void shell_loop(t_data *data)
 {
-    char *input;
+    char *input;	
 
     while (1)
     {
-        input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
+        input = readline("\033[0;32mminishell\033[0m ");
         if (!input)
+		{
+			free_all(data->gc);
+			free(input);
             break;
+		}
         add_history(input);
         process_command(input, data);
+		//printf("exit status = %d\n", data->exit_status);
         free(input);
     }
 }
@@ -421,14 +380,13 @@ void shell_loop(t_data *data)
 /* Fonction principale */
 int main(int argc, char **argv, char **envp)
 {
-    t_data data;
+	t_data data;
 
-    (void)argv;
-    if (!check_arguments(argc))
-        return (1);
-    initialize_data(&data, envp);
-    setup_signals();
-    shell_loop(&data);
-    return (0);
+	(void)argv;
+	if (!check_arguments(argc))
+		return (1);
+	initialize_data(&data, envp);
+	setup_signals();
+	shell_loop(&data);
+	return (0);
 }
-

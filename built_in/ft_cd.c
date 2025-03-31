@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/25 14:53:28 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/31 20:03:48 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@
 // }
 
 
-void	ft_cd(t_cmd *cmd)
+int	ft_cd(t_cmd *cmd)
 {
 	char	*target_dir;
 	char	current_pwd[1024];
@@ -138,7 +138,7 @@ void	ft_cd(t_cmd *cmd)
 	if (count_args(cmd->args) > 2)
 	{
 		printf("minishell: cd: too many arguments\n");
-		return ;
+		return (1);
 	}
 	if (!cmd->args[1])
 	{
@@ -146,7 +146,7 @@ void	ft_cd(t_cmd *cmd)
 		if (!target_dir)
 		{
 			printf("minishell: cd: HOME not set\n");
-			return ;
+			return (1);
 		}
 	}
 	else
@@ -155,9 +155,13 @@ void	ft_cd(t_cmd *cmd)
 	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
 	{
 		perror("minishell: getcwd");
-		return ;
+		return (1);
 	}
 
 	if (chdir(target_dir) != 0)
+	{
 		perror("minishell: cd");
+		return (1);
+	}
+	return (0);
 }

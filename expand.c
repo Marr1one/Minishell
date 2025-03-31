@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   new_parse.c                                        :+:      :+:    :+:   */
+/*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 19:59:00 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:13:58 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,12 +141,12 @@ int	append_var_value(char *result, int *j, char *var_name, t_data *data)
 	}
 }
 // Gère l'expansion des signes dollar en interprétant les variables d'environnement ou spéciales
-int handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data)
+int	handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data)
 {
     int		dollar_count;
     char	*var_name;
     int		k;
-	int		error;
+    int		error;
 
     dollar_count = get_dollar_count(arg, &idx->i);
     k = dollar_count / 2;
@@ -157,13 +157,16 @@ int handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data)
         var_name = extract_var_name(arg, &idx->i);
         if (var_name)
         {
-			error = append_var_value(result, &idx->j, var_name, data);
+            error = append_var_value(result, &idx->j, var_name, data);
             if (error)
                 return (1);
         }
+        else
+            result[idx->j++] = '$';
     }
-	return (0);
+    return (0);
 }
+
 
 // Construit la chaîne finale après les expansions à partir de la chaîne d'entrée
 int	build_final_string(char *result, const char *arg, t_data *data)
