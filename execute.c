@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/28 23:38:30 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:55:18 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,7 +347,7 @@ void handle_single_builtin(t_data *data, t_cmd *current_cmd)
     stdin_backup = dup(STDIN_FILENO);
     stdout_backup = dup(STDOUT_FILENO);
 
-    if (handle_file_redirections(current_cmd) == 0)
+    // if (handle_file_redirections(current_cmd) == 0)
     if (ft_strcmp(current_cmd->args[0], "exit") == 0)
     {
         dup2(stdin_backup, STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/27 18:31:11 by braugust         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:38:11 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,19 @@ int	calc_final_len(const char *arg, t_data *data)
 	return (final_len);
 }
 
+int check_variable_in_env(const char *var_name)
+{
+    char *value;
+
+    value = getenv(var_name);
+    if (value == NULL)
+        return (0);
+    return (1);
+}
+
+
 // Ajoute la valeur développée d'une variable dans la chaîne de destination
-void	append_var_value(char *result, int *j, char *var_name, t_data *data)
+int	append_var_value(char *result, int *j, char *var_name, t_data *data)
 {
 	char	*var_value;
 	char	*exit_str;
@@ -116,23 +127,28 @@ void	append_var_value(char *result, int *j, char *var_name, t_data *data)
 		while (exit_str[k])
 			result[(*j)++] = exit_str[k++];
 		free(exit_str);
+		return(0);
 	}
 	else
 	{
+		if (check_variable_in_env(var_name) == 0)
+			return (1);
 		var_value = getenv(var_name);
 		if (!var_value)
 			var_value = "";
 		k = 0;
 		while (var_value[k])
 			result[(*j)++] = var_value[k++];
+		return (0);
 	}
 }
 // Gère l'expansion des signes dollar en interprétant les variables d'environnement ou spéciales
-void handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data)
+int handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data)
 {
     int		dollar_count;
     char	*var_name;
     int		k;
+	int		error;
 
     dollar_count = get_dollar_count(arg, &idx->i);
     k = dollar_count / 2;
@@ -143,16 +159,19 @@ void handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data)
         var_name = extract_var_name(arg, &idx->i);
         if (var_name)
         {
-            append_var_value(result, &idx->j, var_name, data);
-            free(var_name);
+			error = append_var_value(result, &idx->j, var_name, data);
+            if (error)
+                return (1);
         }
     }
+	return (0);
 }
 
 // Construit la chaîne finale après les expansions à partir de la chaîne d'entrée
-void	build_final_string(char *result, const char *arg, t_data *data)
+int	build_final_string(char *result, const char *arg, t_data *data)
 {
     t_idx idx;
+    int error;
 
     idx.i = 0;
     idx.j = 0;
@@ -162,11 +181,18 @@ void	build_final_string(char *result, const char *arg, t_data *data)
         if (handle_quotes(arg[idx.i], data))
             result[idx.j++] = arg[idx.i++];
         else if (arg[idx.i] == '$' && data->in_quote != 2)
-            handle_dollar(result, arg, &idx, data);
+		{
+            error = handle_dollar(result, arg, &idx, data);
+			if (error)
+			{
+				return (1);
+			}
+		}
         else
             result[idx.j++] = arg[idx.i++];
     }
     result[idx.j] = '\0';
+	return (0);
 }
 
 // Compte les signes dollar consécutifs à partir d'une position donnée
@@ -215,15 +241,20 @@ char	*expand_string(const char *arg, t_data *data)
 {
 	char	*result;
 	int	final_len;
+	int	error;
 
+	
 	final_len = calc_final_len(arg, data);
 	result = ft_malloc(final_len + 1);
 	if (!result)
 		return (NULL);
-	build_final_string(result, arg, data);
+	error = build_final_string(result, arg, data);
+	if (error)
+	{
+		return (NULL);
+	}
 	return (result);
 }
-
 
 void	expand_all(t_cmd *cmd, t_data *data)
 {
