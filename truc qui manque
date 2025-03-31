@@ -1,2 +1,9 @@
 
+minishell echo $VARINEXISTENTE
+^C
+
 poser la question pour cat | cat | cat | ls
+
+question;
+	
+

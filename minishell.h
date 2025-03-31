@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/30 15:36:20 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/31 18:56:22 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@
 //	char			*value;
 //	struct s_env	*next;
 //}	t_env;
+
+typedef struct s_idx
+{
+	int	i;
+	int	j;
+}	t_idx;
 
 typedef struct s_malloc_node
 {
@@ -102,6 +108,24 @@ typedef struct s_data
 	
 }	t_data;
 
+char			*check_env(t_data *data, char *str);
+int				check_variable_in_env(char *var_name, t_data *data);
+void 			handle_heredoc(t_cmd *current_cmd);
+void			expand_all(t_cmd *cmd, t_data *data);
+int 			handle_quotes(char c, t_data *data);
+int				is_redirect(char c);
+int				is_pipe(char c);
+int				is_space(char c);
+ int			len_exit_status(t_data *data);
+ int			len_var_value(const char *arg, int *i, t_data *data);
+ int			handle_dollar_len(const char *arg, int *i, t_data *data);
+int				calc_final_len(const char *arg, t_data *data);
+int			append_var_value(char *result, int *j, char *var_name, t_data *data);
+int			handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data);
+int			build_final_string(char *result, const char *arg, t_data *data);
+int				get_dollar_count(const char *arg, int *i);
+char			*extract_var_name(const char *arg, int *i);
+char			*expand_string(const char *arg, t_data *data);
 char			*ft_substr(char *str,  int start, int end);
 void			show_list_cmd(t_cmd *list);
 void			show_tab(char **tab);
@@ -194,6 +218,8 @@ int 			count_tab(char **tab);
 int				is_builtin(char *cmd);
 // void			execute_builtin(t_data *data, char **args);
 // heredoc
+int				contains_heredoc(t_cmd *cmd);
+char 			*execute_last_heredoc(t_cmd *cmd);
 int 			heredoc_input(char *delimiter);
 char 			*ft_strstr(const char *haystack, const char *needle);
 char			**list_to_args(t_data *data);
@@ -211,7 +237,5 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_re_strjoin(char *s1, char const *s2);
 char	*ft_strcpy(char *dest, char *src);
 char	*ft_strcat(char *dest, char *src);
-char *expand_string(const char *input);
-void	expand_all(t_cmd *cmd, t_data *data);
 
 #endif

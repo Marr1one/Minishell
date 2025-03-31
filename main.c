@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/30 05:46:39 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/31 19:04:01 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,59 +251,66 @@ char	*quoteless_string(char *str)
 	return (new_str);
 }
 
-void	remove_quotes(t_token *list_tkn)
+void	remove_quotes(t_cmd *list_cmd)
 {
-	t_token	*current_tkn;
+	t_cmd	*current_cmd;
+	int	i;
 
-	current_tkn = list_tkn;
-	while (current_tkn)
+	i = 0;\
+	current_cmd = list_cmd;
+	while (current_cmd)
 	{
-		current_tkn->content = quoteless_string(current_tkn->content);
-		current_tkn = current_tkn->next;
-	}
+		i = 0;
+		while (current_cmd->args && current_cmd->args[i])
+		{
+            current_cmd->args[i] = quoteless_string(current_cmd->args[i]);
+			i++;
+		}
+		current_cmd = current_cmd->next;
+    }	
 }
 
-// int main(int argc, char **argv, char **envp)
-// {
-	
-//     (void)argv;
-// 	char	*input;
-// 	t_cmd	*list_cmd;
-// 	t_token *list_tkn;
-// 	t_data	data;
-	
-//     if (argc != 1)
-//         return (printf("Usage : ./minishell\n"));
-// 	ft_memset(&data, 0, sizeof(data));
-//     data.envp = copy_env(envp);
-//     signal(SIGINT, sigint_handler);
-//     signal(SIGQUIT, SIG_IGN);
+char *quoteless_string_cmd(char *str)
+{
+    int len;
 
-//     while (1)
-//     {
-//         input = readline("\033[0;34mMini_\033[0;31mshell$\033[0m ");
-//         if (!input)
-//             break;
-//         add_history(input);
-// 		list_tkn = tokenizer(input, &data);
-// 		if (list_tkn == NULL)
-// 			continue;
-// 		remove_quotes(list_tkn);
-// 		list_cmd = parse_cmd(list_tkn);
-// 		if (list_cmd == NULL)
-//         {
-//             free(input);
-//             continue;
-//         }
-// 		list_cmd = create_args(list_tkn, list_cmd);
-// 		list_cmd = create_files(list_tkn, list_cmd);
-// 		// expand_var_command(list_cmd, data.exit_status, &data);
-// 		expand_all(list_cmd, &data);
-// 		execute_cmds(&data, list_cmd);
-// 		free(input);
-//     }
-//     return (0);
-// }
+    if (!str)
+        return (NULL);
+    len = ft_strlen(str);
+    if (len >= 4 && str[0] == '"' && str[len - 1] == '"' &&
+        str[1] == '\'' && str[len - 2] == '\'')
+    {
+        return (ft_substr(str, 1, len - 1));
+    }
+    if (len >= 2 && ((str[0] == '\'' && str[len - 1] == '\'') ||
+                     (str[0] == '"' && str[len - 1] == '"')))
+    {
+        return (ft_substr(str, 1, len - 1));
+    }
+    return (ft_strdup(str));
+}
+//void remove_quotes_from_cmd(t_cmd *cmd)
+//{
+//    int i;
+//    char *new_arg;
+
+//    i = 0;
+//    while (cmd->args && cmd->args[i])
+//    {
+//        while (1)
+//        {
+//            new_arg = quoteless_string_cmd(cmd->args[i]);
+//            if (ft_strcmp(new_arg, cmd->args[i]) == 0)
+//            {
+//                //free(new_arg);
+//                break;
+//            }
+//            //free(cmd->args[i]);
+//            cmd->args[i] = new_arg;
+//        }
+//        i++;
+//    }
+//}
 
 void initialize_data(t_data *data, char **envp)
 {
@@ -338,20 +345,21 @@ void process_command(char *input, t_data *data)
 	list_tkn = tokenizer(input, data);
 	if (list_tkn == NULL)
 		return ;
-	remove_quotes(list_tkn);
 	list_cmd = parse_cmd(list_tkn);
 	if (list_cmd == NULL)
 		return ;
 	list_cmd = create_args(list_tkn, list_cmd);
 	list_cmd = create_files(list_tkn, list_cmd);
-	// expand_all(list_cmd, data);
-	execute_cmds(data, list_cmd);
+	//show_list_cmd(list_cmd);
+	expand_all(list_cmd, data);
+	remove_quotes(list_cmd);
+    execute_cmds(data, list_cmd);
 }
 
 /* Boucle principale du shell */
 void shell_loop(t_data *data)
 {
-    char *input;
+    char *input;	
 
     while (1)
     {
@@ -364,7 +372,7 @@ void shell_loop(t_data *data)
 		}
         add_history(input);
         process_command(input, data);
-		printf("exit status = %d\n", data->exit_status);
+		//printf("exit status = %d\n", data->exit_status);
         free(input);
     }
 }

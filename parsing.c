@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/09 15:52:22 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/31 16:09:06 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ int	case_redirection(t_data *data)
             }
             if (input_fd != -1)
                 close(input_fd);
-            input_fd = heredoc_input(list->next->content);
             if (input_fd == -1)
             {
                 if (output_fd != -1)
