@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 20:07:22 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/01 12:44:44 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,41 +222,12 @@ t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 	return (list_cmd);
 }
 
-char	*quoteless_string(char *str)
-{
-	int		i;
-	int		j;
-	char	*new_str;
-
-	i = 0;
-	j = 0;
-	while(str[i])
-	{
-		if (str[i] != '"' && str[i] != '\'')
-			j++;
-		i++;
-	}
-	new_str = ft_malloc(sizeof(char) * (j + 1));
-	if (!new_str)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] != '"' && str[i] != '\'')
-			new_str[j++] = str[i];
-		i++;
-	}
-	new_str[j] = '\0';
-	return (new_str);
-}
-
 void	remove_quotes(t_cmd *list_cmd)
 {
 	t_cmd	*current_cmd;
 	int	i;
 
-	i = 0;\
+	i = 0;
 	current_cmd = list_cmd;
 	while (current_cmd)
 	{
@@ -270,47 +241,119 @@ void	remove_quotes(t_cmd *list_cmd)
     }	
 }
 
-char *quoteless_string_cmd(char *str)
+// char *quoteless_string(char *str)
+// {
+//     int     i;
+//     int     j;
+//     char    *new_str;
+//     int     in_dquote;
+//     int     in_squote;
+
+//     i = 0;
+//     j = 0;
+//     in_dquote = 0;
+//     in_squote = 0;
+    
+//     while (str[i])
+//     {
+//         if (str[i] == '"' && !in_squote)
+//             in_dquote = !in_dquote;
+//         else if (str[i] == '\'' && !in_dquote)
+//             in_squote = !in_squote;
+//         else
+//             j++;
+//         i++;
+//     }
+    
+//     new_str = ft_malloc(sizeof(char) * (j + 1));
+//     if (!new_str)
+//         return (NULL);
+    
+//     i = 0;
+//     j = 0;
+//     in_dquote = 0;
+//     in_squote = 0;
+    
+//     while (str[i])
+//     {
+//         if (str[i] == '"' && !in_squote)
+//             in_dquote = !in_dquote;
+//         else if (str[i] == '\'' && !in_dquote)
+//             in_squote = !in_squote;
+//         else
+//             new_str[j++] = str[i];
+//         i++;
+//     }
+    
+//     new_str[j] = '\0';
+//     return (new_str);
+// }
+
+//Calcule la longueur de la chaîne sans les guillemets
+
+int	calculate_length_without_quotes(char *str)
 {
-    int len;
+	int	i;
+	int	j;
+	int	in_dquote;
+	int	in_squote;
 
-    if (!str)
-        return (NULL);
-    len = ft_strlen(str);
-    if (len >= 4 && str[0] == '"' && str[len - 1] == '"' &&
-        str[1] == '\'' && str[len - 2] == '\'')
-    {
-        return (ft_substr(str, 1, len - 1));
-    }
-    if (len >= 2 && ((str[0] == '\'' && str[len - 1] == '\'') ||
-                     (str[0] == '"' && str[len - 1] == '"')))
-    {
-        return (ft_substr(str, 1, len - 1));
-    }
-    return (ft_strdup(str));
+	i = 0;
+	j = 0;
+	in_dquote = 0;
+	in_squote = 0;
+	while (str[i])
+	{
+		if (str[i] == '"' && !in_squote)
+			in_dquote = !in_dquote;
+		else if (str[i] == '\'' && !in_dquote)
+			in_squote = !in_squote;
+		else
+			j++;
+		i++;
+	}
+	return (j);
 }
-//void remove_quotes_from_cmd(t_cmd *cmd)
-//{
-//    int i;
-//    char *new_arg;
 
-//    i = 0;
-//    while (cmd->args && cmd->args[i])
-//    {
-//        while (1)
-//        {
-//            new_arg = quoteless_string_cmd(cmd->args[i]);
-//            if (ft_strcmp(new_arg, cmd->args[i]) == 0)
-//            {
-//                //free(new_arg);
-//                break;
-//            }
-//            //free(cmd->args[i]);
-//            cmd->args[i] = new_arg;
-//        }
-//        i++;
-//    }
-//}
+// Remplit la nouvelle chaîne sans les guillemets
+char	*fill_string_without_quotes(char *new_str, char *str)
+{
+	int	i;
+	int	j;
+	int	in_dquote;
+	int	in_squote;
+
+	i = 0;
+	j = 0;
+	in_dquote = 0;
+	in_squote = 0;
+	while (str[i])
+	{
+		if (str[i] == '"' && !in_squote)
+			in_dquote = !in_dquote;
+		else if (str[i] == '\'' && !in_dquote)
+			in_squote = !in_squote;
+		else
+			new_str[j++] = str[i];
+		i++;
+	}
+	new_str[j] = '\0';
+	return (new_str);
+}
+
+//Fonction principale qui enlève les guillemets d'une chaîne
+char	*quoteless_string(char *str)
+{
+	int		length;
+	char	*new_str;
+
+	length = calculate_length_without_quotes(str);
+	new_str = ft_malloc(sizeof(char) * (length + 1));
+	if (!new_str)
+		return (NULL);
+	new_str = fill_string_without_quotes(new_str, str);
+	return (new_str);
+}
 
 void initialize_data(t_data *data, char **envp)
 {

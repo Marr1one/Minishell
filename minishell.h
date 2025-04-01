@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 20:08:42 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/01 12:45:59 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,9 @@ typedef struct s_data
 	
 }	t_data;
 
+char			*fill_string_without_quotes(char *new_str, char *str);
+int				calculate_length_without_quotes(char *str);
+char 			*quoteless_string(char *str);
 char			*check_env(t_data *data, char *str);
 int				check_variable_in_env(char *var_name, t_data *data);
 void 			handle_heredoc(t_cmd *current_cmd);
