@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 03:12:31 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 03:29:03 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,6 +345,7 @@ void process_command(char *input, t_data *data)
 	list_tkn = tokenizer(input, data);
 	if (list_tkn == NULL)
 		return ;
+	show_list(list_tkn);
 	list_cmd = parse_cmd(list_tkn);
 	if (list_cmd == NULL)
 		return ;

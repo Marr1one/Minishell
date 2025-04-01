@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 03:25:33 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 03:32:38 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ int	case_pipe(char *input, int i)
 	return (count);
 }
 
-t_type case_infile(char *input, int *i)
+t_type case_infile(char *input, int i)
 {
 	int count ;
 
 	count = 0;
-	while (input[*i] == '<')
+	while (input[i] == '<')
 	{
-		(*i)++;
+		(i)++;
 		count++;
 	}
 	if (count == 1)
@@ -58,14 +58,14 @@ t_type case_infile(char *input, int *i)
 	return (UNKNOWN);
 }
 
-t_type case_outfile(char *input, int *i)
+t_type case_outfile(char *input, int i)
 {
 	int	count;
 
 	count = 0;
-	while (input[*i] == '>')
+	while (input[i] == '>')
 	{
-		(*i)++;
+		(i)++;
 		count++;
 	}
 	if (count == 1)
@@ -75,9 +75,9 @@ t_type case_outfile(char *input, int *i)
 	return (UNKNOWN);
 }
 
-t_type	case_redirect(char *input, int	*i)
+t_type	case_redirect(char *input, int	i)
 {
-	if (input[*i] == '<')
+	if (input[i] == '<')
 		return (case_infile(input, i));
 	else
 		return (case_outfile(input, i));
@@ -105,18 +105,10 @@ t_token *case_redir(char *input, int *i, t_data *data, t_token *list)
 
 	char save_redirect;
 	save_redirect = input[*i];
-	redirect = case_redirect(input, i);
-	// if (redirect == UNKNOWN)
-    // {
-    //     printf("erreur de redirect\n");
-    //     char current_char = input[*i];
-    //     while (input[*i] && (input[*i] == current_char))
-    //         (*i)++;
-    //     return (NULL);
-    // }
+	redirect = case_redirect(input, *i);
 	if (redirect == UNKNOWN)
 	{
-		printf("minishell: syntax error near unexpected token `%c'\n", save_redirect);
+		printf("minishell: syntax error near unexpected token `%c%c'\n", save_redirect, save_redirect);
 		return (NULL);
 	}
 	if (input[*i] == '<')
