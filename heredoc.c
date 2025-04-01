@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 05:13:51 by braugust          #+#    #+#             */
-/*   Updated: 2025/03/31 16:12:25 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 02:45:02 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ char *heredoc_loop(char *delimiter, char *prompt)
 {
     char *content;
     char *line;
-    char *tmp;
 
     content = ft_strdup("");
     while ((line = readline(prompt)) != NULL)
@@ -79,10 +78,8 @@ char *heredoc_loop(char *delimiter, char *prompt)
             free(line);
             break;
         }
-        tmp = content;
         content = ft_strjoin(content, line);
         //free(tmp);
-        tmp = content;
         content = ft_strjoin(content, "\n");
         //free(tmp);
         free(line);

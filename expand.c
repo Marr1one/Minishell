@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 19:12:03 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 03:02:30 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ int check_variable_in_env(char *var_name, t_data *data)
     char *value;
 
     value = check_env(data, var_name);
-	printf("value = {%s}\n", value);
     if (value == NULL)
         return (0);
     return (1);

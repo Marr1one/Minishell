@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 19:39:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 19:15:45 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 02:51:07 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ int	index_match(t_data *data, char *str)
 
 char *check_env(t_data *data, char *str)
 {
-    printf("dans check env\n");
     int i = 0;
     int len;
     
@@ -138,9 +137,7 @@ char *check_env(t_data *data, char *str)
     {
         // Comparer directement avec la variable d'environnement jusqu'au =
         if (ft_strncmp(data->envp[i], search_str, len) == 0 && data->envp[i][len] == '=')
-        {
             return take_after(data->envp[i], '=');
-        }
         i++;
     }
     return (NULL);
