@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 05:13:51 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/01 17:55:41 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/01 19:25:01 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ t_file *add_or_replace_heredoc(t_file *files, t_token *heredoc_token)
         last->next = new_node;
     return (files);
 }
-
 
 char *process_heredoc(t_file *file, int current_index, int last_index)
 {

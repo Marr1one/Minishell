@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 20:13:58 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/01 19:35:58 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,17 +271,19 @@ void	expand_all(t_cmd *cmd, t_data *data)
 		while (current_cmd->args && current_cmd->args[++i])
 		{
 			expanded = expand_string(current_cmd->args[i], data);
-			//free(current_cmd->args[i]);
 			current_cmd->args[i] = expanded;
 		}
 		current_file = current_cmd->files;
 		while (current_file)
 		{
-			expanded = expand_string(current_file->path, data);
-			//free(current_file->path);
-			current_file->path = expanded;
+			if (current_file->mode != HEREDOC)
+			{
+				expanded = expand_string(current_file->path, data);
+				current_file->path = expanded;
+			}
 			current_file = current_file->next;
 		}
 		current_cmd = current_cmd->next;
 	}
 }
+
