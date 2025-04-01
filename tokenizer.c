@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 15:33:31 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 16:26:46 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,12 +218,12 @@ int validate_input(const char *input)
 		else if (quote == 0)
 		{
 			if (input[i] == '\\' || input[i] == ';')
-				return (fprintf(stderr, "Erreur de parsing : caractère spécial\n"), 0);
+				return (printf("minishell :special character '%c' detected\n", input[i]), 0);
 		}
 		i++;
 	}
 	if (quote != 0)
-		return (fprintf(stderr, "Erreur de parsing : quote non fermée\n"), 0);
+		return (printf("minishell :special character '%c' detected\n", input[i]), 0);
 	return (1);
 }
 

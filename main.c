@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 15:26:37 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 15:56:45 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,33 +222,68 @@ t_cmd *create_files(t_token *list_tkn, t_cmd *list_cmd)
 	return (list_cmd);
 }
 
-char	*quoteless_string(char *str)
+int    calculate_length_without_quotes(char *str)
 {
-	int		i;
-	int		j;
-	char	*new_str;
+    int    i;
+    int    j;
+    int    in_dquote;
+    int    in_squote;
 
-	i = 0;
-	j = 0;
-	while(str[i])
-	{
-		if (str[i] != '"' && str[i] != '\'')
-			j++;
-		i++;
-	}
-	new_str = ft_malloc(sizeof(char) * (j + 1));
-	if (!new_str)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] != '"' && str[i] != '\'')
-			new_str[j++] = str[i];
-		i++;
-	}
-	new_str[j] = '\0';
-	return (new_str);
+    i = 0;
+    j = 0;
+    in_dquote = 0;
+    in_squote = 0;
+    while (str[i])
+    {
+        if (str[i] == '"' && !in_squote)
+            in_dquote = !in_dquote;
+        else if (str[i] == '\'' && !in_dquote)
+            in_squote = !in_squote;
+        else
+            j++;
+        i++;
+    }
+    return (j);
+}
+
+// Remplit la nouvelle chaîne sans les guillemets
+char    *fill_string_without_quotes(char *new_str, char *str)
+{
+    int    i;
+    int    j;
+    int    in_dquote;
+    int    in_squote;
+
+    i = 0;
+    j = 0;
+    in_dquote = 0;
+    in_squote = 0;
+    while (str[i])
+    {
+        if (str[i] == '"' && !in_squote)
+            in_dquote = !in_dquote;
+        else if (str[i] == '\'' && !in_dquote)
+            in_squote = !in_squote;
+        else
+            new_str[j++] = str[i];
+        i++;
+    }
+    new_str[j] = '\0';
+    return (new_str);
+}
+
+//Fonction principale qui enlève les guillemets d'une chaîne
+char    *quoteless_string(char *str)
+{
+    int        length;
+    char    *new_str;
+
+    length = calculate_length_without_quotes(str);
+    new_str = ft_malloc(sizeof(char) * (length + 1));
+    if (!new_str)
+        return (NULL);
+    new_str = fill_string_without_quotes(new_str, str);
+    return (new_str);
 }
 
 void	remove_quotes(t_cmd *list_cmd)
@@ -345,13 +380,11 @@ void process_command(char *input, t_data *data)
 	list_tkn = tokenizer(input, data);
 	if (list_tkn == NULL)
 		return ;
-	show_list(list_tkn);
 	list_cmd = parse_cmd(list_tkn);
 	if (list_cmd == NULL)
 		return ;
 	list_cmd = create_args(list_tkn, list_cmd);
 	list_cmd = create_files(list_tkn, list_cmd);
-	//show_list_cmd(list_cmd);
 	expand_all(list_cmd, data);
 	remove_quotes(list_cmd);
     execute_cmds(data, list_cmd);
@@ -373,7 +406,6 @@ void shell_loop(t_data *data)
 		}
         add_history(input);
         process_command(input, data);
-		printf("exit status = %d\n", data->exit_status);
         free(input);
     }
 }
