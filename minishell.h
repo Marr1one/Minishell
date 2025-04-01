@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 12:45:59 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/01 17:54:26 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,6 @@ int				is_builtin(char *cmd);
 // heredoc
 int				contains_heredoc(t_cmd *cmd);
 char 			*execute_last_heredoc(t_cmd *cmd);
-int 			heredoc_input(char *delimiter);
 char 			*ft_strstr(const char *haystack, const char *needle);
 char			**list_to_args(t_data *data);
 char			**cut_last(char **tab, int	i);
@@ -234,7 +233,10 @@ int				ft_export(t_cmd *cmd, t_data *data);
 char			**add_export(t_data *data, char *str);
 void			show_tab_export(char **tab);
 int				check_change(t_data *data, char *str);
-
+t_file *find_last_heredoc(t_file *files, int *last_index);
+char 			*process_heredoc(t_file *file, int current_index, int last_index);
+char 			*execute_heredocs(t_file *files, int last_index);
+char		 	*execute_last_heredoc(t_cmd *cmd);
 int 	validate_input(const char *input);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_re_strjoin(char *s1, char const *s2);
