@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 18:56:22 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 17:20:29 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ char			*ft_substr_qte(char *str,  int start, int end);
 char			**ft_unset(t_data *data, int	save);
 void			check_unset(t_data *data, char	*str);
 int				is_alphanum(char c);
+void 			reset_signals_for_child(void);
 
 
 // void			parsing(char **envp, t_data *data);

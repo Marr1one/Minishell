@@ -1,9 +1,2 @@
-
-minishell echo $VARINEXISTENTE
-^C
-
-poser la question pour cat | cat | cat | ls
-
-question;
-	
+gerer 	bash-5.1$ cat << $USER il faut simplement pas expand un fichier qui suit un heredoc!
 

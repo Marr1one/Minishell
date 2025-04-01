@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 03:02:30 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 18:09:03 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,10 @@ int handle_dollar(char *result, const char *arg, t_idx *idx, t_data *data)
         {
 			error = append_var_value(result, &idx->j, var_name, data);
             if (error)
-                return (1);
+            	return (1);
         }
+		else
+			result[idx->j++] = '$';
     }
 	return (0);
 }
@@ -181,9 +183,7 @@ int	build_final_string(char *result, const char *arg, t_data *data)
 		{
             error = handle_dollar(result, arg, &idx, data);
 			if (error)
-			{
 				return (1);
-			}
 		}
         else
             result[idx.j++] = arg[idx.i++];
@@ -247,10 +247,28 @@ char	*expand_string(const char *arg, t_data *data)
 		return (NULL);
 	error = build_final_string(result, arg, data);
 	if (error)
-	{
 		return (NULL);
-	}
+		
 	return (result);
+}
+
+char	**create_new_args(char **args, int idx)
+{
+	int		i;
+	int		j;
+	char **res;
+
+	i = 0;
+	j = 0;
+	res = ft_malloc(sizeof(char) * count_args(args));
+	while (args[i])
+	{
+		if (i != idx)
+			res[j++] = args[i];
+		i++;
+	}
+	res[j] = NULL;
+	return (res);
 }
 
 void	expand_all(t_cmd *cmd, t_data *data)
@@ -260,21 +278,30 @@ void	expand_all(t_cmd *cmd, t_data *data)
 	char	*expanded;
 	t_file	*current_file;
 
-	current_cmd = cmd;
+	current_cmd = cmd; 
 	while (current_cmd)
 	{
 		i = -1;
 		while (current_cmd->args && current_cmd->args[++i])
 		{
-			expanded = expand_string(current_cmd->args[i], data);
-			//free(current_cmd->args[i]);
-			current_cmd->args[i] = expanded;
+			if (ft_strlcmp(current_cmd->args[i], "$?") == 0)
+				expanded = ft_itoa(data->exit_status);
+			else
+			{
+				expanded = expand_string(current_cmd->args[i], data);
+				if (expanded == NULL)
+					current_cmd->args = create_new_args(current_cmd->args, i);
+				else 
+					current_cmd->args[i] = expanded;
+			}
 		}
 		current_file = current_cmd->files;
 		while (current_file)
 		{
-			expanded = expand_string(current_file->path, data);
-			//free(current_file->path);
+			if (ft_strlcmp(current_cmd->args[i], "$?") == 0)
+				expanded = ft_itoa(data->exit_status);
+			else 
+				expanded = expand_string(current_file->path, data);
 			current_file->path = expanded;
 			current_file = current_file->next;
 		}

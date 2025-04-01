@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:33:34 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 15:41:26 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 17:19:35 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,10 @@ void	sigint_handler(int signum)
 		rl_replace_line("", 0);
 		rl_redisplay();	
 	}
+}
+
+void reset_signals_for_child(void)
+{
+    signal(SIGINT, SIG_DFL);  // Comportement par défaut pour SIGINT
+    signal(SIGQUIT, SIG_DFL); // Comportement par défaut pour SIGQUIT
 }
