@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 03:32:38 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/01 15:33:31 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,9 @@ t_token *case_redir(char *input, int *i, t_data *data, t_token *list)
 	char save_redirect;
 	save_redirect = input[*i];
 	redirect = case_redirect(input, *i);
-	if (redirect == UNKNOWN)
+	if (data->expect == FICHIER)
 	{
-		printf("minishell: syntax error near unexpected token `%c%c'\n", save_redirect, save_redirect);
+		printf("minishell: syntax error near unexpected token `%c'\n",save_redirect);
 		return (NULL);
 	}
 	if (input[*i] == '<')
