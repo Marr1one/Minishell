@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 18:13:38 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/02 18:18:48 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,10 +383,10 @@ void process_command(char *input, t_data *data)
 	list_cmd = parse_cmd(list_tkn);
 	if (list_cmd == NULL)
 		return ;
-	remove_quotes(list_cmd);
 	list_cmd = create_args(list_tkn, list_cmd);
 	list_cmd = create_files(list_tkn, list_cmd);
 	expand_all(list_cmd, data);
+	remove_quotes(list_cmd);
 	//show_list_cmd(list_cmd);
     execute_cmds(data, list_cmd);
 }

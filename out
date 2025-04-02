@@ -1,0 +1,29 @@
+total 252
+-rw-r--r-- 1 braugust 2024_paris   1527 Apr  2 15:54 add_slash.c
+-rw-r--r-- 1 braugust 2024_paris      0 Apr  2 16:06 bs
+drwxr-xr-x 2 braugust 2024_paris     99 Apr  2 15:54 built_in
+-rw-r--r-- 1 braugust 2024_paris   3329 Apr  2 15:54 chaining.c
+-rw-r--r-- 1 braugust 2024_paris   6834 Apr  2 15:54 comment.c
+-rw-r--r-- 1 braugust 2024_paris   2909 Apr  2 15:54 env_var.c
+-rw-r--r-- 1 braugust 2024_paris   2258 Apr  2 15:54 exec.c
+-rw-r--r-- 1 braugust 2024_paris  11867 Apr  2 16:45 execute.c
+-rw-r--r-- 1 braugust 2024_paris   6564 Apr  2 15:56 expand.c
+-rw-r--r-- 1 braugust 2024_paris   2963 Apr  2 15:54 ft_show.c
+drwxr-xr-x 2 braugust 2024_paris     25 Apr  2 15:54 garbage_collector
+-rw-r--r-- 1 braugust 2024_paris   6153 Apr  2 16:53 heredoc.c
+-rw-r--r-- 1 braugust 2024_paris      1 Apr  2 15:54 lesgars
+-rw-r--r-- 1 braugust 2024_paris      0 Apr  2 16:06 ls
+-rw-r--r-- 1 braugust 2024_paris   9138 Apr  2 15:54 main.c
+-rw-r--r-- 1 braugust 2024_paris    545 Apr  2 15:54 Makefile
+-rwxr-xr-x 1 braugust 2024_paris 119248 Apr  2 16:54 minishell
+-rw-r--r-- 1 braugust 2024_paris   7633 Apr  2 16:46 minishell.h
+-rw-r--r-- 1 braugust 2024_paris      1 Apr  2 15:54 nouvofichier
+drwxr-xr-x 5 braugust 2024_paris    294 Apr  2 16:54 obj
+-rw-r--r-- 1 braugust 2024_paris      0 Apr  2 16:59 out
+-rw-r--r-- 1 braugust 2024_paris  13696 Apr  2 15:54 parsing.c
+-rw-r--r-- 1 braugust 2024_paris   4416 Apr  2 15:54 pipex.c
+-rw-r--r-- 1 braugust 2024_paris   1546 Apr  2 16:44 signals.c
+-rw-r--r-- 1 braugust 2024_paris    335 Apr  2 15:54 supp.supp
+-rw-r--r-- 1 braugust 2024_paris   5974 Apr  2 16:12 tokenizer.c
+-rw-r--r-- 1 braugust 2024_paris     93 Apr  2 15:54 truc qui manque
+drwxr-xr-x 2 braugust 2024_paris     98 Apr  2 15:54 utils

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 18:09:03 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/02 15:56:33 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,7 +298,12 @@ void	expand_all(t_cmd *cmd, t_data *data)
 		current_file = current_cmd->files;
 		while (current_file)
 		{
-			if (ft_strlcmp(current_cmd->args[i], "$?") == 0)
+			if (current_file->mode != HEREDOC)
+			{
+				expanded = expand_string(current_file->path, data);
+				current_file->path = expanded;
+			}
+			else if (ft_strlcmp(current_cmd->args[i], "$?") == 0)
 				expanded = ft_itoa(data->exit_status);
 			else 
 				expanded = expand_string(current_file->path, data);

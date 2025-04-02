@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 17:20:29 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:11:40 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_cmd
 {
 	char **args;
 	t_file *files;	
+	char *heredoc_content;
 	struct	s_cmd	*next;
 }	t_cmd;
 
@@ -95,7 +96,6 @@ typedef struct s_data
 	int		in_quote;
 	char	**envp;
 	char 	**path;
-	int		pipe[2];
 	char	*input;
 	char	*command_path;
 	char	**args;
@@ -108,6 +108,14 @@ typedef struct s_data
 	
 }	t_data;
 
+
+void	child_signal_handler(int signum);
+void	setup_child_signals(t_data *data);
+void 	parent_signal_handler(int sig) ;
+void 	setup_parent_signal_handlers(void);
+void	sigint_handler(int signum);
+void child_signal_handler(int sig);
+void reset_signals_for_child(void);
 char			*check_env(t_data *data, char *str);
 int				check_variable_in_env(char *var_name, t_data *data);
 void 			handle_heredoc(t_cmd *current_cmd);
@@ -140,7 +148,7 @@ t_token			*tokenizer(char *input, t_data *data);
 const char		*get_token_type_name(t_type type);
 // void			execute_cmds(t_cmd *cmds, char **paths);
 void 			execute_cmds(t_data *data, t_cmd *cmds);
-int 			execute_builtin(t_cmd *cmd, t_data *data);
+// int 			execute_builtin(t_cmd *cmd, t_data *data);
 int				show_env(char **tab);
 char			*ft_substr_qte(char *str,  int start, int end);
 char			**ft_unset(t_data *data, int	save);
@@ -161,7 +169,7 @@ char			*ft_join(char *str, char *add);
 // int 	handle_env(t_data *data, char *str);
 void			ft_clean_input(t_data *data, char c);
 void 			ft_echo(t_cmd *current_cmd);
-void			check_exit_status(t_data *data);
+// void			check_exit_status(t_data *data);
 char			*get_path_env(char **envp);
 t_malloc		**get_gc(void);
 char			**add_slash_all(char **tab);
@@ -183,9 +191,9 @@ void			*ft_malloc(size_t size);
 int				ft_cd(t_cmd *cmd);
 int				ft_strcmp(char *s1, char *s2);
 int				ft_strlcmp(char *s1, char *s2);
-int				return_exit_status(t_data *data);
+// int				return_exit_status(t_data *data);
 void			sigint_handler(int signum);
-int				check_unclosed(t_data *data);
+// int				check_unclosed(t_data *data);
 void			rm_qts_nodes(t_data *data);
 int				is_alpha(char c);
 // t_token	*findlast(t_token	*list);
@@ -194,7 +202,7 @@ t_token			*add_chained_list(char **tab);
 void			show_list(t_token *list);
 char			*ft_joinchar(char *str, char c, int x);
 char			*ft_strdup(char	*str);
-int				check_dollar(t_data *data);
+// int				check_dollar(t_data *data);
 int				check_export_compatibility(char *str);
 int				get_nbr_node(t_token *list);
 int				ft_atoi(char	*str);
@@ -202,8 +210,8 @@ int				count_word2(char *str);
 int				count_args(char **args);
 void			destroy_node_quotes(t_data *data);
 char			**skip_quotes(t_data *data);
-void			check_exit_status(t_data *data);
-int				return_exit_status(t_data *data);
+// void			check_exit_status(t_data *data);
+// int				return_exit_status(t_data *data);
 void			ft_exit(t_cmd *cmd, t_data *data);
 int				is_numeric(char	*str);
 void			free_all(t_malloc **gc);
@@ -212,15 +220,15 @@ char			**custom_split(char *str, char c);
 //pipex
 char 			*ft_strchr(const char *s, int c);
 char 			*get_cmd_path(const char *cmd, char **envp);
-void 			try_dup2(int oldfd, int newfd);
-void 			execute_pipex(t_data *data);
-void 			execute_simple_command(t_data *data);
 int 			count_tab(char **tab);
 int				is_builtin(char *cmd);
 // void			execute_builtin(t_data *data, char **args);
 // heredoc
+char *execute_heredocs(t_file *files, int last_index);
+char *process_heredoc(t_file *file, int current_index, int last_index);
 int				contains_heredoc(t_cmd *cmd);
 char 			*execute_last_heredoc(t_cmd *cmd);
+t_file 			*find_last_heredoc(t_file *files, int *last_index);
 int 			heredoc_input(char *delimiter);
 char 			*ft_strstr(const char *haystack, const char *needle);
 char			**list_to_args(t_data *data);

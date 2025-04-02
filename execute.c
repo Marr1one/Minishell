@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/01 17:29:58 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:13:29 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,11 +374,30 @@ void	execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_
 {
     char	**paths;
 
+	setup_child_signals(data);
     if (current_cmd->next)
     {
         dup2(fd_pipe[1], STDOUT_FILENO);
         close(fd_pipe[0]);
         close(fd_pipe[1]);
+    }
+	if (current_cmd->heredoc_content != NULL)
+    {
+        int heredoc_pipe[2];
+        
+        if (pipe(heredoc_pipe) == -1)
+        {
+            perror("pipe");
+            exit(1);
+        }
+        
+        // Écrire le contenu dans le pipe
+        write(heredoc_pipe[1], current_cmd->heredoc_content, ft_strlen(current_cmd->heredoc_content));
+        close(heredoc_pipe[1]);
+        
+        // Rediriger STDIN vers le pipe
+        dup2(heredoc_pipe[0], STDIN_FILENO);
+        close(heredoc_pipe[0]);
     }
     if (fd_in != 0)
     {
@@ -435,6 +454,15 @@ void	execute_cmds(t_data *data, t_cmd *cmds)
 	pid_t	pid;
 	t_cmd	*current_cmd;
 
+	current_cmd = cmds;
+    while (current_cmd)
+    {
+        if (contains_heredoc(current_cmd))
+        {
+            current_cmd->heredoc_content = execute_last_heredoc(current_cmd);
+        }
+        current_cmd = current_cmd->next;
+    }
 	fd_in = 0;
 	current_cmd = cmds;
 	while (current_cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 05:13:51 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/01 02:45:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:07:47 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void handle_heredoc(t_cmd *current_cmd)
     int heredoc_pipe[2];
     char *heredoc_content;
 
-    if (contains_heredoc(current_cmd)) {
+    if (contains_heredoc(current_cmd))
+    {
         heredoc_content = execute_last_heredoc(current_cmd);
         if (heredoc_content != NULL) {
             if (pipe(heredoc_pipe) == -1) {
@@ -49,18 +50,25 @@ int contains_heredoc(t_cmd *cmd)
 }
 
 // Renvoie le dernier heredoc trouvé dans la liste des fichiers.
-t_file *find_last_heredoc(t_file *files)
+t_file *find_last_heredoc(t_file *files, int *last_index)
 {
     t_file *current;
     t_file *last;
+    int current_index;
 
     current = files;
     last = NULL;
+    current_index = 0;
+    *last_index = -1;
     while (current)
     {
         if (current->mode == HEREDOC)
+        {
             last = current;
+            *last_index = current_index;
+        }
         current = current->next;
+        current_index++;
     }
     return (last);
 }
@@ -69,19 +77,20 @@ char *heredoc_loop(char *delimiter, char *prompt)
 {
     char *content;
     char *line;
+    char *tmp;
 
     content = ft_strdup("");
     while ((line = readline(prompt)) != NULL)
     {
-        if (ft_strcmp(line, delimiter) == 0)
+        if (ft_strlcmp(line, delimiter) == 0)
         {
             free(line);
             break;
         }
+        tmp = content;
         content = ft_strjoin(content, line);
-        //free(tmp);
+        tmp = content;
         content = ft_strjoin(content, "\n");
-        //free(tmp);
         free(line);
     }
     return (content);
@@ -96,16 +105,18 @@ char *read_heredoc_from_tty(char *delimiter, char *prompt)
     tty_fd = open("/dev/tty", O_RDONLY);
     if (tty_fd == -1)
     {
-        perror("open /dev/tty");
+        close(tty_fd);
+        printf("open /dev/tty");
         return (ft_strdup(""));
     }
     std_backup = dup(STDIN_FILENO);
+    close(std_backup);
     dup2(tty_fd, STDIN_FILENO);
     // printf("> (terminer avec '%s')\n", delimiter);
+    close(tty_fd);
     content = heredoc_loop(delimiter, prompt);
     dup2(std_backup, STDIN_FILENO);
     close(std_backup);
-    close(tty_fd);
     return (content);
 }
 // Cherche récursivement un heredoc existant dans la liste.
@@ -167,15 +178,45 @@ t_file *add_or_replace_heredoc(t_file *files, t_token *heredoc_token)
     return (files);
 }
 
+char *process_heredoc(t_file *file, int current_index, int last_index)
+{
+    char *content;
+
+    content = read_heredoc_from_tty(file->path, "> ");
+    if (current_index != last_index)
+        content = NULL;
+    return (content);
+}
+char *execute_heredocs(t_file *files, int last_index)
+{
+    t_file *current;
+    char *content;
+    int current_index;
+
+    current = files;
+    current_index = 0;
+    content = NULL;
+    while (current)
+    {
+        if (current->mode == HEREDOC)
+            content = process_heredoc(current, current_index, last_index);
+        current = current->next;
+        current_index++;
+    }
+    return (content);
+}
+
 // Exécute le heredoc en récupérant le contenu du dernier heredoc de la commande.
+
 char *execute_last_heredoc(t_cmd *cmd)
 {
     t_file *last;
+    int last_index;
     char *content;
 
-    last = find_last_heredoc(cmd->files);
+    last = find_last_heredoc(cmd->files, &last_index);
     if (last == NULL)
         return (NULL);
-    content = read_heredoc_from_tty(last->path, "> ");
+    content = execute_heredocs(cmd->files, last_index);
     return (content);
 }
