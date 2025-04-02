@@ -3,48 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/30 07:10:36 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/02 22:47:28 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// void ft_cd(t_data *data)
-// {
-// 	char	*old_pwd;
-// 	char	current_pwd[1024];
-
-// 	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
-// 	{
-// 		perror("getcwd");
-// 	}
-// 	old_pwd = getenv("OLDPWD");
-// 	//printf("old_pwd = %s\n", old_pwd);
-// 	if (data->args[1] && ft_strlcmp(data->args[1], "-") == 0)
-// 	{
-// 		if (!old_pwd)
-// 		{
-// 			printf("minishell: cd: OLDPWD not set\n");
-// 			data->exit_status = 1;
-// 			return ;
-// 		}
-// 		printf("%s\n", old_pwd);
-// 		if (chdir(old_pwd) != 0)
-// 			perror("cd");
-// 		data->exit_status = 0;
-// 		return;
-// 	}
-// 	else if (data->args[1] && chdir(data->args[1]) != 0)
-// 	{
-// 		data->exit_status = 1;
-// 		perror("cd");
-// 	}
-// 	else
-// 		data->exit_status = 0;
-// }
 
 int	is_numeric(char	*str)
 {
@@ -62,101 +28,6 @@ int	is_numeric(char	*str)
 	return (1);
 }
 
-
-
-
-// char	*ft_strdupenv(char	*str, int start, int	i)
-// {
-// 	int		k;
-// 	char	*dup;
-
-// 	k = 0;
-// 	//printf("str[start] = %c, et str[i] (fin) = %c\n", str[start], str[i]);
-// 	dup = ft_malloc(sizeof(char) * (i - start) + 1);
-// 	if (!dup)
-//     	return (NULL);
-// 	while (start < i)
-// 	{
-// 		dup[k] = str[start];
-// 		k++;
-// 		start++;
-// 	}
-// 	dup[k] = '\0';
-// 	return (dup);
-// }
-
-// int	fill_export(t_env *var,char	*str)
-// {
-// 	int		i;
-// 	int		save;
-// 	int		quote;
-	
-// 	i = 0;
-// 	quote = 0;
-// 	while (is_alpha(str[i]) == 0)
-// 		i++;
-// 	if (str[i] == '=')
-// 	{
-// 		var->name = ft_strdupenv(str, 0, i);
-// 		i++;
-// 		save = i;
-// 	}
-// 	else 
-// 		return (1);
-// 	if (str[save] == '"')
-// 		quote = 1;
-// 	i++;
-// 	while (is_alpha(str[i]) == 0)
-// 		i++;
-// 	if (str[i] == '\0')
-// 	{
-// 		printf("in!\n");
-// 		var->value = ft_strdupenv(str, save, i);
-// 		return (0);
-// 	}
-// 	else if ((quote == 1 && str[i] == '"'))
-// 	{
-// 		printf("in guillemet!\n");
-// 		var->value = ft_strdupenv(str, save + 1, i);
-// 		return (0);
-// 	}
-// 	else 
-// 		return (1);
-// }
-
-// void	add_node_queue(t_env	*list)
-// {
-// 	t_env	*new_node;
-	
-// 	while(list->next != NULL)
-// 		list = list->next;
-// 	new_node = ft_malloc(sizeof(t_env));
-// 	if (!new_node)
-// 		return;
-// 	new_node->name = NULL;
-// 	new_node->next = NULL;
-// 	new_node->value = NULL;
-// }
-
-// char	*take_before(char	*str)
-// {
-// 	int	i;
-// 	char	*new_str;
-
-// 	i = 0;
-// 	while (str[i] && str[i] != '=')
-// 		i++;
-// 	new_str = ft_malloc(sizeof(char) * i + 1);
-// 	i = 0;
-// 	while (str[i] && str[i] != '=')
-// 	{
-// 		new_str[i] = str[i];
-// 		i++;
-// 	}
-// 	new_str[i] = '\0';
-// 	return (new_str);
-// }
-
 int	check_change(t_data *data, char *str)
 {
 	char 	**env;
@@ -165,7 +36,7 @@ int	check_change(t_data *data, char *str)
 	int		found;
 	char	*name;
 
-	
+		
 	name = take_before(str, '=');
 	len = ft_strlen(name) + 1;
 	env = data->envp;
@@ -228,11 +99,6 @@ char	**ft_unset(t_data *data, int save)
 		i++;
 	}
 	new_env[j] = NULL;
-	// while (data->envp[i])	
-		// free(data->envp[i++]);
-	// free(data->envp);
-	// printf("nouvelle env ;\n");
-	// show_tab(new_env);
 	return (new_env);
 }
 
@@ -265,15 +131,13 @@ void	check_unset(t_data *data, char	*str)
 {
 	int		i;
 	char	*join_eg;
-	
-	
+
 	i = 0;
 	join_eg = ft_joinunset(str);
 	while (data->envp[i])
 	{
 		if (ft_strncmp(data->envp[i], join_eg, ft_strlen(join_eg)) == 0)
 		{
-			// printf("FOUNDED");
 			data->envp = ft_unset(data, i);
 			break;
 		}
@@ -290,51 +154,4 @@ int	count_args(char **args)
 	while (args[i])
 		i++;
 	return (i);
-}
-
-
-
-//la on verifie le premier argument, si cest parmis un builtin on lance la fonction adequates.
-int	check_builtin(t_data *data)
-{
-	(void)data;
-// 	// if (data->list && (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0))
-// 	// {
-// 	// 	//printf("dans mon pwd a moi\n");
-// 	// 	destroy_node_quotes(data); //detruit les noeuds ou ya juste des guillemets ; pwd "" devient pwd.
-// 	// 	// ft_pwd(data);
-// 	// 	return (1);
-// 	// }
-// 	// if (data->list && (ft_strlcmp(data->list->content, "unset") == 0 ||ft_strlcmp(data->list->content, "\"unset\"") == 0))
-// 	// {
-// 	// 	data->list = data->list->next;
-// 	// 	check_unset(data, data->list->content);	
-// 	// 	return (1);
-// 	// }
-// 	// if (data->list && (ft_strlcmp(data->list->content, "exit") == 0 ||ft_strlcmp(data->list->content, "\"exit\"") == 0))
-// 	// {
-// 	// 	ft_exit(data);
-// 	// 	return (1);
-// 	// }
-// 	// if (data->list && (ft_strlcmp(data->list->content, "echo") == 0 ||ft_strlcmp(data->list->content, "\"echo\"") == 0))
-// 	// {
-// 	// 	ft_echo(*data);
-// 	// 	return (1);
-// 	// }
-// 	// if (data->list && (ft_strlcmp(data->list->content, "cd") == 0 ||ft_strlcmp(data->list->content, "\"cd\"") == 0))
-// 	// {
-// 	// 	ft_cd(data);
-// 	// 	return (1);
-// 	// }
-// 	// if (data->list && (ft_strlcmp(data->args[0], "env") == 0 ||ft_strlcmp(data->args[0], "\"env\"") == 0))
-// 	// {
-// 	// 	show_tab(data->envp);
-// 	// 	return (1);
-// 	// }
-// 	//if (data->list && (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0))
-// 	//{
-// 	//	export(data);
-// 	//	return (1);
-// 	//}
-	return (0);
 }

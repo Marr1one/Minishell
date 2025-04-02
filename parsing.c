@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:16:21 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 16:09:06 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/02 22:51:39 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -582,72 +582,3 @@ void	check_redirect(t_data *data)
 
 //|| (input[0] == '.' && input[1] == '/'))
 
-void	 parsing(char **envp, t_data *data)
-{
-	pid_t	pid;
-	int		status;
-	
-	if (check_empty(*data) == 1) // cas ou on appuie juste sur entree
-		return ;
-	if (check_builtin(data) != 0) //la on verifie si ya on est dans le cas dun built in
-		return;
-	if (data->list->content[0] == '/') //ce cas la est pas demande dans le sujet, donc on pourra enlever
-	//je pense mais pour linstant je le garde au cas ou mais tu peux passer
-	{
-		//REVOIR lES EXITS STATUS DE /bin/ls/file
-		if (access(data->list->content, F_OK) != 0)
-		{
-			data->exit_status = 127;
-            printf("minishell: %s: No such file or directory\n", data->list->content);
-            return;
-        }
-        if (access(data->list->content, X_OK) != 0)
-        {
-			data->exit_status = 126;
-            printf("minishell: %s: Permission denied\n", data->list->content);
-            return;
-        }
-		pid = fork();
-		if (pid == 0)
-		{
-			execve(data->list->content, data->args, envp);
-			perror("execve");
-			//data->exit_status = 127;
-			//check_exit_status(data);
-			exit(127);
-		}
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status))
-        {
-			printf("in signaled !\n");
-            data->exit_status = 128 + WTERMSIG(status);
-        }
-		if (WIFEXITED(status))
-		{
-			printf("in wifexited !\n");
-			data->exit_status = WEXITSTATUS(status);
-			//check_exit_status(data);
-		}
-		else
-		{
-			printf("in else case of sign\n");
-        	data->exit_status = 128;
-		}
-		return;
-	}
-	data->path = ft_split(get_path_env(envp), ':');//a partir de la cest comme pipex finalement
-	//printf("data.paths apres split\n");
-	//show_tab(data->path);
-	data->path = add_slash_all(data->path);
-	
-	if (test_commands(data) == 0)// cas ou on trouve la commande avec access
-	{
-		exec_command(data); //execute la commande.
-		return;
-	}
-	else //cas ou on trouve pas
-	{
-		data->exit_status = 127;
-		printf("minishell: %s: command not found\n", data->list->content);
-	}
-}

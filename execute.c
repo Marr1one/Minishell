@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/02 17:13:29 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/03 00:03:47 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,7 +285,7 @@ int	handle_file_redirections(t_cmd *current_cmd)
     current_file = current_cmd->files;
     while (current_file)
     {
-		 if (current_file->mode == HEREDOC)
+		if (current_file->mode == HEREDOC)
         {
             current_file = current_file->next;
             continue;
@@ -293,7 +293,7 @@ int	handle_file_redirections(t_cmd *current_cmd)
         fd = open_file(current_file->path, current_file->mode);
         if (fd == -1)
         {
-            perror("open");
+            printf("open");
             return (1);
         }
 
@@ -319,7 +319,7 @@ void	handle_single_builtin(t_data *data, t_cmd *current_cmd)
 
     if (handle_file_redirections(current_cmd) == 0)
 	{
-		 if (ft_strcmp(current_cmd->args[0], "exit") == 0)
+		 if (ft_strlcmp(current_cmd->args[0], "exit") == 0)
     	{
 			dup2(stdin_backup, STDIN_FILENO);
 			dup2(stdout_backup, STDOUT_FILENO);
@@ -404,8 +404,8 @@ void	execute_child_process(t_data *data, t_cmd *current_cmd, int fd_in, int *fd_
         dup2(fd_in, STDIN_FILENO);
         close(fd_in);
     }
-	if(current_cmd->next == NULL && contains_heredoc(current_cmd))
-		handle_heredoc(current_cmd);
+	// if(current_cmd->next == NULL && contains_heredoc(current_cmd))
+	// 	handle_heredoc(current_cmd);
     handle_file_redirections(current_cmd);
 	if (current_cmd->args == NULL || current_cmd->args[0] == NULL)
 	{
