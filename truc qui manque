@@ -1,2 +1,0 @@
-gerer 	bash-5.1$ cat << $USER il faut simplement pas expand un fichier qui suit un heredoc!
-

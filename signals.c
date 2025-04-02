@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:33:34 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/02 16:44:40 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/02 18:47:54 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_data *g_data_child = NULL;
+t_data	*g_data_child = NULL;
 
 void	sigint_handler(int signum)
 {
@@ -22,15 +22,14 @@ void	sigint_handler(int signum)
 	{
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		rl_redisplay();	
+		rl_redisplay();
 	}
 }
 
-void reset_signals_for_child(void)
+void	reset_signals_for_child(void)
 {
-    signal(SIGINT, SIG_DFL);  // Comportement par défaut pour SIGINT
-    signal(SIGQUIT, SIG_DFL); // Comportement par défaut pour SIGQUIT
-
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 void	child_signal_handler(int signum)

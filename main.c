@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/02 18:18:48 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/02 19:07:35 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_substr_qte(char *str,  int start, int len)
+char	*ft_substr_qte(char *str, int start, int len)
 {
 	int		i;
 	char	*new_str;
@@ -29,7 +29,7 @@ char	*ft_substr_qte(char *str,  int start, int len)
 	return (new_str);
 }
 
-char	*ft_substr(char *str,  int start, int end)
+char	*ft_substr(char *str, int start, int end)
 {
 	int		i;
 	char	*new_str;
@@ -46,7 +46,6 @@ char	*ft_substr(char *str,  int start, int end)
 	return (new_str);
 }
 
-
 int	count_arguments(t_token *list)
 {
 	int		count;
@@ -62,7 +61,7 @@ int	count_arguments(t_token *list)
 	while (current)
 	{
 		if (current->type == PIPE)
-			break;
+			break ;
 		if (current->type == CMD || current->type == ARG)
 			count++;
 		current = current->next;
@@ -70,33 +69,34 @@ int	count_arguments(t_token *list)
 	return (count);
 }
 
-
-t_cmd	*create_args(t_token *list_tkn, t_cmd *list_cmd)
+t_cmd	*create_args(t_token *lst_tkn, t_cmd *lst_cmd)
 {
 	int		i;
-	t_token	*current_tkn;
-	t_cmd	*current_cmd;
+	t_token	*curr_tkn;
+	t_cmd	*curr_cmd;
 
-	current_tkn = list_tkn;
-	current_cmd = list_cmd;
+	curr_tkn = lst_tkn;
+	curr_cmd = lst_cmd;
 	i = 0;
-	current_cmd->args = ft_malloc(sizeof(char *) * (count_arguments(current_tkn) + 1));
-	while (current_tkn && current_cmd)
+	curr_cmd->args = ft_malloc(sizeof(char *) * \
+		(count_arguments(curr_tkn) + 1));
+	while (curr_tkn && curr_cmd)
 	{
-		if (current_tkn->type == CMD || current_tkn->type == ARG)
-			current_cmd->args[i++] = current_tkn->content;
-		else if (current_tkn->type == PIPE)
+		if (curr_tkn->type == CMD || curr_tkn->type == ARG)
+			curr_cmd->args[i++] = curr_tkn->content;
+		else if (curr_tkn->type == PIPE)
 		{
-			current_cmd->args[i] = NULL;	
+			curr_cmd->args[i] = NULL;
 			i = 0;
-			current_cmd = current_cmd->next;
-			current_cmd->args = ft_malloc(sizeof(char *) * (count_arguments(current_tkn) + 1));
+			curr_cmd = curr_cmd->next;
+			curr_cmd->args = ft_malloc(sizeof(char *) * \
+				(count_arguments(curr_tkn) + 1));
 		}
-		current_tkn = current_tkn->next;
+		curr_tkn = curr_tkn->next;
 	}
-	if (current_cmd)
-		current_cmd->args[i] = NULL;
-	return (list_cmd);
+	if (curr_cmd)
+		curr_cmd->args[i] = NULL;
+	return (lst_cmd);
 }
 
 t_cmd	*add_cmd_node(t_cmd *cmd_list)
@@ -107,8 +107,7 @@ t_cmd	*add_cmd_node(t_cmd *cmd_list)
 	new_cmd = ft_malloc(sizeof(t_cmd));
 	if (!new_cmd)
 		return (NULL);
-	
-	ft_memset(new_cmd, 0, sizeof(t_cmd));	
+	ft_memset(new_cmd, 0, sizeof(t_cmd));
 	if (!cmd_list)
 		return (new_cmd);
 	else
@@ -120,7 +119,6 @@ t_cmd	*add_cmd_node(t_cmd *cmd_list)
 	}
 	return (cmd_list);
 }
-
 
 t_cmd	*parse_cmd(t_token *list)
 {
@@ -145,7 +143,6 @@ t_cmd	*parse_cmd(t_token *list)
 	}
 	return (list_cmd);
 }
-
 
 t_file *	add_file(t_file	*list_file, t_token *file_tkn, t_type mode)
 {

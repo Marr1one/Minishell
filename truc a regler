@@ -1,0 +1,19 @@
+bash-5.1$ << salut les gars << oupi
+> salut les gars
+> oupi
+> ^C
+
+minishell << salut les gars << oupi
+> salut les gars
+> oupi
+> ^C
+> ^C
+> ^C
+> ^C
+> ^C
+> ^C
+> ^C
+> 
+> 
+> 
+> 
