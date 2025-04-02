@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/31 19:59:43 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:50:33 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,8 +413,10 @@ void	handle_parent_process(t_data *data, int *fd_in, int *fd_pipe, t_cmd *curren
         data->exit_status = WEXITSTATUS(status);
     } else if (WIFSIGNALED(status)) 
 	{
-        // 128 + signal pour les terminaisons par signal
+   		 if (WTERMSIG(status) == SIGQUIT) {
+        	printf("Quit (core dumped)\n");
         data->exit_status = 128 + WTERMSIG(status);
+    }
 	}
     if (*fd_in != 0)
         close(*fd_in);
@@ -446,7 +448,10 @@ void	execute_cmds(t_data *data, t_cmd *cmds)
 		}
 		pid = fork();
 		if (pid == 0)
+		{
+			reset_signals_for_child();
 			execute_child_process(data, current_cmd, fd_in, fd_pipe);
+		}
 		else if (pid > 0)
 			handle_parent_process(data, &fd_in, fd_pipe, current_cmd);
 		current_cmd = current_cmd->next;

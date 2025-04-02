@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/28 06:31:37 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:48:38 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ t_token	*add_node(char *str, t_token *list,  t_type type)
 		findlast_token(list)->next = new_node;
 	return (list);
 }
-int	case_pipe(char *input, int	i)
+int	case_pipe(char *input, int i)
 {	
 	int	count;
-	
+
 	count = 0;
 	while(input[i] == '|')
 	{
@@ -39,7 +39,6 @@ int	case_pipe(char *input, int	i)
 		i++;
 	}
 	return (count);
-	
 }
 
 t_type case_infile(char *input, int i)
@@ -49,7 +48,7 @@ t_type case_infile(char *input, int i)
 	count = 0;
 	while (input[i] == '<')
 	{
-		i++;
+		(i)++;
 		count++;
 	}
 	if (count == 1)
@@ -66,7 +65,7 @@ t_type case_outfile(char *input, int i)
 	count = 0;
 	while (input[i] == '>')
 	{
-		i++;
+		(i)++;
 		count++;
 	}
 	if (count == 1)
@@ -102,17 +101,15 @@ int is_word(char c, t_data *data)
 
 t_token *case_redir(char *input, int *i, t_data *data, t_token *list)
 {
-	t_type redirect;
-	
+	t_type	redirect;
+
+	char save_redirect;
+	save_redirect = input[*i];
 	redirect = case_redirect(input, *i);
-	if (redirect == UNKNOWN)
+	if (data->expect == FICHIER)
 	{
-        printf("erreur de redirect\n");
-        while (input[*i] && (input[*i] == '<' || input[*i] == '>'))
-        {
-            (*i)++;
-        }
-        return (list);
+		printf("minishell: syntax error near unexpected token `%c'\n",save_redirect);
+		return (NULL);
 	}
 	if (input[*i] == '<')
 		list = add_node("<", list, redirect);
@@ -146,6 +143,7 @@ t_token	*case_word(int *i, t_data *data, t_token *list, char *input)
 		data->expect = ARG;
 	return (list);
 }
+
 
 t_token *input_pipe(int *i, char *input, t_data *data, t_token *list)
 {
@@ -204,71 +202,31 @@ t_token *input_pipe(int *i, char *input, t_data *data, t_token *list)
 
 int validate_input(const char *input)
 {
-    char quote;
-    int i;
+	char	quote;
+	int		i;
 
 	i = 0;
 	quote = 0;
-    while (input[i])
-    {
-        if (input[i] == '\'' || input[i] == '"')
-        {
-            if (quote == 0)
-                quote = input[i];
-            else if (quote == input[i])
-                quote = 0;
-        }
-        else if (quote == 0)
-        {
-            if (input[i] == '\\' || input[i] == ';')
-            {
-                fprintf(stderr, "Erreur de parsing : caractère spécial\n");
-                return (0);
-			}
-        }
-        i++;
-    }
-    if (quote != 0)
-    {
-        fprintf(stderr, "Erreur de parsing : quote non fermée\n");
-        return (0);
-    }
-    return (1);
+	while (input[i])
+	{
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			if (quote == 0)
+				quote = input[i];
+			else if (quote == input[i])
+				quote = 0;
+		}
+		else if (quote == 0)
+		{
+			if (input[i] == '\\' || input[i] == ';')
+				return (printf("minishell :special character '%c' detected\n", input[i]), 0);
+		}
+		i++;
+	}
+	if (quote != 0)
+		return (printf("minishell :special character '%c' detected\n", input[i]), 0);
+	return (1);
 }
-
-// t_token *tokenizer(char *input, t_data *data)
-// {
-//     int i;
-//     t_token *list;
-
-//     data->quote = 0;
-//     data->expect = CMD;
-// 	i = 0;
-// 	list = NULL;
-//     if (!validate_input(input))
-//         return (NULL);
-//     while (input[i])
-//     {
-//         while (input[i] == ' ')
-//             i++;
-//         if (input[i] == '\0')
-//             break;
-//         if (is_word(input[i], data) == 1)
-//             list = case_word(&i, data, list, input);
-//         else if (input[i] == '|')
-//             list = input_pipe(&i, input, data, list);
-//         else if (input[i] == '<' || input[i] == '>')
-//             list = case_redir(input, &i, data, list);
-//         else if (list && findlast_token(list)->type == PIPE)
-//         {
-//             printf("Pipe not closed\n");
-//             return (NULL);
-//         }
-//         else
-//             i++;
-//     }
-//     return (list);
-// }
 
 t_token *handle_token_cases(char *input, int *i, t_data *data, t_token *list)
 {
@@ -290,29 +248,32 @@ t_token *handle_token_cases(char *input, int *i, t_data *data, t_token *list)
     return (list);
 }
 
+
 t_token *tokenizer(char *input, t_data *data)
 {
-    int i;
-    t_token *list;
+    int		i;
+    t_token	*list;
 
     data->quote = 0;
     data->expect = CMD;
 	i = 0;
 	list = NULL;
     if (!validate_input(input))
-        return NULL;
+        return (NULL);
     while (input[i])
     {
         while (input[i] == ' ')
             i++;
         if (input[i] == '\0')
-            break;
+            break ;
         list = handle_token_cases(input, &i, data, list);
+		if (list == NULL)
+			return (NULL);
     }
 	if (list && findlast_token(list)->type == PIPE)
         {
-            printf("Pipe not closed\n");
+            printf("minishell: Pipe not closed\n");
             return (NULL);
         }
-    return list;
+    return (list);
 }
