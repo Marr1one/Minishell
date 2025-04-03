@@ -1,131 +1,102 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*                                                                          */
 /*                                                        :::      ::::::::   */
 /*   handle_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:15:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/15 08:31:52 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/03 18:39:09 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	count_global_quotes(char *str)
+int	handle_quotes(char c, t_data *data)
 {
-	int		i;
-	int		count;
-	
+	if (c == '"' && data->in_quote != 2)
+	{
+		if (data->in_quote == 1)
+			data->in_quote = 0;
+		else
+			data->in_quote = 1;
+		return (1);
+	}
+	else if (c == '\'' && data->in_quote != 1)
+	{
+		if (data->in_quote == 2)
+			data->in_quote = 0;
+		else
+			data->in_quote = 2;
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_atoi(char *str)
+{
+	int	n;
+	int	i;
+
+	n = 0;
 	i = 0;
-	count = 0;
-	
 	while (str[i])
 	{
-		
-		if (str[i] == '"' || str[i] == '\'')
-			count++;
+		n = n * 10 + (str[i] - '0');
 		i++;
 	}
-	return (count);
+	return (n);
 }
 
-// char	*rm_qts_str(char *str)
-// {
-// 	int	i;
-// 	int	j;
-// 	int	nb_quotes = count_global_quotes(str);
-// 	char	*new_str;
+int	countword(char *str, char c)
+{	
+	int	counter;
+	int	check;
 
-// 	i = 0;
-// 	while (str[i])
-// 		i++;
-// 	new_str = ft_malloc (sizeof(char) * (i - nb_quotes + 1));
-// 	if (!new_str)
-// 		return (NULL);
-// 	i = 0;
-// 	j = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] != '"' && str[i] != '\'')
-// 		{
-// 			new_str[j] = str[i];
-// 			i++;
-// 			j++;
-// 		}
-// 		else
-// 			i++;
-// 	}
-// 	new_str[j] = '\0';
-// 	return (new_str);
-// }
-
-// void	rm_qts_nodes(t_data *data)
-// {
-// 	t_token	*current;
-
-// 	current = data->list;
-// 	while (current)
-// 	{
-// 		current->content = rm_qts_str(current->content);
-// 		current = current->next;
-// 	}		
-// }
-
-int handle_quotes(char c, t_data *data)
-{
-    if (c == '"' && data->in_quote != 2)
-    {
-        if (data->in_quote == 1)
-            data->in_quote = 0;
-        else
-            data->in_quote = 1;
-        return (1);
-    }
-    else if (c == '\'' && data->in_quote != 1)
-    {
-        if (data->in_quote == 2)
-            data->in_quote = 0;
-        else
-            data->in_quote = 2;
-        return (1);
-    }
-    return (0);
-}
-char *rm_qts_str(char *str, t_data *data)
-{
-    int i;
-    int j;
-    char *new_str;
-
-    /* Réinitialiser l'état des quotes pour cette chaîne */
-    data->in_quote = 0;
-    new_str = ft_malloc(sizeof(char) * (ft_strlen(str) + 1));
-    if (!new_str)
-        return (NULL);
-    i = 0;
-    j = 0;
-    while (str[i])
-    {
-        if (handle_quotes(str[i], data))
-        {
-            i++;
-            continue;
-        }
-        new_str[j++] = str[i++];
-    }
-    new_str[j] = '\0';
-    return (new_str);
+	counter = 0;
+	check = 0;
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		if (*str != c && check == 0)
+		{
+			counter++;
+			check = 1;
+		}
+		if (*str == c)
+			check = 0;
+		str++;
+	}
+	return (counter);
 }
 
-void rm_qts_nodes(t_data *data)
+char	*custom_worddup(char *str, int start, int end)
 {
-    t_token *current;
+	int		i;
+	char	*dup;
 
-    current = data->list;
-    while (current)
-    {
-        current->content = rm_qts_str(current->content, data);
-        current = current->next;
-    }
+	i = 0;
+	dup = ft_malloc((end - start + 2) * sizeof(char));
+	if (!dup)
+		return (NULL);
+	while (start <= end)
+		dup[i++] = str[start++];
+	dup[i] = '\0';
+	return (dup);
+}
+
+char	*worddup(char *str, int start, int end)
+{
+	int		i;
+	char	*dup;
+
+	i = 0;
+	dup = ft_malloc((end - start + 1) * sizeof(char));
+	if (!dup)
+		return (NULL);
+	while (start < end)
+		dup[i++] = str[start++];
+	dup[i] = '\0';
+	return (dup);
 }

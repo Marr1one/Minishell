@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/19 16:13:15 by maissat          ###   ########.fr       */
+/*   Updated: 2025/03/30 06:23:12 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,19 @@ void	show_list_cmd(t_cmd *list)
 	}
 }
 
-void	show_env(char **tab)
+int	show_env(char **env)
 {
 	int	i;
 
 	i = 0;
-	while (tab[i])
+	if (!env)
+		return (1);
+	while (env[i])
 	{
-		printf("%s\n", tab[i]);
+		printf("%s\n", env[i]);
 		i++;
 	}
+	return (0);
 }
 
 void	show_tab(char **tab)
@@ -125,6 +128,12 @@ void	show_list(t_token *list)
 	int	i;
 
 	i = 0;
+	if (!list)
+	{
+		printf("list meme pas alloue\n");
+		return ;
+		
+	}
 	while(list)
 	{
 		printf("noeud %d : {%s}, type = {%s}\n", i, list->content, get_token_type_name(list->type));

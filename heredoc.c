@@ -1,43 +1,66 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*									                                        */
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 08:11:37 by braugust          #+#    #+#             */
-/*   Updated: 2025/03/03 09:25:15 by braugust         ###   ########.fr       */
+/*   Created: 2025/03/28 05:13:51 by braugust          #+#    #+#             */
+/*   Updated: 2025/04/03 20:28:23 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int heredoc_input(char *delimiter)
+void	handle_heredoc(t_cmd *current_cmd)
 {
-    int pipefd[2];
-    char *line;
+	int		heredoc_pipe[2];
+	char	*heredoc_content;
 
-    if (pipe(pipefd) == -1)
-    {
-        perror("pipe");
-        return (-1);
-    }
-    while (1)
-    {
-        line = readline("> ");
-        if (!line)
-            break;
-        // Si la ligne correspond exactement au délimiteur on stop
-        if (ft_strcmp(line, delimiter) == 0)
-        {
-            free(line);
-            break;
-        }
-        write(pipefd[1], line, ft_strlen(line));
-        write(pipefd[1], "\n", 1);
-        free(line);
-    }
-    // On ferme le côté écriture car seul le côté lecture sera utilisé
-    close(pipefd[1]);
-    return (pipefd[0]);
+	if (contains_heredoc(current_cmd))
+	{
+		heredoc_content = execute_last_heredoc(current_cmd);
+		if (heredoc_content != NULL)
+		{
+			if (pipe(heredoc_pipe) == -1)
+			{
+				perror("pipe");
+				exit(1);
+			}
+			write(heredoc_pipe[1], heredoc_content, ft_strlen(heredoc_content));
+			close(heredoc_pipe[1]);
+			dup2(heredoc_pipe[0], STDIN_FILENO);
+			close(heredoc_pipe[0]);
+		}
+	}
+}
+
+// Vérifie si une commande contient au moins un heredoc.
+int	contains_heredoc(t_cmd *cmd)
+{
+	t_file	*current;
+
+	current = cmd->files;
+	while (current)
+	{
+		if (current->mode == HEREDOC)
+			return (1);
+		current = current->next;
+	}
+	return (0);
+}
+
+// Exécute le heredoc en récupérant le contenu du dernier 
+// heredoc de la commande.
+char	*execute_last_heredoc(t_cmd *cmd)
+{
+	t_file	*last;
+	int		last_index;
+	char	*content;
+
+	last = find_last_heredoc(cmd->files, &last_index);
+	if (last == NULL)
+		return (NULL);
+	content = execute_heredocs(cmd->files, last_index);
+	return (content);
 }

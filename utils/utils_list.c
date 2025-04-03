@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:10:49 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/21 17:43:44 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/04 00:00:51 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 char	**list_to_args(t_data *data)
 {
-	t_token *current;
+	t_token	*current;
 	char	**new_args;
 	int		i;
-	
+
 	i = 0;
 	new_args = ft_malloc(sizeof(char *) * (list_len(data->list) + 1));
 	if (!new_args)
@@ -35,31 +35,15 @@ char	**list_to_args(t_data *data)
 
 int	list_len(t_token *list)
 {
-	int	i;
-	t_token *current;
-	
+	int		i;
+	t_token	*current;
+
 	i = 0;
 	current = list;
 	while (current)
 	{
 		current = current->next;
 		i++;
-	}
-	return (i);
-}
-
-
-int	get_nbr_node(t_token *list)
-{
-	int	i;
-	t_token *current;
-	
-	i = 0;
-	current = list;
-	while (current != NULL)
-	{
-		i++;
-		current = current->next;
 	}
 	return (i);
 }
@@ -72,7 +56,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	i = 0;
 	j = 0;
-	dest = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	dest = ft_malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!dest)
 		return (NULL);
 	while (s1[i])
@@ -89,46 +73,31 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (dest);
 }
 
-char	*ft_re_strjoin(char *s1, char const *s2)
+char	*ft_join(char *str, char *add)
 {
-	size_t	i;
-	size_t	j;
-	char	*dest;
+	int		i;
+	int		j;
+	char	*join;
 
 	i = 0;
 	j = 0;
-	dest = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!dest)
-	{
+	if (!str || !add)
 		return (NULL);
-	}
-	while (s1[i])
+	join = ft_malloc(sizeof(char) * (ft_strlen(str) + ft_strlen(add) + 1));
+	if (!join)
+		return (NULL);
+	while (str[i])
 	{
-		dest[i] = s1[i];
+		join[i] = str[i];
 		i++;
 	}
-	while (s2[j])
+	j = 0;
+	while (add[j])
 	{
-		dest[i + j] = s2[j];
+		join[i] = add[j];
+		i++;
 		j++;
 	}
-	dest[j + i] = '\0';
-	free(s1);
-	return (dest);
-}
-
-char	*ft_strcat(char *dest, char *src)
-{
-	int	i;
-	int	dlen;
-
-	i = 0;
-	dlen = ft_strlen(dest);
-	while (src[i])
-	{
-		dest[dlen + i] = src[i];
-		i++;
-	}
-	dest[dlen + i] = 0;
-	return (dest);
+	join[i] = 0;
+	return (join);
 }

@@ -6,164 +6,60 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 20:35:34 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/09 16:52:33 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/04 00:00:24 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+static int	init_split(char *str, char c, char ***res)
+{
+	int	word_count;
 
-int	countword(char *str, char c)
-{	
-	int	counter;
-	int	check;
-
-	//printf("countword de la chaine :{%s}\n", str);
-	counter = 0;
-	check = 0;
 	if (!str)
 		return (0);
-	while (*str)
+	word_count = countword(str, c);
+	*res = ft_malloc((word_count + 1) * sizeof(char *));
+	if (!(*res))
+		return (0);
+	return (1);
+}
+
+static int	fill_words(char **res, char *str, char c)
+{
+	int	i;
+	int	j;
+	int	start;
+
+	i = 0;
+	j = 0;
+	start = -1;
+	while (str[i])
 	{
-		if (*str != c && check == 0)
+		if (str[i] != c && start < 0)
+			start = i;
+		if (str[i + 1] == '\0' && start >= 0)
 		{
-			counter++;
-			check = 1;
+			res[j++] = custom_worddup(str, start, i);
+			break ;
 		}
-		if (*str == c)
-			check = 0;
-		str++;
+		else if (str[i] == c && start >= 0)
+		{
+			res[j++] = worddup(str, start, i);
+			start = -1;
+		}
+		i++;
 	}
-	return (counter);
-}
-
-
-
-char	*custom_worddup(char *str, int start, int end)
-{
-	int		i;
-	char	*dup;
-
-	i = 0;
-	dup = ft_malloc((end - start + 2) * sizeof(char));
-	if (!dup)
-		return (NULL);
-	while (start <= end)
-		dup[i++] = str[start++];
-	dup[i] = '\0';
-	return (dup);
-}
-
-char	*worddup(char *str, int start, int end)
-{
-	int		i;
-	char	*dup;
-
-	i = 0;
-	dup = ft_malloc((end - start + 1) * sizeof(char));
-	if (!dup)
-		return (NULL);
-	while (start < end)
-		dup[i++] = str[start++];
-	dup[i] = '\0';
-	return (dup);
+	res[j] = NULL;
+	return (1);
 }
 
 char	**ft_split(char *str, char c)
 {
 	char	**res;
-	int		idx;
-	int		i;
-	int		j;
 
-	if (!str)
+	if (!init_split(str, c, &res))
 		return (NULL);
-	idx = -1;
-	i = 0;
-	j = 0;
-	//printf("countword = %d\n", countword(str, c));
-	res = ft_malloc((countword(str, c) + 1) * sizeof(char *));
-	if (!res)
-		return (NULL);
-	while (str[i])
-	{
-		
-		if (str[i] != c && idx < 0 )
-		{
-			idx = i;
-		}
-		if (str[i + 1] == '\0')
-		{
-			res[j++] = custom_worddup(str, idx, i);
-			break;
-		}
-		else if ((str[i] == c  && idx >= 0))
-		{
-			res [j++] = worddup(str, idx, i);
-			idx = -1;
-		}
-		i++;
-	}
-	res[j] = NULL;
-	return (res);
-}
-
-
-char	**custom_split(char *str, char c)
-{
-	char	**res;
-	int		idx;
-	int		i;
-	int		j;
-	int		in_word;
-	int		quote;
-
-	if (!str)
-		return (NULL);
-	idx = -1;
-	i = 0;
-	j = 0;
-	in_word = 0;
-	quote = 0;
-	res = ft_malloc((countword(str, c) + 1) * sizeof(char *));
-	if (!res)
-		return (NULL);
-	while (str[i])
-	{
-		if (str[i] == '"')
-		{
-			if (quote == 0 && in_word == 0)
-			{
-				//printf(" guillemet ouvrante\n");
-				idx = i;
-				quote = 1;
-			}
-			else if (quote == 1)
-			{
-				//printf("guillemet fermante\n");
-				res[j++] = custom_worddup(str, idx, i);
-				idx = -1;
-				quote = 0;
-			}
-		}
-		else 
-		{	
-			if (str[i] != c && idx < 0 && quote != 1)
-			{
-				in_word = 1;
-				idx = i;
-			}
-			else if ((str[i] == c  && idx >= 0  && quote != 1))
-			{
-				res [j++] = worddup(str, idx, i);
-				idx = -1;
-				in_word = 0;
-			}
-		}
-		i++;
-	}
-	if (idx >= 0)
-        res[j++] = worddup(str, idx, i);
-	res[j] = NULL;
+	fill_words(res, str, c);
 	return (res);
 }
