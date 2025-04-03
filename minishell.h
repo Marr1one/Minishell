@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/02 17:11:40 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:13:44 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,9 @@ typedef struct s_data
 	
 }	t_data;
 
-
+int validate_exit_arg(char *arg, int *status);
+int check_exit_args_count(char **args, t_data *data);
+int process_exit_args(t_cmd *cmd, t_data *data, int *status);
 void	child_signal_handler(int signum);
 void	setup_child_signals(t_data *data);
 void 	parent_signal_handler(int sig) ;

@@ -3,51 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 19:31:51 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/30 15:37:23 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/03 15:21:23 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// int	check_export_compatibility(char *str)
-// {
-// 	int	i;
-// 	int	quote;
-	
-// 	i = 0;
-// 	quote = 0;
-// 	while (is_alpha(str[i]))
-// 		i++;
-// 	if (str[i] == '=')
-// 		i++;
-// 	else
-// 		return (1);
-// 	if (str[i] == '"')
-// 		quote = 1;
-// 	i++;
-// 	while (is_alpha(str[i]) || str[i] == '/')
-// 		i++;
-// 	if (str[i] == '\0')
-// 		return (0);
-// 	else if ((quote == 1 && str[i] == '"'))
-// 		return (0);
-// 	else
-// 		return (1);
-// }
-
 int	check_export_compatibility(char *str)
 {
-	int i;
+	int	i;
 
-	if (!str || (!is_alpha(str[0]) && str[0] != '_')) // Doit commencer par une lettre ou un _
+	if (!str || (!is_alpha(str[0]) && str[0] != '_'))
 		return (1);
 	i = 1;
-	while (str[i] && (is_alphanum(str[i]) || str[i] == '_')) // Lettres, chiffres ou _
+	while (str[i] && (is_alphanum(str[i]) || str[i] == '_'))
 		i++;
-	if (str[i] == '=' || str[i] == '\0') // Fin correcte (fin de variable ou début de valeur)
+	if (str[i] == '=' || str[i] == '\0')
 		return (0);
 	return (1);
 }

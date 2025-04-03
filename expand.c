@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:30:52 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/02 15:56:33 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:22:54 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,7 +285,10 @@ void	expand_all(t_cmd *cmd, t_data *data)
 		while (current_cmd->args && current_cmd->args[++i])
 		{
 			if (ft_strlcmp(current_cmd->args[i], "$?") == 0)
+			{
 				expanded = ft_itoa(data->exit_status);
+				current_cmd->args[i] = expanded;
+			}
 			else
 			{
 				expanded = expand_string(current_cmd->args[i], data);

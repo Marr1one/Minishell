@@ -3,49 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 18:48:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/29 15:39:28 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/03 15:12:30 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// void ft_echo(t_data data)
-// {
-// 	int		n;
-// 	t_token	*list;
-// 	int		i;
-	
-// 	list = data.list->next;
-// 	n = 0;
-// 	i = 0;
-// 	while (list && list->content[0] == '-' && list->content[1] == 'n')
-// 	{
-// 		i = 2;
-// 		while (list->content[i] == 'n')
-// 			i++;
-// 		if (list->content[i] != '\0')
-// 			break;
-// 		n = 1;
-// 		list = list->next;
-// 	}
-// 	while (list != NULL)
-// 	{
-// 		if (list->next == NULL)
-// 			printf("%s", list->content);
-// 		else
-// 			printf("%s ", list->content);
-// 		if (data.args[i + 1] != NULL)
-// 			printf(" ");
-// 		i++;
-// 		list = list->next;
-// 	}
-// 	if (n == 0)
-// 		printf("\n");
-// }
-
 
 int	is_option_n(char *str)
 {
@@ -64,10 +29,10 @@ int	is_option_n(char *str)
 	return (1);
 }
 
-void ft_echo(t_cmd *current_cmd)
+void	ft_echo(t_cmd *current_cmd)
 {
-    int     option_n;
-    char	**args;
+	int		option_n;
+	char	**args;
 	int		i;
 
 	args = current_cmd->args;
@@ -78,13 +43,13 @@ void ft_echo(t_cmd *current_cmd)
 		i++;
 		option_n = 1;
 	}
-    while (args[i])
-    {
-        printf("%s", args[i]);
-        if (args[i  + 1] != NULL)
-            printf(" ");
-        i++;
-    }
-    if (option_n == 0)
-        printf("\n");
+	while (args[i])
+	{
+		printf("%s", args[i]);
+		if (args[i + 1] != NULL)
+			printf(" ");
+		i++;
+	}
+	if (option_n == 0)
+		printf("\n");
 }

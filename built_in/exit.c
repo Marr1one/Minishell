@@ -1,43 +1,64 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*	                                                                        */
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 16:46:56 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 14:58:10 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:13:24 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+int	validate_exit_arg(char *arg, int *status)
+{
+	if (is_numeric(arg) == 0)
+	{
+		printf("minishell: exit: %s: numeric argument required\n", arg);
+		*status = 2;
+		return (0);
+	}
+	*status = ft_atoi(arg);
+	if (*status < 0 || *status > 255)
+		*status = *status % 256;
+	return (1);
+}
+
+int	check_exit_args_count(char **args, t_data *data)
+{
+	if (count_args(args) > 2)
+	{
+		printf("minishell: exit: too many arguments\n");
+		data->exit_status = 1;
+		return (1);
+	}
+	return (0);
+}
+
+int	process_exit_args(t_cmd *cmd, t_data *data, int *status)
+{
+	int	valid;
+
+	*status = data->exit_status;
+	if (!cmd->args[1])
+		return (0);
+	valid = validate_exit_arg(cmd->args[1], status);
+	if (valid && check_exit_args_count(cmd->args, data))
+		return (1);
+	return (0);
+}
+
 void	ft_exit(t_cmd *cmd, t_data *data)
 {
 	int	status;
+	int	should_return;
 
-	status = data->exit_status;
 	printf("exit\n");
-	if (cmd->args[1])
-	{
-		if (is_numeric(cmd->args[1]) == 0)
-		{
-			printf("minishell: exit: %s: numeric argument required\n", cmd->args[1]);
-			status = 2;
-		}
-		else 
-		{
-			status = ft_atoi(cmd->args[1]);	
-			if (status < 0 || status > 255)
-				status = status % 256;
-			if (count_args(cmd->args) > 2)
-			{
-				printf("minishell: exit: too many arguments\n");
-				data->exit_status = 1;
-				return ;	
-			}
-		}
-	}
+	should_return = process_exit_args(cmd, data, &status);
+	if (should_return)
+		return ;
 	free_all(data->gc);
 	exit(status);
 }

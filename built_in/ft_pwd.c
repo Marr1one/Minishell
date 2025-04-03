@@ -12,23 +12,6 @@
 
 #include "../minishell.h"
 
-// void	ft_pwd(t_data *data)
-// {
-// 	char path[1024];
-
-
-//     if (getcwd(path, sizeof(path)) != NULL)
-// 	{
-// 		data->exit_status = 0;
-//         printf("%s\n", path);
-// 	}
-//     else
-// 	{
-// 		data->exit_status = 1;
-//         perror("getcwd");
-// 	}
-// }
-
 int ft_pwd(t_cmd *cmd)
 {
     char cwd[1024];
