@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/02 22:47:28 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:06:11 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	check_change(t_data *data, char *str)
 	int		found;
 	char	*name;
 
-		
 	name = take_before(str, '=');
 	len = ft_strlen(name) + 1;
 	env = data->envp;
@@ -131,13 +130,15 @@ void	check_unset(t_data *data, char	*str)
 {
 	int		i;
 	char	*join_eg;
-
+	
+	
 	i = 0;
 	join_eg = ft_joinunset(str);
 	while (data->envp[i])
 	{
 		if (ft_strncmp(data->envp[i], join_eg, ft_strlen(join_eg)) == 0)
 		{
+			// printf("FOUNDED");
 			data->envp = ft_unset(data, i);
 			break;
 		}
@@ -154,4 +155,51 @@ int	count_args(char **args)
 	while (args[i])
 		i++;
 	return (i);
+}
+
+
+
+//la on verifie le premier argument, si cest parmis un builtin on lance la fonction adequates.
+int	check_builtin(t_data *data)
+{
+	(void)data;
+// 	// if (data->list && (ft_strlcmp(data->list->content, "pwd") == 0 ||ft_strlcmp(data->list->content, "\"pwd\"") == 0))
+// 	// {
+// 	// 	//printf("dans mon pwd a moi\n");
+// 	// 	destroy_node_quotes(data); //detruit les noeuds ou ya juste des guillemets ; pwd "" devient pwd.
+// 	// 	// ft_pwd(data);
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->list->content, "unset") == 0 ||ft_strlcmp(data->list->content, "\"unset\"") == 0))
+// 	// {
+// 	// 	data->list = data->list->next;
+// 	// 	check_unset(data, data->list->content);	
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->list->content, "exit") == 0 ||ft_strlcmp(data->list->content, "\"exit\"") == 0))
+// 	// {
+// 	// 	ft_exit(data);
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->list->content, "echo") == 0 ||ft_strlcmp(data->list->content, "\"echo\"") == 0))
+// 	// {
+// 	// 	ft_echo(*data);
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->list->content, "cd") == 0 ||ft_strlcmp(data->list->content, "\"cd\"") == 0))
+// 	// {
+// 	// 	ft_cd(data);
+// 	// 	return (1);
+// 	// }
+// 	// if (data->list && (ft_strlcmp(data->args[0], "env") == 0 ||ft_strlcmp(data->args[0], "\"env\"") == 0))
+// 	// {
+// 	// 	show_tab(data->envp);
+// 	// 	return (1);
+// 	// }
+// 	//if (data->list && (ft_strlcmp(data->args[0], "export") == 0 ||ft_strlcmp(data->args[0], "\"export\"") == 0))
+// 	//{
+// 	//	export(data);
+// 	//	return (1);
+// 	//}
+	return (0);
 }
