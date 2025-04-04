@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/04 15:49:52 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/04 17:29:31 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,11 @@ typedef struct s_data
 
 }							t_data;
 
+int							print_error(char *message);
+char						*get_target_dir(t_data *data);
+char						*search_oldpwd(t_data *data);
+void						update_oldpwd(t_data *data, char *pwd);
+void						update_pwd(t_data *data, char *pwd);
 void						expand_argument(char **args, int i, t_data *data);
 void						expand_file_path(t_file *file, t_data *data);
 void						expand_cmd_files(t_cmd *cmd, t_data *data);
@@ -230,7 +235,7 @@ char						*take_after(char *str, char c);
 int							ft_strncmp(char *s1, char *s2, int n);
 char						*ft_itoa(int n);
 void						*ft_malloc(size_t size);
-int							ft_cd(t_cmd *cmd);
+int							ft_cd(t_cmd *cmd, t_data *data);
 int							ft_strcmp(char *s1, char *s2);
 int							ft_strlcmp(char *s1, char *s2);
 // int				return_exit_status(t_data *data);

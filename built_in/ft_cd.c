@@ -3,61 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 23:56:12 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/04 17:29:20 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	print_error(char *message)
+int	print_error(char *message)
 {
 	printf("minishell: %s\n", message);
 	return (1);
 }
 
-static char	*get_target_dir(char **args)
+char	*search_oldpwd(t_data *data)
 {
-	char	*home;
+	int	i;
 
-	if (!args[1])
+	i = 0;
+	while (data->envp[i])
 	{
-		home = getenv("HOME");
-		if (!home)
-		{
-			print_error("cd: HOME not set");
-			return (NULL);
-		}
-		return (home);
+		if (ft_strncmp(data->envp[i], "OLDPWD=", 7) == 0)
+			return (take_after(data->envp[i], '='));
+		i++;
 	}
-	return (args[1]);
+	return (NULL);
 }
 
-static int	update_pwd_and_cd(char *target_dir)
+void	update_oldpwd(t_data *data, char *pwd)
+{
+	int		i;
+	char	*new_oldpwd;
+
+	new_oldpwd = ft_join("OLDPWD=", pwd);
+	i = 0;
+	while (data->envp[i])
+	{
+		if (ft_strncmp(data->envp[i], "OLDPWD=", 7) == 0)
+		{
+			data->envp[i] = new_oldpwd;
+			return ;
+		}
+		i++;
+	}
+}
+
+void	update_pwd(t_data *data, char *pwd)
+{
+	int		i;
+	char	*new_pwd;
+
+	new_pwd = ft_join("PWD=", pwd);
+	i = 0;
+	while (data->envp[i])
+	{
+		if (ft_strncmp(data->envp[i], "PWD=", 4) == 0)
+		{
+			data->envp[i] = new_pwd;
+			return ;
+		}
+		i++;
+	}
+}
+
+int	ft_cd(t_cmd *cmd, t_data *data)
 {
 	char	current_pwd[1024];
-	int		chdir_status;
-
-	if (getcwd(current_pwd, sizeof(current_pwd)) == NULL)
-		return (print_error("getcwd"));
-	chdir_status = chdir(target_dir);
-	if (chdir_status != 0)
-		return (print_error("cd"));
-	return (0);
-}
-
-int	ft_cd(t_cmd *cmd)
-{
+	char	pwd_after[1024];
 	char	*target_dir;
-	int		arg_count;
 
-	arg_count = count_args(cmd->args);
-	if (arg_count > 2)
+	if (list_len(data->list) > 2)
 		return (print_error("cd: too many arguments"));
-	target_dir = get_target_dir(cmd->args);
+	if (!getcwd(current_pwd, sizeof(current_pwd)))
+		return (print_error("getcwd"), 1);
+	data->args = cmd->args;
+	target_dir = get_target_dir(data);
 	if (!target_dir)
 		return (1);
-	return (update_pwd_and_cd(target_dir));
+	if (chdir(target_dir) != 0)
+		return (print_error("cd"), 1);
+	update_oldpwd(data, current_pwd);
+	if (!getcwd(pwd_after, sizeof(pwd_after)))
+		return (print_error("getcwd"), 1);
+	update_pwd(data, pwd_after);
+	data->exit_status = 0;
+	return (0);
 }

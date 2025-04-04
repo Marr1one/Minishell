@@ -21,7 +21,7 @@ int	execute_advanced_builtin(t_cmd *cmd, t_data *data)
 	}
 	if (ft_strlcmp(cmd->args[0], "cd") == 0)
 	{
-		data->exit_status = ft_cd(cmd);
+		data->exit_status = ft_cd(cmd, data);
 		return (1);
 	}
 	if (ft_strlcmp(cmd->args[0], "exit") == 0)
