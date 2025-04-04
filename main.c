@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 20:53:49 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/04 16:29:40 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
+	if (isatty(STDIN_FILENO) == 0 || isatty(STDOUT_FILENO) == 0)
+		return(printf("minishell: no tty\n"), 1);
 	(void)argv;
 	if (!check_arguments(argc))
 		return (1);
