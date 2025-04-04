@@ -1,12 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*						                                                    */
 /*                                                        :::      ::::::::   */
 /*   utils_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:10:49 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/04 00:00:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/04 15:47:19 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,12 @@ char	*ft_join(char *str, char *add)
 	}
 	join[i] = 0;
 	return (join);
+}
+
+char	*expand_exit_status(t_data *data)
+{
+	char	*expanded;
+
+	expanded = ft_itoa(data->exit_status);
+	return (expanded);
 }

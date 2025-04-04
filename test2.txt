@@ -1,0 +1,2 @@
+minishell: ./test.txt: command not found
+minishell: ./test.txt: command not found

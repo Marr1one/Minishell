@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/04 00:18:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/04 15:49:52 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ typedef struct s_data
 	t_token					*list_tkn;
 	t_type					expect;
 	t_malloc				**gc;
-	// t_env	*env_var;
 	int						in_quote;
 	char					**envp;
 	char					**path;
@@ -99,6 +98,11 @@ typedef struct s_data
 
 }							t_data;
 
+void						expand_argument(char **args, int i, t_data *data);
+void						expand_file_path(t_file *file, t_data *data);
+void						expand_cmd_files(t_cmd *cmd, t_data *data);
+char						*expand_exit_status(t_data *data);
+char						**create_new_args(char **args, int idx);
 int							open_file(char *path, t_type mode);
 int							count_cmds(t_cmd *list_cmds);
 int							execute_unset(t_cmd *cmd, t_data *data);
