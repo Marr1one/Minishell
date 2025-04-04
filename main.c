@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/04 16:29:40 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/04 17:00:33 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	shell_loop(t_data *data)
 
 	while (1)
 	{
-		input = readline("\033[0;32mminishell\033[0m ");
+		input = readline("\001\033[0;32mminishell\033[0m\002 ");
 		if (!input)
 		{
 			free_all(data->gc);
