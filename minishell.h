@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/05 13:41:03 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:18:26 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,10 @@ typedef struct s_data
 
 extern	int					variable_globale;
 t_data 						*get_gdata(void);
+void	sigint_handler_heredoc(int signum);
+void	sigint_handler(int signum);
+void	setup_child_signals(void);
+int	simplefn(void);
 void						setup_signals_heredoc(void);
 int							print_error(char *message);
 char						*get_target_dir(t_data *data);

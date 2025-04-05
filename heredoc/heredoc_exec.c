@@ -6,11 +6,11 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:02:12 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/05 13:21:25 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:28:17 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	*process_heredoc(t_data *data, t_file *file, int current_index, int last_index)
 {
@@ -37,8 +37,12 @@ char	*execute_heredocs(t_data *data, t_file *files, int last_index)
 		if (current->mode == HEREDOC)
 		{
 			temp_content = process_heredoc(data, current, current_index, last_index);
-			if (temp_content != NULL)
+			if (temp_content == NULL && data->exit_status != 0)
+				return (NULL);
+			if (current_index == last_index)
 				content = temp_content;
+			else
+				free(temp_content);
 		}
 		current = current->next;
 		current_index++;

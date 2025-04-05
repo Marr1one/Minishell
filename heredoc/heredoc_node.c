@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_node.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:03:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 21:09:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/05 15:14:26 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 // Crée un nouveau noeud heredoc à partir d'un token.
 t_file	*create_new_heredoc_node(t_token *token)

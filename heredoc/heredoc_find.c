@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_find.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:04:46 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 21:09:17 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/05 15:14:30 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 // Renvoie le dernier heredoc trouvé dans la liste des fichiers.
 t_file	*find_last_heredoc(t_file *files, int *last_index)
