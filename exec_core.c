@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:10:49 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/05 13:27:37 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:38:41 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	execute_command(t_data *data, t_cmd *cmd)
 
 void	execute_child_process(t_data *data, t_cmd *cmd, int fd_in, int *fd_pipe)
 {
-	setup_child_signals(data);
+	setup_child_signals();
 	redirect_pipes(cmd, fd_in, fd_pipe);
 	handle_heredoc_and_files(cmd);
 	execute_command(data, cmd);

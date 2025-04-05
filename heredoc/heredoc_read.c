@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/05 15:34:01 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:47:00 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,25 +49,7 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 char	*read_heredoc_from_tty(t_data *data, char *delimiter, char *prompt)
 {
 	char	*content;
-	int		tty_fd;
-	int		std_backup;
 
-	tty_fd = open("/dev/tty", O_RDONLY);
-	
-	if (tty_fd == -1)
-	{
-		close(tty_fd);
-		printf("open /dev/tty");
-		return (ft_strdup(""));
-	}
-	if (variable_globale != 0)
-		return (NULL);
-	std_backup = dup(STDIN_FILENO);
-	close(std_backup);
-	dup2(tty_fd, STDIN_FILENO);
-	close(tty_fd);
 	content = heredoc_loop(data, delimiter, prompt);
-	dup2(std_backup, STDIN_FILENO);
-	close(std_backup);
 	return (content);
 }

@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:14:44 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/04 15:51:15 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 16:40:55 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ void	expand_file_path(t_file *file, t_data *data)
 {
 	char	*expanded;
 
-	if (file->mode != HEREDOC)
+	if (file->mode == HEREDOC)
 	{
-		expanded = expand_string(file->path, data);
-		file->path = expanded;
+		file->path = quoteless_string(file->path);
+		return ;
 	}
 	else
 	{
@@ -70,9 +70,7 @@ void	expand_file_path(t_file *file, t_data *data)
 	}
 }
 
-/*
-** Traite l'expansion de tous les fichiers d'une commande
-*/
+//Traite l'expansion de tous les fichiers d'une commande
 void	expand_cmd_files(t_cmd *cmd, t_data *data)
 {
 	t_file	*current_file;
@@ -95,6 +93,7 @@ void	expand_all(t_cmd *cmd, t_data *data)
 	current_cmd = cmd;
 	while (current_cmd)
 	{
+		
 		expand_cmd_args(current_cmd, data);
 		expand_cmd_files(current_cmd, data);
 		current_cmd = current_cmd->next;

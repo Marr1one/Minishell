@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/05 13:29:10 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 15:51:11 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	redirect_pipes(t_cmd *current_cmd, int fd_in, int *fd_pipe)
 		close(fd_pipe[0]);
 		close(fd_pipe[1]);
 	}
-	if (fd_in != 0 && !current_cmd->heredoc_content)
+	if (fd_in != 0)
 	{
 		dup2(fd_in, STDIN_FILENO);
 		close(fd_in);

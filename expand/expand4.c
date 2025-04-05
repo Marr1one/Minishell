@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:13:09 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/04 15:51:37 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 16:54:55 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,16 @@ char	*extract_var_name(const char *arg, int *i)
 	char	*var_name;
 	int		k;
 
+	if (arg[*i] == '?')
+	{
+		(*i)++;
+		var_name = ft_malloc(2);
+		if (!var_name)
+			return (NULL);
+		var_name[0] = '?';
+		var_name[1] = '\0';
+		return (var_name);
+	}
 	start = *i;
 	while (arg[*i] && (isalnum((unsigned char)arg[*i]) || arg[*i] == '_'))
 		(*i)++;
@@ -70,11 +80,10 @@ char	*extract_var_name(const char *arg, int *i)
 	var_name = ft_malloc(len + 1);
 	if (!var_name)
 		return (NULL);
-	k = 0;
-	while (k < len)
+	k = -1;
+	while (++k < len)
 	{
 		var_name[k] = arg[start + k];
-		k++;
 	}
 	var_name[len] = '\0';
 	return (var_name);
