@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/04 17:00:33 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 13:29:53 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,12 @@ void	shell_loop(t_data *data)
 			free_all(data->gc);
 			free(input);
 			break ;
+		}
+		if (variable_globale != 0)
+		{
+			data->exit_status = 128 + variable_globale;
+			variable_globale = 0;
+			continue ;
 		}
 		add_history(input);
 		process_command(input, data);

@@ -3,26 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_read.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 21:09:26 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/05 13:25:43 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // Lit via readline jusqu'au délimiteur et retourne le contenu lu.
-char	*heredoc_loop(char *delimiter, char *prompt)
+char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 {
 	char	*content;
 	char	*line;
 	char	*tmp;
-
+	
 	content = ft_strdup("");
-	line = readline(prompt);
-	while (line != NULL)
+	setup_signals_heredoc();
+	while (1)
 	{
+		line = readline(prompt);
+		if (!line) // Vérifie si heredoc a été annulé
+			break ;
+		if (variable_globale != 0)
+		{
+			data->exit_status = 128 + variable_globale;
+			return (variable_globale = 0, NULL);
+		}
 		if (ft_strlcmp(line, delimiter) == 0)
 		{
 			free(line);
@@ -33,13 +41,12 @@ char	*heredoc_loop(char *delimiter, char *prompt)
 		tmp = content;
 		content = ft_strjoin(content, "\n");
 		free(line);
-		line = readline(prompt);
 	}
 	return (content);
 }
 
 // Ouvre le tty et lit le heredoc en redirigeant temporairement STDIN.
-char	*read_heredoc_from_tty(char *delimiter, char *prompt)
+char	*read_heredoc_from_tty(t_data *data, char *delimiter, char *prompt)
 {
 	char	*content;
 	int		tty_fd;
@@ -56,7 +63,7 @@ char	*read_heredoc_from_tty(char *delimiter, char *prompt)
 	close(std_backup);
 	dup2(tty_fd, STDIN_FILENO);
 	close(tty_fd);
-	content = heredoc_loop(delimiter, prompt);
+	content = heredoc_loop(data, delimiter, prompt);
 	dup2(std_backup, STDIN_FILENO);
 	close(std_backup);
 	return (content);

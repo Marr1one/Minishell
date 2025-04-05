@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:12 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/03 21:08:30 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 13:26:06 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	handle_heredoc_and_files(t_cmd *cmd)
 		setup_heredoc(cmd);
 }
 
-void	handle_all_heredocs(t_cmd *cmds)
+int	handle_all_heredocs(t_data *data, t_cmd *cmds)
 {
 	t_cmd	*cmd;
 
@@ -43,7 +43,12 @@ void	handle_all_heredocs(t_cmd *cmds)
 	while (cmd)
 	{
 		if (contains_heredoc(cmd))
-			cmd->heredoc_content = execute_last_heredoc(cmd);
+		{
+			cmd->heredoc_content = execute_last_heredoc(data, cmd);
+			if (cmd->heredoc_content == NULL)
+				return 1;
+		}
 		cmd = cmd->next;
 	}
+	return (0);
 }

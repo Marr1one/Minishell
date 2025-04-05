@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 23:56:55 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/05 13:29:10 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	handle_parent_process(t_data *data, int *fd_in, int *fd_pipe,
 		if (WTERMSIG(status) == SIGQUIT)
 		{
 			printf("Quit (core dumped)\n");
-			data->exit_status = 128 + WTERMSIG(status);
 		}
+		data->exit_status = 128 + WTERMSIG(status);
 	}
 	if (*fd_in != 0)
 		close(*fd_in);
@@ -61,7 +61,7 @@ void	execute_forked_cmd(t_data *data, t_cmd *cmd, int *fd_in, int *fd_pipe)
 	pid = fork();
 	if (pid == 0)
 	{
-		reset_signals_for_child();
+		setup_child_signals();
 		execute_child_process(data, cmd, *fd_in, fd_pipe);
 	}
 	else if (pid > 0)
@@ -74,7 +74,8 @@ void	execute_cmds(t_data *data, t_cmd *cmds)
 	int		fd_pipe[2];
 	t_cmd	*cmd;
 
-	handle_all_heredocs(cmds);
+	if (handle_all_heredocs(data, cmds) == 1)
+		return ;
 	fd_in = 0;
 	cmd = cmds;
 	if (check_single_builtin(data, cmds))

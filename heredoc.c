@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-void	handle_heredoc(t_cmd *current_cmd)
+void	handle_heredoc(t_data *data, t_cmd *current_cmd)
 {
 	int		heredoc_pipe[2];
 	char	*heredoc_content;
 
 	if (contains_heredoc(current_cmd))
 	{
-		heredoc_content = execute_last_heredoc(current_cmd);
+		heredoc_content = execute_last_heredoc(data, current_cmd);
 		if (heredoc_content != NULL)
 		{
 			if (pipe(heredoc_pipe) == -1)
@@ -32,10 +32,12 @@ void	handle_heredoc(t_cmd *current_cmd)
 			dup2(heredoc_pipe[0], STDIN_FILENO);
 			close(heredoc_pipe[0]);
 		}
+		if (heredoc_content == NULL)
+			return ;
 	}
 }
 
-// Vérifie si une commande contient au moins un heredoc.
+// Vérifie si une commande contient au moins un heredoc
 int	contains_heredoc(t_cmd *cmd)
 {
 	t_file	*current;
@@ -51,8 +53,8 @@ int	contains_heredoc(t_cmd *cmd)
 }
 
 // Exécute le heredoc en récupérant le contenu du dernier 
-// heredoc de la commande.
-char	*execute_last_heredoc(t_cmd *cmd)
+// heredoc de la commande
+char	*execute_last_heredoc(t_data *data, t_cmd *cmd)
 {
 	t_file	*last;
 	int		last_index;
@@ -61,6 +63,6 @@ char	*execute_last_heredoc(t_cmd *cmd)
 	last = find_last_heredoc(cmd->files, &last_index);
 	if (last == NULL)
 		return (NULL);
-	content = execute_heredocs(cmd->files, last_index);
+	content = execute_heredocs(data, cmd->files, last_index);
 	return (content);
 }

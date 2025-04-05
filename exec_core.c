@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:10:49 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/03 21:19:43 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 13:27:37 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 	if (test_relative_path(current_cmd->args[0]) == 0)
 	{
 		execve(current_cmd->args[0], current_cmd->args, data->envp);
-		perror("execve");
+		print_error("execve");
 		free_all(data->gc);
 		exit(1);
 	}
@@ -27,7 +27,7 @@ void	execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 	if (good_path != NULL)
 	{
 		execve(good_path, current_cmd->args, data->envp);
-		perror("execve");
+		print_error("execve");
 		free_all(data->gc);
 		exit(1);
 	}
