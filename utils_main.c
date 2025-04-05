@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:27:11 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 19:38:02 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/05 19:12:54 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,13 @@ void	add_arg(t_token *curr_tkn, t_cmd *curr_cmd, int	*i)
 		curr_cmd->args = ft_malloc(sizeof(char *) * \
 			(count_arguments(curr_tkn) + 1));
 	}
+}
+
+int	is_tkn_redir(t_token *token)
+{
+	if (token->type == INFILE || token->type == HEREDOC)
+		return (1);
+	if (token->type == OUTFILE_APPEND || token->type == OUTFILE_TRUNC)
+		return (1);
+	return (0);
 }

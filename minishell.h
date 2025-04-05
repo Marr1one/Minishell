@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/05 16:43:09 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 19:15:20 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ typedef struct s_data
 }							t_data;
 
 extern int					variable_globale;
+
+int							is_tkn_redir(t_token *token);
 t_data						*get_gdata(void);
 void						sigint_handler_heredoc(int signum);
 void						sigint_handler(int signum);

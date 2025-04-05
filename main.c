@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/05 13:29:53 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 19:11:54 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	shell_loop(t_data *data)
 
 	while (1)
 	{
-		input = readline("\001\033[0;32mminishell\033[0m\002 ");
+		input = readline("minishell >");
 		if (!input)
 		{
 			free_all(data->gc);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/05 13:32:23 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 19:12:42 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,7 @@ t_token	*tokenizer(char *input, t_data *data)
 		if (list == NULL)
 			return (NULL);
 	}
-	if (list && findlast_token(list)->type == PIPE)
+	if (list && (findlast_token(list)->type == PIPE || is_tkn_redir(findlast_token(list))))
 	{
 		printf("minishell: Pipe not closed\n");
 		return (NULL);

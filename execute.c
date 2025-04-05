@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/05 15:51:11 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/05 19:16:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	execute_cmds(t_data *data, t_cmd *cmds)
 	while (cmd)
 	{
 		setup_pipe(cmd, fd_pipe);
-		execute_forked_cmd(data, cmd, &fd_in, fd_pipe);
+		execute_forked_cmd(data, cmd, &fd_in, fd_pipe);	// execute first all command and after waitpid
 		cmd = cmd->next;
 	}
 }
