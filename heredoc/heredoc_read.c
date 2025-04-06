@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 15:55:09 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 15:58:56 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 	while (1)
 	{
 		if (variable_globale != 0)
-		{
 			return (NULL);
-		}
 		line = readline(prompt);
 		if(!line)
 			break ;
