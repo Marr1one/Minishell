@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 18:19:51 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/06 18:38:42 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,6 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 			break ;
 		if (variable_globale != 0)
 			return (NULL);
-		line = readline(prompt);
-		if (!line)
-			break ;
 		if (ft_strlcmp(line, delimiter) == 0)
 		{
 			free(line);
