@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:10:46 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/03 19:11:34 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 16:37:25 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,24 @@ char	*ft_itoa(int n)
 	if (!res)
 		return (NULL);
 	ft_fillstr(res, n, len);
+	return (res);
+}
+
+char	**create_new_args(char **args, int idx)
+{
+	int		i;
+	int		j;
+	char	**res;
+
+	i = 0;
+	j = 0;
+	res = ft_malloc(sizeof(char) * count_args(args));
+	while (args[i])
+	{
+		if (i != idx)
+			res[j++] = args[i];
+		i++;
+	}
+	res[j] = NULL;
 	return (res);
 }

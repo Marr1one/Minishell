@@ -6,83 +6,75 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:02:12 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 17:31:25 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/06 18:17:59 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*process_heredoc(t_data *data, t_file *file, int current_index, int last_index)
+char	*process_heredoc(t_data *data, t_file *file, int current_index,
+		int last_index)
 {
 	char	*content;
 
-	content = read_heredoc_from_tty(data, file->path, "> ");
+	content = read_heredoc(data, file->path, "> ");
 	if (current_index != last_index)
 		return (NULL);
 	return (content);
 }
 
-// char	*execute_heredocs(t_data *data, t_file *files, int last_index)
-// {
-// 	t_file	*current;
-// 	char	*content;
-// 	int		current_index;
-// 	char	*temp_content;
+static int	heredoc_should_abort(void)
+{
+	return (variable_globale != 0);
+}
 
-// 	current = files;
-// 	current_index = 0;
-// 	content = NULL;
-// 	while (current)
-// 	{
-// 		if (current->mode == HEREDOC)
-// 		{
-// 			temp_content = process_heredoc(data, current, current_index, last_index);
-// 			if (temp_content == NULL && data->exit_status != 0)
-// 				return (NULL);
-// 			if (current_index == last_index)
-// 				content = temp_content;
-// 			else
-// 				free(temp_content);
-// 		}
-// 		current = current->next;
-// 		current_index++;
-// 	}
-// 	return (content);
-// }
+static char	*handle_heredoc_content(t_data *data, t_file *file,
+		int current_index, int last_index)
+{
+	char	*temp;
 
-char	*execute_heredocs(t_data *data, t_file *files, int last_index)
+	if (heredoc_should_abort())
+		return (NULL);
+	temp = process_heredoc(data, file, current_index, last_index);
+	if (heredoc_should_abort())
+	{
+		free(temp);
+		return (NULL);
+	}
+	if (current_index == last_index)
+		return (temp);
+	free(temp);
+	return (NULL);
+}
+
+static char	*iterate_heredocs(t_data *data, t_file *files, int last_index)
 {
 	t_file	*current;
-	char	*content = NULL;
-	char	*temp_content;
-	int		current_index = 0;
+	char	*content;
+	char	*temp;
+	int		i;
 
-	variable_globale = 0; // reset avant de commencer
-
+	i = 0;
+	content = NULL;
 	current = files;
 	while (current)
 	{
 		if (current->mode == HEREDOC)
 		{
-			if (variable_globale != 0)
-			{
-				variable_globale = 0;
+			temp = handle_heredoc_content(data, current, i, last_index);
+			if (heredoc_should_abort())
 				return (NULL);
-			}
-			temp_content = process_heredoc(data, current, current_index, last_index);
-			if (variable_globale != 0)
-			{
-				variable_globale = 0;
-				free(temp_content);
-				return (NULL);
-			}
-			if (current_index == last_index)
-				content = temp_content;
-			else
-				free(temp_content);
+			if (temp)
+				content = temp;
 		}
 		current = current->next;
-		current_index++;
+		i++;
 	}
 	return (content);
+}
+
+char	*execute_heredocs(t_data *data, t_file *files, int last_index)
+{
+	variable_globale = 0;
+	return (iterate_heredocs(data, files, last_index));
 }

@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:14:44 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/05 16:40:55 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:04:28 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void	expand_all(t_cmd *cmd, t_data *data)
 	current_cmd = cmd;
 	while (current_cmd)
 	{
-		
 		expand_cmd_args(current_cmd, data);
 		expand_cmd_files(current_cmd, data);
 		current_cmd = current_cmd->next;
