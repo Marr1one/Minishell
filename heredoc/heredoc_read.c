@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/05 15:47:00 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 00:45:06 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 	setup_signals_heredoc();
 	while (1)
 	{
-		line = readline(prompt);
-		if (!line) // Vérifie si heredoc a été annulé
-			break ;
 		if (variable_globale != 0)
 		{
-			data->exit_status = 128 + variable_globale;
-			return (variable_globale = 0, NULL);
+			free(content);
+			return (NULL);
 		}
+		line = readline(prompt);
+		if(!line)
+			break ;
 		if (ft_strlcmp(line, delimiter) == 0)
 		{
 			free(line);
