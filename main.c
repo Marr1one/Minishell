@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 15:41:21 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/06 17:42:39 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	check_arguments(int argc)
 
 void	process_command(char *input, t_data *data)
 {
+	if (variable_globale != 0)
+		return ;
 	t_token	*list_tkn;
 	t_cmd	*list_cmd;
 

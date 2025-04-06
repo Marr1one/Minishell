@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:02:12 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 00:44:37 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:31:25 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,14 @@ char	*execute_heredocs(t_data *data, t_file *files, int last_index)
 		if (current->mode == HEREDOC)
 		{
 			if (variable_globale != 0)
+			{
+				variable_globale = 0;
 				return (NULL);
+			}
 			temp_content = process_heredoc(data, current, current_index, last_index);
 			if (variable_globale != 0)
 			{
+				variable_globale = 0;
 				free(temp_content);
 				return (NULL);
 			}

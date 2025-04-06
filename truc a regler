@@ -1,1 +1,4 @@
-regler lees pipes dans lexec ! 
+minishell cat
+minishell echo $?
+dans le cas single builtin
+0
