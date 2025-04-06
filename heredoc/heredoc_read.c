@@ -6,11 +6,17 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 15:58:56 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 16:36:15 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+char	*init_heredoc_loop(void)
+{
+	setup_signals_heredoc();
+	return (ft_strdup(""));
+}
 
 // Lit via readline jusqu'au délimiteur et retourne le contenu lu.
 char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
@@ -18,15 +24,15 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 	char	*content;
 	char	*line;
 	char	*tmp;
-	
-	content = ft_strdup("");
-	setup_signals_heredoc();
+
+	(void)data;
+	content = init_heredoc_loop();
 	while (1)
 	{
 		if (variable_globale != 0)
 			return (NULL);
 		line = readline(prompt);
-		if(!line)
+		if (!line)
 			break ;
 		if (ft_strlcmp(line, delimiter) == 0)
 		{
@@ -42,8 +48,8 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 	return (content);
 }
 
-// Ouvre le tty et lit le heredoc en redirigeant temporairement STDIN.
-char	*read_heredoc_from_tty(t_data *data, char *delimiter, char *prompt)
+// lit le heredoc
+char	*read_heredoc(t_data *data, char *delimiter, char *prompt)
 {
 	char	*content;
 

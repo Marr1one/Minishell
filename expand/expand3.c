@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:12:20 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/05 16:47:34 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:56:29 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	handle_dollar_len(const char *arg, int *i, t_data *data)
 	int	len;
 
 	len = 0;
+	if (!arg[*i])
+		return (1);
 	if (arg[*i] == '?')
 	{
 		len = len_exit_status(data);
@@ -32,21 +34,21 @@ int	calc_final_len(const char *arg, t_data *data)
 	int	i;
 	int	final_len;
 
-	i = 0;
+	i = -1;
 	final_len = 0;
 	data->in_quote = 0;
 	while (arg[i])
 	{
-		if (arg[i] == '$' && data->in_quote != 2)
-		{
-			i++;
-			final_len += handle_dollar_len(arg, &i, data);
-		}
-		else
+		i++;
+		if (handle_quotes(arg[i], data))
 		{
 			final_len++;
-			i++;
+			continue ;
 		}
+		if (arg[i] == '$' && data->in_quote != 1)
+			final_len += handle_dollar_len(arg, &i, data);
+		else
+			final_len++;
 	}
 	return (final_len);
 }
@@ -68,6 +70,7 @@ int	append_var_value(char *result, int *j, char *var_name, t_data *data)
 	char	*exit_str;
 	int		k;
 
+	exit_str = NULL;
 	if (ft_strcmp(var_name, "?") == 0)
 	{
 		exit_str = ft_itoa(data->exit_status);

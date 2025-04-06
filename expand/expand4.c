@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:13:09 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/05 16:54:55 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:56:04 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,21 @@ int	get_dollar_count(const char *arg, int *i)
 	return (count);
 }
 
+static char	*handle_special_var(int *i)
+{
+	char	*var_name;
+
+	(*i)++;
+	var_name = ft_malloc(2);
+	if (!var_name)
+		return (NULL);
+	var_name[0] = '?';
+	var_name[1] = '\0';
+	return (var_name);
+}
+
 // Extrait un nom de variable à partir d'une position donnée dans une chaîne
+
 char	*extract_var_name(const char *arg, int *i)
 {
 	int		start;
@@ -62,15 +76,7 @@ char	*extract_var_name(const char *arg, int *i)
 	int		k;
 
 	if (arg[*i] == '?')
-	{
-		(*i)++;
-		var_name = ft_malloc(2);
-		if (!var_name)
-			return (NULL);
-		var_name[0] = '?';
-		var_name[1] = '\0';
-		return (var_name);
-	}
+		return (handle_special_var(i));
 	start = *i;
 	while (arg[*i] && (isalnum((unsigned char)arg[*i]) || arg[*i] == '_'))
 		(*i)++;
@@ -80,10 +86,11 @@ char	*extract_var_name(const char *arg, int *i)
 	var_name = ft_malloc(len + 1);
 	if (!var_name)
 		return (NULL);
-	k = -1;
-	while (++k < len)
+	k = 0;
+	while (k < len)
 	{
 		var_name[k] = arg[start + k];
+		k++;
 	}
 	var_name[len] = '\0';
 	return (var_name);
@@ -97,30 +104,11 @@ char	*expand_string(char *arg, t_data *data)
 	int		error;
 
 	final_len = calc_final_len(arg, data);
-	result = ft_malloc(final_len + 1);
+	result = ft_malloc(final_len + 2);
 	if (!result)
 		return (NULL);
 	error = build_final_string(result, arg, data);
 	if (error)
 		return (NULL);
 	return (result);
-}
-
-char	**create_new_args(char **args, int idx)
-{
-	int		i;
-	int		j;
-	char	**res;
-
-	i = 0;
-	j = 0;
-	res = ft_malloc(sizeof(char) * count_args(args));
-	while (args[i])
-	{
-		if (i != idx)
-			res[j++] = args[i];
-		i++;
-	}
-	res[j] = NULL;
-	return (res);
 }

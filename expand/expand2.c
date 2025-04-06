@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:11:17 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/04 15:51:22 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:18:43 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	len_var_value(const char *arg, int *i, t_data *data)
 
 	var_name = extract_var_name(arg, i);
 	if (!var_name)
-		return (1);
+		return (0);
 	var_value = check_env(data, var_name);
 	if (!var_value)
 		var_value = "";
