@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 15:36:40 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/06 15:41:21 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,11 @@ void	shell_loop(t_data *data)
 			free(input);
 			break ;
 		}
-		//if (variable_globale != 0)
-		//{
-		//	data->exit_status = 128 + variable_globale;
-		//	variable_globale = 0;
-		//	continue ;
-		//}
+		if (variable_globale != 0)
+		{
+			data->exit_status = 128 + variable_globale;
+			variable_globale = 0;
+		}
 		add_history(input);
 		process_command(input, data);
 		free(input);
