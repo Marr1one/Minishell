@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:12:20 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/06 17:56:29 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/06 18:04:20 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,22 @@ int	calc_final_len(const char *arg, t_data *data)
 	int	i;
 	int	final_len;
 
-	i = -1;
+	i = 0;
 	final_len = 0;
 	data->in_quote = 0;
 	while (arg[i])
 	{
-		i++;
 		if (handle_quotes(arg[i], data))
 		{
 			final_len++;
+			i++;
 			continue ;
 		}
 		if (arg[i] == '$' && data->in_quote != 1)
 			final_len += handle_dollar_len(arg, &i, data);
 		else
 			final_len++;
+		i++;
 	}
 	return (final_len);
 }

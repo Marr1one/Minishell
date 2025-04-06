@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 14:09:11 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/06 17:58:22 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void execute_cmds(t_data *data, t_cmd *cmds)
         return;
     
     // Allocation pour stocker les PIDs
-    pids = malloc(sizeof(pid_t) * nb_cmd);
+    pids = ft_malloc(sizeof(pid_t) * nb_cmd);
     if (!pids)
         return;
     
