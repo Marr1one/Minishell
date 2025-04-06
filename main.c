@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 17:42:39 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/06 18:09:03 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ int	check_arguments(int argc)
 
 void	process_command(char *input, t_data *data)
 {
-	if (variable_globale != 0)
-		return ;
 	t_token	*list_tkn;
 	t_cmd	*list_cmd;
 
@@ -56,6 +54,12 @@ void	shell_loop(t_data *data)
 
 	while (1)
 	{
+		if (variable_globale != 0)
+		{
+			data->exit_status = 128 + variable_globale;
+			variable_globale = 0;
+		}
+		
 		input = readline("\033[0;32mminishell\033[0m ");
 		if (!input)
 		{
@@ -65,9 +69,10 @@ void	shell_loop(t_data *data)
 		}
 		if (variable_globale != 0)
 		{
-			data->exit_status = 128 + variable_globale;
-			variable_globale = 0;
+			continue;
 		}
+		// Move the variable_globale check to before reading input
+		// so it's already reset when we process the next command
 		add_history(input);
 		process_command(input, data);
 		free(input);

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 17:47:18 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/06 17:57:57 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,39 +76,33 @@
 //	//}
 //}
 
-void execute_child_process(t_data *data, t_cmd *cmd, int fd_in, int *fd_pipe)
+void	execute_child_process(t_data *data, t_cmd *cmd, int fd_in, int *fd_pipe)
 {
-    // Configuration des signaux pour l'enfant
-    setup_child_signals();
-    
-    // Rediriger les entrées/sorties seulement si les descripteurs sont valides
-    if (fd_in > 0)  // Seulement si fd_in est un descripteur valide (>0)
-    {
-        if (dup2(fd_in, STDIN_FILENO) == -1)
-            perror("dup2 stdin");
-        close(fd_in);
-    }
-    
-    if (cmd->next && fd_pipe[1] >= 0)  // Vérifier que fd_pipe[1] est valide
-    {
-        if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)
-            perror("dup2 stdout");
-    }
-    // Fermer tous les descripteurs de pipe dans l'enfant
-    if (fd_pipe[0] >= 0)
-        close(fd_pipe[0]);
-    if (fd_pipe[1] >= 0)
-        close(fd_pipe[1]);
-    
-    // Gérer les redirections de fichiers et les heredocs
-    handle_heredoc_and_files(cmd);
-    execute_command(data, cmd);
-}
+	setup_child_signals();
+	if (fd_in > 0)  // Seulement si fd_in est un descripteur valide (>0)
+	{
+		if (dup2(fd_in, STDIN_FILENO) == -1)
+			perror("dup2 stdin");
+		close(fd_in);
+	}
+	if (cmd->next && fd_pipe[1] >= 0)  // Vérifier que fd_pipe[1] est valide
+	{
+		if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)
+			perror("dup2 stdout");
+	}
+	if (fd_pipe[0] >= 0)
+		close(fd_pipe[0]);
+	if (fd_pipe[1] >= 0)
+		close(fd_pipe[1]);
+
+	handle_heredoc_and_files(cmd);
+	execute_command(data, cmd);
+	}
 
 void execute_cmds(t_data *data, t_cmd *cmds)
 {
 	int fd_in;
-	int fd_pipe[2];  // Initialiser à -1 pour indiquer descripteurs invalides
+	int fd_pipe[2];
 	t_cmd *cmd;
 	pid_t *pids;
 	int i;
@@ -194,5 +188,4 @@ void execute_cmds(t_data *data, t_cmd *cmds)
 		}
 		j++;
 	}
-	free(pids);
 }
