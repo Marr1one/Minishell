@@ -16,8 +16,9 @@ static int	is_overflow(char *arg)
 {
 	int		i;
 	int		len;
-	char	*max_val = "9223372036854775807";
+	char	*max_val;
 
+	max_val = "9223372036854775807";
 	i = 0;
 	if (arg[i] == '+' || arg[i] == '-')
 		i++;
