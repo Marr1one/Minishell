@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:28:12 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/04 00:17:41 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 15:56:43 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*take_before(char *str, char c)
 	int		len;
 
 	i = 0;
-	while (str[i] != c)
+	while (str[i] && str[i] != c)
 		i++;
 	len = i;
 	res = ft_malloc(sizeof(char) * (len + 1));

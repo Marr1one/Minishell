@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/03/30 06:23:12 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 16:08:56 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,20 @@ void	show_list_cmd(t_cmd *list)
 	}
 }
 
+int	char_in_string(char *str, char c)
+{
+	int	i;
+	
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	show_env(char **env)
 {
 	int	i;
@@ -56,7 +70,8 @@ int	show_env(char **env)
 		return (1);
 	while (env[i])
 	{
-		printf("%s\n", env[i]);
+		if (char_in_string(env[i], '=') == 1)
+			printf("%s\n", env[i]);
 		i++;
 	}
 	return (0);

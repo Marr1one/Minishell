@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 18:17:09 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 15:54:40 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,7 @@ void	shell_loop(t_data *data)
 			break ;
 		}
 		if (variable_globale != 0)
-		{
 			continue;
-		}
 		// Move the variable_globale check to before reading input
 		// so it's already reset when we process the next command
 		add_history(input);

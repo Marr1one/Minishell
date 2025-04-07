@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 16:27:36 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/07 16:08:46 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,7 @@ void						free_all(t_malloc **gc);
 void						destroy_empty_node(t_data *data);
 char						**custom_split(char *str, char c);
 // pipex
-char						*ft_strchr(const char *s, int c);
+int							char_in_string(char *str, char c);
 char						*get_cmd_path(const char *cmd, char **envp);
 int							count_tab(char **tab);
 int							is_builtin(char *cmd);
