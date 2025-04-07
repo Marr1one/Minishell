@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 19:21:47 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:34:29 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,7 @@ int							count_arguments(t_token *list);
 
 // void			parsing(char **envp, t_data *data);
 char						**copy_env(char **envp);
+t_token						*findfirst_token(t_token	*list);
 int							test_commands(t_data *data);
 char						*take_before(char *str, char c);
 void						exec_command(t_data *data);

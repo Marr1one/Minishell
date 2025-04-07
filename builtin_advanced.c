@@ -68,7 +68,6 @@ int	check_single_builtin(t_data *data, t_cmd *cmds)
 {
 	if (count_cmds(cmds) == 1 && ncheck_builtin(cmds))
 	{
-		printf("dans le cas single builtin\n");
 		handle_single_builtin(data, cmds);
 		return (1);
 	}

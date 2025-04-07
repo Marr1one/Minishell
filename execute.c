@@ -6,181 +6,114 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 18:16:24 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 19:27:00 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//void	redirect_pipes(t_cmd *current_cmd, int fd_in, int *fd_pipe)
-//{
-//	if (current_cmd->next)
-//	{
-//		dup2(fd_pipe[1], STDOUT_FILENO);
-//		close(fd_pipe[0]);
-//		close(fd_pipe[1]);
-//	}
-//	if (fd_in != 0)
-//	{
-//		dup2(fd_in, STDIN_FILENO);
-//		close(fd_in);
-//	}
-//}
-//void redirect_pipes(t_cmd *current_cmd, int fd_in, int *fd_pipe)
-//{
-//    // Redirection de l'entrée standard si nécessaire
-//    if (fd_in != 0)
-//    {
-//        if (dup2(fd_in, STDIN_FILENO) == -1)
-//            perror("dup2 stdin");
-//        close(fd_in);
-//    }
-    
-//    // Redirection de la sortie standard si une commande suit
-//    if (current_cmd->next)
-//    {
-//        if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)
-//            perror("dup2 stdout");
-//    }
-    
-//    // Fermer tous les descripteurs de pipe qui ne sont plus nécessaires
-//    if (current_cmd->next)
-//    {
-//        close(fd_pipe[0]);
-//        close(fd_pipe[1]);
-//    }
-//}
-//void	handle_parent_process(t_data *data, t_cmd *current_cmd)
-//{
-//	int	status;
-
-//	//waitpid(0, &status, 0);
-//	if (WIFEXITED(status))
-//	{
-//		data->exit_status = WEXITSTATUS(status);
-//	}
-//	else if (WIFSIGNALED(status))
-//	{
-//		if (WTERMSIG(status) == SIGQUIT)
-//		{
-//			printf("Quit (core dumped)\n");
-//		}
-//		data->exit_status = 128 + WTERMSIG(status);
-//	}
-//	//if (*fd_in != 0)
-//	//	close(*fd_in);
-//	//if (current_cmd->next)
-//	//{
-//	//	close(fd_pipe[1]);
-//	//	*fd_in = fd_pipe[0];
-//	//}
-//}
-
 void	execute_child_process(t_data *data, t_cmd *cmd, int fd_in, int *fd_pipe)
 {
 	setup_child_signals();
-	if (fd_in > 0)  // Seulement si fd_in est un descripteur valide (>0)
+	if (fd_in > 0)
 	{
 		if (dup2(fd_in, STDIN_FILENO) == -1)
 			perror("dup2 stdin");
 		close(fd_in);
 	}
-	if (cmd->next && fd_pipe[1] >= 0)  // Vérifier que fd_pipe[1] est valide
+	if (cmd->next && fd_pipe[1] >= 0)
 	{
 		if (dup2(fd_pipe[1], STDOUT_FILENO) == -1)
 			perror("dup2 stdout");
+		close(fd_pipe[1]);
 	}
 	if (fd_pipe[0] >= 0)
 		close(fd_pipe[0]);
 	if (fd_pipe[1] >= 0)
 		close(fd_pipe[1]);
-
 	handle_heredoc_and_files(cmd);
 	execute_command(data, cmd);
-	}
+}
 
-void execute_cmds(t_data *data, t_cmd *cmds)
+int	init_cmd_execution(t_data *data, t_cmd *cmds, pid_t **pids, int *nb_cmd)
 {
-	int fd_in;
-	int fd_pipe[2];
-	t_cmd *cmd;
-	pid_t *pids;
-	int i;
-	int nb_cmd;
-	int	j;
-
+	// Gestion des heredocs
 	if (handle_all_heredocs(data, cmds) == 1)
-		return;
-	nb_cmd = count_cmds(cmds);
+		return (0);
+	// Vérification des builtins simples
+	*nb_cmd = count_cmds(cmds);
 	if (check_single_builtin(data, cmds))
-		return;
-	pids = ft_malloc(sizeof(pid_t) * nb_cmd);
-	if (!pids)
-		return;
-	fd_in = 0;  // 0 = stdin standard
-	i = 0;
-	cmd = cmds;
-	while (cmd)
+		return (0);
+	// Allocation de mémoire pour les PIDs
+	*pids = ft_malloc(sizeof(pid_t) * (*nb_cmd));
+	if (!*pids)
+		return (0);
+	return (1);
+}
+
+int	setup_cmd_pipe(int fd_pipe[2], t_cmd *cmd)
+{
+	if (cmd->next)
 	{
-		if (cmd->next)
+		if (pipe(fd_pipe) == -1)
 		{
-			if (pipe(fd_pipe) == -1)
-			{
-				perror("pipe");
-				free(pids);
-				return;
-			}
+			perror("pipe");
+			return (0);
 		}
-		else
-		{
-			fd_pipe[0] = -1;  
-			fd_pipe[1] = -1;
-		}
-		pids[i] = fork();
-		if (pids[i] == -1)
-		{
-			perror("fork");
-			if (fd_in > 0)
-				close(fd_in);
-			if (fd_pipe[0] >= 0)				//erreur de fork
-				close(fd_pipe[0]);
-			if (fd_pipe[1] >= 0)
-				close(fd_pipe[1]);
-			free(pids);
-			return;
-		}
-		if (pids[i] == 0)
-			execute_child_process(data, cmd, fd_in, fd_pipe);
-		else
-		{
-			// Processus parent
-			// Fermer les descripteurs qui ne sont plus nécessaires
-			if (fd_in > 0)  // Ne pas fermer stdin standard (0)
-				close(fd_in);
-			if (cmd->next)
-			{
-				close(fd_pipe[1]);
-				// Conserver l'extrémité de lecture pour la prochaine commande
-				fd_in = fd_pipe[0];
-			}
-		}
-		i++;
-		cmd = cmd->next;
 	}
+	else
+	{
+		fd_pipe[0] = -1;
+		fd_pipe[1] = -1;
+	}
+	return (1);
+}
+
+// Gestion des erreurs de fork et nettoyage
+void	handle_fork_error(pid_t *pids, int fd_in, int fd_pipe[2])
+{
+	perror("fork");
+	if (fd_in > 0)
+		close(fd_in);
+	if (fd_pipe[0] >= 0)
+		close(fd_pipe[0]);
+	if (fd_pipe[1] >= 0)
+		close(fd_pipe[1]);
+	free(pids);
+}
+
+// Gestion des descripteurs de fichiers dans le processus parent
+int	handle_parent_descriptors(int *fd_in, int fd_pipe[2], t_cmd *cmd)
+{
+	if (*fd_in > 0)
+		close(*fd_in);
+	if (cmd->next)
+	{
+		close(fd_pipe[1]);
+		*fd_in = fd_pipe[0];
+	}
+	return (1);
+}
+
+// Attente et gestion des statuts des processus enfants
+void	wait_for_children(t_data *data, pid_t *pids, int nb_cmd)
+{
+	int	j;
+	int	status;
+
 	j = 0;
-	// Attendre tous les processus enfants
 	while (j < nb_cmd)
 	{
-		int status;
 		waitpid(pids[j], &status, 0);
-		
-		// Le statut de sortie est celui du dernier processus
+		// Gestion du statut du dernier processus
 		if (j == nb_cmd - 1)
 		{
 			if (WIFEXITED(status))
 				data->exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 			{
+				if (WTERMSIG(status) == SIGINT)
+					printf("\n");
 				if (WTERMSIG(status) == SIGQUIT)
 					printf("Quit (core dumped)\n");
 				data->exit_status = 128 + WTERMSIG(status);
@@ -188,4 +121,43 @@ void execute_cmds(t_data *data, t_cmd *cmds)
 		}
 		j++;
 	}
+	free(pids);
+}
+
+// Fonction principale d'exécution des commandes
+void	execute_cmds(t_data *data, t_cmd *cmds)
+{
+	int fd_in;
+	int fd_pipe[2];
+	t_cmd *cmd;
+	pid_t *pids;
+	int i;
+	int nb_cmd;
+
+	if (!init_cmd_execution(data, cmds, &pids, &nb_cmd))
+		return ;
+	fd_in = 0;
+	i = 0;
+	cmd = cmds;
+	while (cmd)
+	{
+		if (!setup_cmd_pipe(fd_pipe, cmd))
+		{
+			free(pids);
+			return ;
+		}
+		pids[i] = fork();
+		if (pids[i] == -1)
+		{
+			handle_fork_error(pids, fd_in, fd_pipe);
+			return ;
+		}
+		if (pids[i] == 0)
+			execute_child_process(data, cmd, fd_in, fd_pipe);
+		else
+			handle_parent_descriptors(&fd_in, fd_pipe, cmd);
+		i++;
+		cmd = cmd->next;
+	}
+	wait_for_children(data, pids, nb_cmd);
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 18:59:20 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/07 19:00:28 by braugust         ###   ########.fr       */
+/*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
+/*   Updated: 2025/04/07 19:36:43 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ int	validate_input(const char *input)
 		else if (quote == 0)
 		{
 			if (input[i] == '\\' || input[i] == ';')
-				return (printf("minishell :special character '%c' \
-					detected\n", input[i]), 0);
+				return (printf("minishell :special character '%c'"
+					"detected\n", input[i]), 0);
 		}
 		i++;
 	}

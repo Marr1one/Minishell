@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 19:27:34 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:36:00 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 	return (content);
 }
 
-// lit le heredoc
 char	*read_heredoc(t_data *data, char *delimiter, char *prompt)
 {
 	char	*content;

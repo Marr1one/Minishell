@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 19:20:10 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:34:16 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	shell_loop(t_data *data)
 			data->exit_status = 128 + g_signalhook;
 			g_signalhook = 0;
 		}
+		input = readline(GREEN "minishell" RESET " ");
 		input = readline(GREEN "minishell" RESET " ");
 		if (!input)
 		{
