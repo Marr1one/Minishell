@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 15:54:40 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 17:43:25 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	process_command(char *input, t_data *data)
 /* Boucle principale du shell */
 void	shell_loop(t_data *data)
 {
-	char	*input;	
+	char	*input;
 
 	while (1)
 	{
@@ -59,8 +59,7 @@ void	shell_loop(t_data *data)
 			data->exit_status = 128 + variable_globale;
 			variable_globale = 0;
 		}
-		
-		input = readline("\033[0;32mminishell\033[0m ");
+		input = readline(GREEN "mmminishell" RESET " ");
 		if (!input)
 		{
 			free_all(data->gc);
@@ -68,9 +67,7 @@ void	shell_loop(t_data *data)
 			break ;
 		}
 		if (variable_globale != 0)
-			continue;
-		// Move the variable_globale check to before reading input
-		// so it's already reset when we process the next command
+			continue ;
 		add_history(input);
 		process_command(input, data);
 		free(input);
@@ -83,7 +80,7 @@ int	main(int argc, char **argv, char **envp)
 	t_data	data;
 
 	if (isatty(STDIN_FILENO) == 0 || isatty(STDOUT_FILENO) == 0)
-		return(printf("minishell: no tty\n"), 1);
+		return (printf("minishell: no tty\n"), 1);
 	(void)argv;
 	if (!check_arguments(argc))
 		return (1);
