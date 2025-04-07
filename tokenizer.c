@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 15:42:19 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:20:14 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,8 +180,8 @@ int	validate_input(const char *input)
 		else if (quote == 0)
 		{
 			if (input[i] == '\\' || input[i] == ';')
-				return (printf("minishell :special character '%c' \
-					detected\n", input[i]), 0);
+				return (printf("minishell :special character '%c'"
+					"detected\n", input[i]), 0);
 		}
 		i++;
 	}
@@ -231,10 +231,11 @@ t_token	*tokenizer(char *input, t_data *data)
 		if (list == NULL)
 			return (NULL);
 	}
-	if (list && (findlast_token(list)->type == PIPE || is_tkn_redir(findlast_token(list))))
+	if (list && (findlast_token(list)->type == PIPE || is_tkn_redir(findlast_token(list)) || findfirst_token(list)->type == PIPE))
 	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
-		return (NULL);
+		if (findfirst_token(list)->type == PIPE)
+			return (printf("minishell: syntax error near unexpected token `|'\n"), NULL);
+		return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
 	}
 	return (list);
 }

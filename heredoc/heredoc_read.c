@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 17:43:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 19:30:53 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,11 @@ char	*init_heredoc_loop(void)
 	return (ft_strdup(""));
 }
 
-// Lit via readline jusqu'au délimiteur et retourne le contenu lu.
 char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 {
 	char	*content;
 	char	*line;
-	char	*tmp;
-
+	
 	(void)data;
 	content = init_heredoc_loop();
 	while (1)
@@ -39,16 +37,13 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 			free(line);
 			break ;
 		}
-		tmp = content;
 		content = ft_strjoin(content, line);
-		tmp = content;
 		content = ft_strjoin(content, "\n");
 		free(line);
 	}
 	return (content);
 }
 
-// lit le heredoc
 char	*read_heredoc(t_data *data, char *delimiter, char *prompt)
 {
 	char	*content;

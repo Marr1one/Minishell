@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 17:43:25 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 17:52:38 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	shell_loop(t_data *data)
 			data->exit_status = 128 + variable_globale;
 			variable_globale = 0;
 		}
-		input = readline(GREEN "mmminishell" RESET " ");
+		input = readline(GREEN "minishell" RESET " ");
 		if (!input)
 		{
 			free_all(data->gc);
