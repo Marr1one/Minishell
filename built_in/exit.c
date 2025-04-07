@@ -36,7 +36,7 @@ static int	is_overflow(char *arg)
 
 int	validate_exit_arg(char *arg, int *status)
 {
-	if (is_numeric(arg) == 0 || is_overflow(arg) == 0)
+	if (is_numeric(arg) == 0 || is_overflow(arg) == 1)
 	{
 		printf("minishell: exit: %s: numeric argument required\n", arg);
 		*status = 2;

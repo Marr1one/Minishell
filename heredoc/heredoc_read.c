@@ -6,17 +6,11 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 17:58:49 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:00:56 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-char	*init_heredoc_loop(void)
-{
-	setup_signals_heredoc();
-	return (ft_strdup(""));
-}
 
 // Lit via readline jusqu'au délimiteur et retourne le contenu lu.
 char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
@@ -26,7 +20,8 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 	char	*tmp;
 
 	(void)data;
-	content = init_heredoc_loop();
+	content = ft_strdup("");
+	setup_signals_heredoc();
 	while (1)
 	{
 		line = readline(prompt);
