@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 19:27:00 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 20:01:33 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,11 @@ void	execute_child_process(t_data *data, t_cmd *cmd, int fd_in, int *fd_pipe)
 
 int	init_cmd_execution(t_data *data, t_cmd *cmds, pid_t **pids, int *nb_cmd)
 {
-	// Gestion des heredocs
 	if (handle_all_heredocs(data, cmds) == 1)
 		return (0);
-	// Vérification des builtins simples
 	*nb_cmd = count_cmds(cmds);
 	if (check_single_builtin(data, cmds))
 		return (0);
-	// Allocation de mémoire pour les PIDs
 	*pids = ft_malloc(sizeof(pid_t) * (*nb_cmd));
 	if (!*pids)
 		return (0);
@@ -69,7 +66,6 @@ int	setup_cmd_pipe(int fd_pipe[2], t_cmd *cmd)
 	return (1);
 }
 
-// Gestion des erreurs de fork et nettoyage
 void	handle_fork_error(pid_t *pids, int fd_in, int fd_pipe[2])
 {
 	perror("fork");
@@ -82,7 +78,6 @@ void	handle_fork_error(pid_t *pids, int fd_in, int fd_pipe[2])
 	free(pids);
 }
 
-// Gestion des descripteurs de fichiers dans le processus parent
 int	handle_parent_descriptors(int *fd_in, int fd_pipe[2], t_cmd *cmd)
 {
 	if (*fd_in > 0)
@@ -95,7 +90,6 @@ int	handle_parent_descriptors(int *fd_in, int fd_pipe[2], t_cmd *cmd)
 	return (1);
 }
 
-// Attente et gestion des statuts des processus enfants
 void	wait_for_children(t_data *data, pid_t *pids, int nb_cmd)
 {
 	int	j;
@@ -105,7 +99,6 @@ void	wait_for_children(t_data *data, pid_t *pids, int nb_cmd)
 	while (j < nb_cmd)
 	{
 		waitpid(pids[j], &status, 0);
-		// Gestion du statut du dernier processus
 		if (j == nb_cmd - 1)
 		{
 			if (WIFEXITED(status))
@@ -121,18 +114,16 @@ void	wait_for_children(t_data *data, pid_t *pids, int nb_cmd)
 		}
 		j++;
 	}
-	free(pids);
 }
 
-// Fonction principale d'exécution des commandes
 void	execute_cmds(t_data *data, t_cmd *cmds)
 {
-	int fd_in;
-	int fd_pipe[2];
-	t_cmd *cmd;
-	pid_t *pids;
-	int i;
-	int nb_cmd;
+	int		fd_in;
+	int		fd_pipe[2];
+	t_cmd	*cmd;
+	pid_t	*pids;
+	int		i;
+	int		nb_cmd;
 
 	if (!init_cmd_execution(data, cmds, &pids, &nb_cmd))
 		return ;

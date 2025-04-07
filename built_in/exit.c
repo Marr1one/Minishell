@@ -12,12 +12,13 @@
 
 #include "../minishell.h"
 
-static int	is_overflow(char *arg)
+int	is_overflow(char *arg)
 {
 	int		i;
 	int		len;
-	char	*max_val = "9223372036854775807";
+	char	*max_val;
 
+	max_val = "9223372036854775807";
 	i = 0;
 	if (arg[i] == '+' || arg[i] == '-')
 		i++;
@@ -36,7 +37,7 @@ static int	is_overflow(char *arg)
 
 int	validate_exit_arg(char *arg, int *status)
 {
-	if (is_numeric(arg) == 0 || is_overflow(arg) == 0)
+	if (is_numeric(arg) == 0 || is_overflow(arg) == 1)
 	{
 		printf("minishell: exit: %s: numeric argument required\n", arg);
 		*status = 2;
