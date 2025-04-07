@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:07:42 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 18:09:54 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:27:34 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 {
 	char	*content;
 	char	*line;
-	char	*tmp;
 
 	(void)data;
 	content = ft_strdup("");
@@ -42,16 +41,12 @@ char	*heredoc_loop(t_data *data, char *delimiter, char *prompt)
 	while (1)
 	{
 		line = readline(prompt);
-		if (variable_globale != 0)
-			return (free(line), free(content), NULL);
+		if (g_signalhook != 0)
+			return (free(line), NULL);
 		if (is_heredoc_end(line, delimiter))
 			break ;
-		tmp = content;
 		content = ft_strjoin(content, line);
-		free(tmp);
-		tmp = content;
 		content = ft_strjoin(content, "\n");
-		free(tmp);
 		free(line);
 	}
 	return (content);

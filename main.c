@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 18:05:13 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:20:10 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ void	shell_loop(t_data *data)
 
 	while (1)
 	{
-		if (variable_globale != 0)
+		if (g_signalhook != 0)
 		{
-			data->exit_status = 128 + variable_globale;
-			variable_globale = 0;
+			data->exit_status = 128 + g_signalhook;
+			g_signalhook = 0;
 		}
 		input = readline(GREEN "minishell" RESET " ");
 		if (!input)
@@ -66,7 +66,7 @@ void	shell_loop(t_data *data)
 			free(input);
 			break ;
 		}
-		if (variable_globale != 0)
+		if (g_signalhook != 0)
 			continue ;
 		add_history(input);
 		process_command(input, data);

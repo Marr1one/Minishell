@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 16:08:46 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 19:21:47 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-#define GREEN   "\001\033[0;32m\002"
-#define RESET   "\001\033[0m\002"
+# define GREEN "\001\033[0;32m\002"
+# define RESET "\001\033[0m\002"
 
 typedef struct s_idx
 {
@@ -101,8 +101,18 @@ typedef struct s_data
 
 }							t_data;
 
-extern int					variable_globale;
+extern int					g_signalhook;
 
+int							is_word(char c, t_data *data);
+t_token						*case_word(int *i, t_data *data, t_token *list,
+								char *input);
+t_token						*input_pipe(int *i, char *input, t_data *data,
+								t_token *list);
+t_token						*case_redir(char *input, int *i, t_data *data,
+								t_token *list);
+int							case_pipe(char *input, int i);
+t_type						case_redirect(char *input, int i);
+t_token						*add_node(char *str, t_token *list, t_type type);
 char						*init_heredoc_loop(void);
 int							is_tkn_redir(t_token *token);
 t_data						*get_gdata(void);
@@ -154,8 +164,8 @@ char						*custom_worddup(char *str, int start, int end);
 char						*worddup(char *str, int start, int end);
 t_file						*find_last_node(t_file *node);
 t_file						*find_existing_heredoc(t_file *node);
-char						*read_heredoc(t_data *data,
-								char *delimiter, char *prompt);
+char						*read_heredoc(t_data *data, char *delimiter,
+								char *prompt);
 void						child_signal_handler(int signum);
 void						setup_child_signals(void);
 void						parent_signal_handler(int sig);

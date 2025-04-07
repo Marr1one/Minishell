@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   add_slash.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 16:46:48 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 23:56:00 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:58:56 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 char	**add_slash_all(char **tab)
 {

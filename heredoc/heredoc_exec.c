@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:02:12 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/06 18:17:59 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/07 19:20:59 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*process_heredoc(t_data *data, t_file *file, int current_index,
 
 static int	heredoc_should_abort(void)
 {
-	return (variable_globale != 0);
+	return (g_signalhook != 0);
 }
 
 static char	*handle_heredoc_content(t_data *data, t_file *file,
@@ -75,6 +75,6 @@ static char	*iterate_heredocs(t_data *data, t_file *files, int last_index)
 
 char	*execute_heredocs(t_data *data, t_file *files, int last_index)
 {
-	variable_globale = 0;
+	g_signalhook = 0;
 	return (iterate_heredocs(data, files, last_index));
 }

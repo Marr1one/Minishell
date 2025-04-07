@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:13:09 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/06 17:56:04 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:24:38 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ static char	*handle_special_var(int *i)
 }
 
 // Extrait un nom de variable à partir d'une position donnée dans une chaîne
-
 char	*extract_var_name(const char *arg, int *i)
 {
 	int		start;
