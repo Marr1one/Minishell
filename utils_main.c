@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:27:11 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 18:10:48 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:28:41 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,10 @@ int	is_tkn_redir(t_token *token)
 	if (token->type == OUTFILE_APPEND || token->type == OUTFILE_TRUNC)
 		return (1);
 	return (0);
+}
+
+void	end_args(t_cmd *cmd, int i)
+{
+	if (cmd)
+		cmd->args[i] = NULL;
 }

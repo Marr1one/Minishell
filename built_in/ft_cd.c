@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 23:02:08 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/04 17:29:20 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:58:01 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ int	ft_cd(t_cmd *cmd, t_data *data)
 	char	*target_dir;
 
 	if (list_len(data->list) > 2)
-		return (print_error("cd: too many arguments"));
+		return (printf("minishell: cd: too many arguments\n"), 1);
 	if (!getcwd(current_pwd, sizeof(current_pwd)))
-		return (print_error("getcwd"), 1);
+		return (printf("minishell: getcwd\n"), 1);
 	data->args = cmd->args;
 	target_dir = get_target_dir(data);
 	if (!target_dir)

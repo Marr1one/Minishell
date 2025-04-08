@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:12:20 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/06 18:04:20 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:42:34 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	handle_dollar_len(const char *arg, int *i, t_data *data)
 	}
 	else
 		len = len_var_value(arg, i, data);
+	printf("DEBUG: handle_dollar_len, len = %d at idx.i = %d\n", len, *i);
 	return (len);
 }
 
@@ -51,6 +52,7 @@ int	calc_final_len(const char *arg, t_data *data)
 			final_len++;
 		i++;
 	}
+	printf("DEBUG: Calcul final_len = %d\n", final_len);
 	return (final_len);
 }
 
@@ -78,6 +80,7 @@ int	append_var_value(char *result, int *j, char *var_name, t_data *data)
 		k = 0;
 		while (exit_str[k])
 			result[(*j)++] = exit_str[k++];
+		printf("DEBUG: append_var_value, added exit status: %s\n", exit_str);
 		return (0);
 	}
 	else
@@ -90,6 +93,7 @@ int	append_var_value(char *result, int *j, char *var_name, t_data *data)
 		k = 0;
 		while (var_value[k])
 			result[(*j)++] = var_value[k++];
+		printf("DEBUG: append_var_value, added variable: %s = %s\n", var_name, var_value);
 		return (0);
 	}
 }

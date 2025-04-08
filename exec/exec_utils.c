@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:09:08 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 04:29:45 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 15:20:34 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,12 @@ void	setup_pipe(t_cmd *cmd, int *fd_pipe)
 	if (cmd->next)
 		pipe(fd_pipe);
 }
+
 int	count_cmds(t_cmd *cmds)
 {
 	int		i;
-	t_cmd *curr_cmd;
-	
+	t_cmd	*curr_cmd;
+
 	i = 0;
 	curr_cmd = cmds;
 	while (curr_cmd)

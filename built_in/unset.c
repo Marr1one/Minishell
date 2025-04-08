@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 03:40:20 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 04:15:36 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 15:10:30 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,10 @@ void	check_unset(t_data *data, char	*str)
 
 	i = 0;
 	join_eg = ft_joinunset(str);
-	printf("joineg = %s\n", join_eg);
 	while (data->envp[i])
 	{
 		if (ft_strncmp(data->envp[i], join_eg, ft_strlen(join_eg)) == 0)
 		{
-			printf("meme chose que join eg  -> {%s}\n", data->envp[i]);
 			data->envp = ft_unset(data, i);
 			break ;
 		}

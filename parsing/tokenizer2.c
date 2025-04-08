@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 04:41:18 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 15:18:45 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	validate_input(const char *input)
 		{
 			if (input[i] == '\\' || input[i] == ';')
 				return (printf("minishell :special character '%c'"
-					"detected\n", input[i]), 0);
+						"detected\n", input[i]), 0);
 		}
 		i++;
 	}

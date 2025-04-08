@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand4.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:13:09 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/07 19:24:38 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:39:15 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // Construit la chaîne finale après les expansions à partir
 // de la chaîne d'entrée
-int	build_final_string(char *result, char *arg, t_data *data)
+int	build_final_string(char *result, char *arg, t_data *data, int final_len)
 {
 	t_idx	idx;
 	int		error;
@@ -24,17 +24,29 @@ int	build_final_string(char *result, char *arg, t_data *data)
 	data->in_quote = 0;
 	while (arg[idx.i])
 	{
+		printf("DEBUG: idx.i = %d, idx.j = %d, char = '%c', in_quote = %d\n", idx.i, idx.j, arg[idx.i], data->in_quote);
 		if (handle_quotes(arg[idx.i], data))
 			result[idx.j++] = arg[idx.i++];
 		else if (arg[idx.i] == '$' && data->in_quote != 2)
 		{
 			error = handle_dollar(result, arg, &idx, data);
-			if (error)
+			if (error){
+			printf("DEBUG: Error during dollar handling at idx.i = %d\n", idx.i);
 				return (1);
+			}
 		}
 		else
+		{
+			// Vérification avant d'écrire pour éviter de dépasser la mémoire
+			if (idx.j >= final_len)
+			{
+				printf("DEBUG: idx.j (%d) exceeds allocated size final_len (%d)\n", idx.j, final_len);
+				return (1); // Erreur si l'indice dépasse la taille allouée
+			}
 			result[idx.j++] = arg[idx.i++];
+		}
 	}
+	printf("DEBUG: Final result after building: %s\n", result);
 	result[idx.j] = '\0';
 	return (0);
 }
@@ -103,11 +115,18 @@ char	*expand_string(char *arg, t_data *data)
 	int		error;
 
 	final_len = calc_final_len(arg, data);
+	printf("DEBUG: expand_string, final_len = %d\n", final_len);
 	result = ft_malloc(final_len + 2);
-	if (!result)
+	if (!result){
+		printf("DEBUG: Failed to allocate memory for result\n");
 		return (NULL);
-	error = build_final_string(result, arg, data);
-	if (error)
+	}
+	printf("DEBUG: Memory allocated for result, size = %d bytes\n", final_len + 2);
+	error = build_final_string(result, arg, data, final_len);
+	if (error){
+		printf("DEBUG: Error occurred in build_final_string\n");
 		return (NULL);
+	}
+	printf("DEBUG: expand_string, expanded result: %s\n", result);
 	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 03:12:29 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 15:55:41 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	process_command(char *input, t_data *data)
 	list_cmd = create_files(list_tkn, list_cmd);
 	expand_all(list_cmd, data);
 	remove_quotes(list_cmd);
+	data->list = list_tkn;
 	execute_cmds(data, list_cmd);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:14:44 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/06 17:04:28 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:03:01 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,11 @@ void	expand_cmd_args(t_cmd *cmd, t_data *data)
 {
 	int	i;
 
-	i = -1;
-	while (cmd->args && cmd->args[++i])
+	i = 0;
+	while (cmd->args && cmd->args[i])
 	{
 		expand_argument(cmd->args, i, data);
+		i++;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 04:05:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 04:06:48 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 15:20:07 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	handle_fork_error(int fd_in, int *fd_pipe)
 	if (fd_pipe[1] >= 0)
 		close(fd_pipe[1]);
 }
-int handle_pid_error(pid_t *pids, int i, int fd_in, int *fd_pipe)
+
+int	handle_pid_error(pid_t *pids, int i, int fd_in, int *fd_pipe)
 {
 	if (pids[i] == -1)
 	{
