@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:09:08 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 15:20:34 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/09 01:16:13 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,11 @@ char	*new_test_commands(char **paths, char *str)
 
 int	test_relative_path(char *path_test)
 {
-	if (access(path_test, F_OK | X_OK) == 0)
-		return (0);
+	if (char_in_string(path_test, '/') == 1)
+	{
+		if (access(path_test, F_OK | X_OK) == 0)
+			return (0);
+	}
 	return (1);
 }
 

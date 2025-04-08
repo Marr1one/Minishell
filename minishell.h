@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 23:08:03 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/09 01:01:33 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,11 @@ typedef struct s_data
 extern int					g_signalhook;
 
 
+void	show_files(t_file *list_file);
+void	show_list_cmd(t_cmd *list);
+void	execute_command(t_data *data, t_cmd *cmd);
 char	*ft_strndup(const char *s, size_t n);
-int	calc_expanded_len(const char *input, t_data *data);
+int		calc_expanded_len(const char *input, t_data *data);
 void	build_expanded_string(char *result, const char *input, t_data *data);
 char	*expand_string(const char *input, t_data *data);
 void	expand_argument(char **arg, t_data *data);
@@ -161,7 +164,6 @@ int							check_single_builtin(t_data *data, t_cmd *cmds);
 void						setup_pipe(t_cmd *cmd, int *fd_pipe);
 void						setup_heredoc(t_cmd *cmd);
 void						handle_heredoc_and_files(t_cmd *cmd);
-void						execute_command(t_data *data, t_cmd *cmd);
 int							redirect_fd(int fd, int mode);
 int							handle_single_file(t_file *file);
 int							execute_unset(t_cmd *cmd, t_data *data);
