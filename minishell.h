@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 16:28:20 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 18:03:32 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ t_file						*find_last_node(t_file *node);
 t_file						*find_existing_heredoc(t_file *node);
 char						*read_heredoc(t_data *data, char *delimiter,
 								char *prompt);
+								void	show_tab(char **tab);
 void						setup_child_signals(void);
 char						*check_env(t_data *data, char *str);
 int							check_variable_in_env(char *var_name, t_data *data);

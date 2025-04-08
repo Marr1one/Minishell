@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:14:44 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 16:03:01 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 18:45:05 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,7 @@ void	expand_cmd_files(t_cmd *cmd, t_data *data)
 	}
 }
 
-/*
-** Fonction principale pour l'expansion de toutes les variables
-*/
+// Fonction principale pour l'expansion de toutes les variables
 void	expand_all(t_cmd *cmd, t_data *data)
 {
 	t_cmd	*current_cmd;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_show.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 15:23:01 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 18:02:29 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,13 @@ void	show_list(t_token *list)
 		list = list->next;
 		i++;
 	}
+}
+
+void	show_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+		printf("%s\n", tab[i++]);
 }
