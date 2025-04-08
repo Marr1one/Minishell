@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:02:12 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 19:20:59 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 04:42:49 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,9 @@ static char	*handle_heredoc_content(t_data *data, t_file *file,
 		return (NULL);
 	temp = process_heredoc(data, file, current_index, last_index);
 	if (heredoc_should_abort())
-	{
-		free(temp);
 		return (NULL);
-	}
 	if (current_index == last_index)
 		return (temp);
-	free(temp);
 	return (NULL);
 }
 
