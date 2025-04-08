@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 19:22:28 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 19:47:30 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,15 @@ void	skip_empty_args(t_cmd *list_cmd)
 	int		i;
 	int		j;
 	char	**new_args;
-	
-	j = 0;
+	int c;
 	
 	curr_cmd = list_cmd;
-	i = 0;
 	while (curr_cmd)
 	{
 		j = 0;
 		i = 0;
-		new_args = ft_malloc(sizeof(char *) * count_without_empty(curr_cmd->args));
+		c = count_without_empty(curr_cmd->args) + 1;
+		new_args = ft_malloc(sizeof(char *) * c);
 		if (!new_args)
 			return ;
 		while (curr_cmd->args[i])
@@ -71,6 +70,7 @@ void	skip_empty_args(t_cmd *list_cmd)
 				new_args[j++]	= curr_cmd->args[i];
 			i++;
 		}
+		new_args[j] = NULL;
 		curr_cmd->args = new_args;
 		curr_cmd = curr_cmd->next;
 	}

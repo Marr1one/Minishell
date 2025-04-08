@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand4.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:13:09 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 19:07:29 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 20:07:28 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	build_final_string(char *result, char *arg, t_data *data, int final_len)
 	idx.i = 0;
 	idx.j = 0;
 	data->in_quote = 0;
-	while (arg[idx.i])
+	while (arg && arg[idx.i])
 	{
 		if (handle_quotes(arg[idx.i], data))
 			result[idx.j++] = arg[idx.i++];
@@ -39,6 +39,8 @@ int	build_final_string(char *result, char *arg, t_data *data, int final_len)
 			result[idx.j++] = arg[idx.i++];
 		}
 	}
+	printf("dans i %d\n", idx.i);
+	printf("dans j %d\n", idx.j);
 	result[idx.j] = '\0';
 	return (0);
 }
@@ -106,8 +108,8 @@ char	*expand_string(char *arg, t_data *data)
 	int		final_len;
 	int		error;
 
-	final_len = calc_final_len(arg, data);
-	result = ft_malloc(final_len + 2);
+	final_len = calc_final_len(arg, data); // LE PROBLEME VIENT DE LA PAS ASSEX DE PLACE
+	result = ft_malloc(final_len + 1000);
 	if (!result)
 		return (NULL);
 	error = build_final_string(result, arg, data, final_len);
