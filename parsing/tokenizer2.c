@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 14:59:32 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 19:36:43 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 04:41:18 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ t_token	*case_redir(char *input, int *i, t_data *data, t_token *list)
 	redirect = case_redirect(input, *i);
 	if (data->expect == FICHIER)
 	{
-		printf("minishell: syntax error near unexpected \
-			token `%c'\n", save_redirect);
+		printf("minishell: syntax error near unexpected"
+			"token `%c'\n", save_redirect);
 		return (NULL);
 	}
 	if (input[*i] == '<')

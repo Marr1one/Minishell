@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 19:00:03 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/07 19:04:40 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 04:40:22 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ t_token	*tokenizer(char *input, t_data *data)
 			return (NULL);
 	}
 	if (list && (findlast_token(list)->type == PIPE
-			|| is_tkn_redir(findlast_token(list))))
-		return (printf("minishell : syntax error\n"), NULL);
+			|| is_tkn_redir(findlast_token(list)) || 
+			findfirst_token(list)->type == PIPE))
+		return (printf("minishell: syntax error\n"), NULL);
 	return (list);
 }
