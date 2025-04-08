@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:13:09 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 18:33:11 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 19:07:29 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	build_final_string(char *result, char *arg, t_data *data, int final_len)
 		{
 			error = handle_dollar(result, arg, &idx, data);
 			if (error)
-				return (0);
+				return (1);
 		}
 		else
 		{
@@ -107,14 +107,11 @@ char	*expand_string(char *arg, t_data *data)
 	int		error;
 
 	final_len = calc_final_len(arg, data);
-
-	result = ft_malloc(final_len + 1);
-	if (!result){
+	result = ft_malloc(final_len + 2);
+	if (!result)
 		return (NULL);
-	}
 	error = build_final_string(result, arg, data, final_len);
-	if (error){
+	if (error)
 		return (NULL);
-	}
 	return (result);
 }

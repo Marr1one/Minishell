@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:10:46 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 18:45:25 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 19:10:10 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*ft_itoa(int n)
 	return (res);
 }
 
-char	** create_new_args(char **args, int idx)
+char	**create_new_args(char **args, int idx)
 {
 	int		i;
 	int		j;
