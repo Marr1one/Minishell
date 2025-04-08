@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 02:11:10 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 16:11:43 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 04:21:26 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,22 +157,3 @@ void	show_list(t_token *list)
 	}
 }
 
-void	show_malloc_list(t_malloc *list)
-{
-	int	i;
-	t_malloc_node	*current;
-
-	i = 0;
-	if (!list || !list->first)
-	{
-		printf("rien a afficher\n");
-		return;	
-	}
-	current = list->first;
-	while(current)
-	{
-		current = current->next;
-		i++;
-	}
-	printf("nombre d'allocations : %d\n", i);
-}

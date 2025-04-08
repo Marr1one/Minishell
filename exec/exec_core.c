@@ -6,11 +6,11 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:10:49 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/06 17:18:07 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 04:28:52 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	execute_command_path(t_data *data, char **paths, t_cmd *current_cmd)
 {
@@ -57,11 +57,3 @@ void	execute_command(t_data *data, t_cmd *cmd)
 	paths = add_slash_all(paths);
 	execute_command_path(data, paths, cmd);
 }
-
-//void	execute_child_process(t_data *data, t_cmd *cmd, int fd_in, int fd_pipe)
-//{
-//	setup_child_signals();
-//	//redirect_pipes(cmd, fd_in, &fd_pipe);
-//	handle_heredoc_and_files(cmd);
-//	execute_command(data, cmd);
-//}

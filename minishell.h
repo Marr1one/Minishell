@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 03:53:04 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 04:28:44 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,10 @@ typedef struct s_data
 
 extern int					g_signalhook;
 
+void	wait_for_children(t_cmd *cmds, t_data *data, pid_t *pids);
+int	handle_parent_descriptors(int *fd_in, int *fd_pipe, t_cmd *cmd);
+int 						handle_pid_error(pid_t *pids, int i, int fd_in, int *fd_pipe);
+int							setup_cmd_pipe(int *fd_pipe, t_cmd *cmd);
 char						*ft_joinunset(char *str);
 int							is_word(char c, t_data *data);
 t_token						*case_word(int *i, t_data *data, t_token *list,
@@ -117,8 +121,6 @@ t_token						*add_node(char *str, t_token *list, t_type type);
 char						*init_heredoc_loop(void);
 int							is_tkn_redir(t_token *token);
 t_data						*get_gdata(void);
-void						sigint_handler_heredoc(int signum);
-void						sigint_handler(int signum);
 void						setup_child_signals(void);
 int							simplefn(void);
 char						*quoteless_string(char *str);
@@ -134,8 +136,7 @@ void						expand_cmd_files(t_cmd *cmd, t_data *data);
 char						*expand_exit_status(t_data *data);
 char						**create_new_args(char **args, int idx);
 int							open_file(char *path, t_type mode);
-int							count_cmds(t_cmd *list_cmds);
-int							execute_unset(t_cmd *cmd, t_data *data);
+int							count_cmds(t_cmd *cmds);
 int							execute_simple_builtin(t_cmd *cmd, t_data *data);
 int							ncheck_builtin(t_cmd *cmd);
 int							execute_builtin_child(t_cmd *cmd, t_data *data);
@@ -157,7 +158,6 @@ void						execute_command(t_data *data, t_cmd *cmd);
 int							redirect_fd(int fd, int mode);
 int							handle_single_file(t_file *file);
 int							execute_unset(t_cmd *cmd, t_data *data);
-int							execute_simple_builtin(t_cmd *cmd, t_data *data);
 int							execute_advanced_builtin(t_cmd *cmd, t_data *data);
 int							check_len(char *s1, char *s2);
 int							countword(char *str, char c);
@@ -167,20 +167,13 @@ t_file						*find_last_node(t_file *node);
 t_file						*find_existing_heredoc(t_file *node);
 char						*read_heredoc(t_data *data, char *delimiter,
 								char *prompt);
-void						child_signal_handler(int signum);
 void						setup_child_signals(void);
-void						parent_signal_handler(int sig);
-void						setup_parent_signal_handlers(void);
-void						sigint_handler(int signum);
-void						child_signal_handler(int sig);
-void						reset_signals_for_child(void);
 char						*check_env(t_data *data, char *str);
 int							check_variable_in_env(char *var_name, t_data *data);
 void						handle_heredoc(t_data *data, t_cmd *current_cmd);
 void						expand_all(t_cmd *cmd, t_data *data);
 int							handle_quotes(char c, t_data *data);
 int							is_redirect(char c);
-int							is_pipe(char c);
 int							is_space(char c);
 int							len_exit_status(t_data *data);
 int							len_var_value(const char *arg, int *i,
@@ -198,15 +191,9 @@ int							get_dollar_count(const char *arg, int *i);
 char						*extract_var_name(const char *arg, int *i);
 char						*expand_string(char *arg, t_data *data);
 char						*ft_substr(char *str, int start, int end);
-void						show_list_cmd(t_cmd *list);
-void						show_tab(char **tab);
-void						show_list(t_token *list);
-void						show_malloc_list(t_malloc *list);
 t_token						*findlast_token(t_token *list);
 int							is_digit(char c);
-int							is_redirect(char c);
 int							is_pipe(char c);
-int							is_space(char c);
 t_token						*tokenizer(char *input, t_data *data);
 const char					*get_token_type_name(t_type type);
 // void			execute_cmds(t_cmd *cmds, char **paths);
@@ -217,7 +204,6 @@ char						*ft_substr_qte(char *str, int start, int end);
 char						**ft_unset(t_data *data, int save);
 void						check_unset(t_data *data, char *str);
 int							is_alphanum(char c);
-void						reset_signals_for_child(void);
 t_cmd						*parse_cmd(t_token *list);
 void						remove_quotes(t_cmd *list_cmd);
 t_cmd						*create_files(t_token *list_tkn, t_cmd *list_cmd);
@@ -232,7 +218,6 @@ int							count_arguments(t_token *list);
 // void			parsing(char **envp, t_data *data);
 char						**copy_env(char **envp);
 t_token						*findfirst_token(t_token	*list);
-int							test_commands(t_data *data);
 char						*take_before(char *str, char c);
 void						exec_command(t_data *data);
 char						**ft_split(char *str, char c);
@@ -246,15 +231,12 @@ void						ft_echo(t_cmd *current_cmd);
 char						*get_path_env(char **envp);
 t_malloc					**get_gc(void);
 char						**add_slash_all(char **tab);
-void						show_malloc_list(t_malloc *list);
 char						*add_slash(char *str);
-void						*ft_malloc(size_t size);
 int							check_builtin(t_data *data);
 void						ft_redirect(t_data *data, int i);
 int							ft_empty(t_data *data);
 void						check_redirect(t_data *data);
 int							case_redirection(t_data *data);
-int							test_commands(t_data *data);
 int							count_global_quotes(char *str);
 char						*take_after(char *str, char c);
 int							ft_strncmp(char *s1, char *s2, int n);
