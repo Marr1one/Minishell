@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 22:15:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 19:27:00 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 03:36:37 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,29 @@ void	execute_child_process(t_data *data, t_cmd *cmd, int fd_in, int *fd_pipe)
 	execute_command(data, cmd);
 }
 
-int	init_cmd_execution(t_data *data, t_cmd *cmds, pid_t **pids, int *nb_cmd)
+int	init_cmd_execution(t_data *data, t_cmd *cmds, pid_t **pids)
 {
-	// Gestion des heredocs
+	t_cmd	*curr_cmd;
+	int		i;
+
+	i = 0;
+	curr_cmd = cmds;
 	if (handle_all_heredocs(data, cmds) == 1)
 		return (0);
-	// Vérification des builtins simples
-	*nb_cmd = count_cmds(cmds);
 	if (check_single_builtin(data, cmds))
 		return (0);
-	// Allocation de mémoire pour les PIDs
-	*pids = ft_malloc(sizeof(pid_t) * (*nb_cmd));
+	while (curr_cmd)
+	{
+		i++;
+		curr_cmd = curr_cmd->next;
+	}
+	*pids = ft_malloc(sizeof(pid_t) * (i));
 	if (!*pids)
 		return (0);
 	return (1);
 }
 
-int	setup_cmd_pipe(int fd_pipe[2], t_cmd *cmd)
+int	setup_cmd_pipe(int *fd_pipe, t_cmd *cmd)
 {
 	if (cmd->next)
 	{
@@ -69,8 +75,7 @@ int	setup_cmd_pipe(int fd_pipe[2], t_cmd *cmd)
 	return (1);
 }
 
-// Gestion des erreurs de fork et nettoyage
-void	handle_fork_error(pid_t *pids, int fd_in, int fd_pipe[2])
+void	handle_fork_error(int fd_in, int *fd_pipe)
 {
 	perror("fork");
 	if (fd_in > 0)
@@ -79,11 +84,9 @@ void	handle_fork_error(pid_t *pids, int fd_in, int fd_pipe[2])
 		close(fd_pipe[0]);
 	if (fd_pipe[1] >= 0)
 		close(fd_pipe[1]);
-	free(pids);
 }
 
-// Gestion des descripteurs de fichiers dans le processus parent
-int	handle_parent_descriptors(int *fd_in, int fd_pipe[2], t_cmd *cmd)
+int	handle_parent_descriptors(int *fd_in, int *fd_pipe, t_cmd *cmd)
 {
 	if (*fd_in > 0)
 		close(*fd_in);
@@ -95,17 +98,32 @@ int	handle_parent_descriptors(int *fd_in, int fd_pipe[2], t_cmd *cmd)
 	return (1);
 }
 
-// Attente et gestion des statuts des processus enfants
-void	wait_for_children(t_data *data, pid_t *pids, int nb_cmd)
+int	count_cmds(t_cmd *cmds)
+{
+	int		i;
+	t_cmd *curr_cmd;
+	
+	i = 0;
+	curr_cmd = cmds;
+	while (curr_cmd)
+	{
+		i++;
+		curr_cmd = curr_cmd->next;
+	}
+	return (i);
+}
+
+void	wait_for_children(t_cmd *cmds, t_data *data, pid_t *pids)
 {
 	int	j;
 	int	status;
+	int	nb_cmd;
 
 	j = 0;
+	nb_cmd = count_cmds(cmds);
 	while (j < nb_cmd)
 	{
 		waitpid(pids[j], &status, 0);
-		// Gestion du statut du dernier processus
 		if (j == nb_cmd - 1)
 		{
 			if (WIFEXITED(status))
@@ -121,43 +139,43 @@ void	wait_for_children(t_data *data, pid_t *pids, int nb_cmd)
 		}
 		j++;
 	}
-	free(pids);
 }
 
-// Fonction principale d'exécution des commandes
+int handle_pid_error(pid_t *pids, int i, int fd_in, int *fd_pipe)
+{
+	if (pids[i] == -1)
+	{
+		handle_fork_error(fd_in, fd_pipe);
+		return (1);
+	}
+	return (0);
+}
+
 void	execute_cmds(t_data *data, t_cmd *cmds)
 {
-	int fd_in;
-	int fd_pipe[2];
-	t_cmd *cmd;
-	pid_t *pids;
-	int i;
-	int nb_cmd;
+	int		fd_in;
+	int		fd_pipe[2];
+	t_cmd	*cmd;
+	pid_t	*pids;
+	int		i;
 
-	if (!init_cmd_execution(data, cmds, &pids, &nb_cmd))
+	if (!init_cmd_execution(data, cmds, &pids))
 		return ;
 	fd_in = 0;
-	i = 0;
+	i = -1;
 	cmd = cmds;
 	while (cmd)
 	{
 		if (!setup_cmd_pipe(fd_pipe, cmd))
-		{
-			free(pids);
 			return ;
-		}
-		pids[i] = fork();
-		if (pids[i] == -1)
-		{
-			handle_fork_error(pids, fd_in, fd_pipe);
+		pids[++i] = fork();
+		if (handle_pid_error(pids, i, fd_in, fd_pipe) == 1)
 			return ;
-		}
 		if (pids[i] == 0)
 			execute_child_process(data, cmd, fd_in, fd_pipe);
 		else
 			handle_parent_descriptors(&fd_in, fd_pipe, cmd);
-		i++;
 		cmd = cmd->next;
 	}
-	wait_for_children(data, pids, nb_cmd);
+	wait_for_children(cmds, data, pids);
 }

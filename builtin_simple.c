@@ -12,29 +12,6 @@
 
 #include"minishell.h"
 
-int	execute_unset(t_cmd *cmd, t_data *data)
-{
-	int	i;
-	int	exit_status;
-
-	if (!cmd->args[1])
-	{
-		data->exit_status = 0;
-		return (1);
-	}
-	exit_status = 0;
-	i = 1;
-	while (cmd->args[i])
-	{
-		check_unset(data, cmd->args[i]);
-		if (data->exit_status == 1)
-			exit_status = 1;
-		i++;
-	}
-	data->exit_status = exit_status;
-	return (1);
-}
-
 int	execute_simple_builtin(t_cmd *cmd, t_data *data)
 {
 	if (ft_strlcmp(cmd->args[0], "echo") == 0)

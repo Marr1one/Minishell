@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 19:34:29 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 03:53:04 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct s_data
 
 extern int					g_signalhook;
 
+char						*ft_joinunset(char *str);
 int							is_word(char c, t_data *data);
 t_token						*case_word(int *i, t_data *data, t_token *list,
 								char *input);
@@ -248,7 +249,6 @@ char						**add_slash_all(char **tab);
 void						show_malloc_list(t_malloc *list);
 char						*add_slash(char *str);
 void						*ft_malloc(size_t size);
-int							ft_strncmp(char *s1, char *s2, int n);
 int							check_builtin(t_data *data);
 void						ft_redirect(t_data *data, int i);
 int							ft_empty(t_data *data);

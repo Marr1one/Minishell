@@ -6,7 +6,7 @@
 /*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:19:59 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/03 23:56:27 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/08 03:41:26 by maissat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,29 +74,3 @@ char	**add_export(t_data *data, char *str)
 	return (new_env);
 }
 
-char	**ft_unset(t_data *data, int save)
-{
-	int		i;
-	int		j;
-	char	**new_env;
-
-	i = 0;
-	while (data->envp[i])
-		i++;
-	new_env = ft_malloc(sizeof(char *) * i);
-	if (!new_env)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (data->envp[i])
-	{
-		if (i != save)
-		{
-			new_env[j] = ft_strdup(data->envp[i]);
-			j++;
-		}
-		i++;
-	}
-	new_env[j] = NULL;
-	return (new_env);
-}
