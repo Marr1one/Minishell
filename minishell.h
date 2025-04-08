@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 18:03:32 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/08 23:08:03 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,16 @@ typedef struct s_data
 
 extern int					g_signalhook;
 
+
+char	*ft_strndup(const char *s, size_t n);
+int	calc_expanded_len(const char *input, t_data *data);
+void	build_expanded_string(char *result, const char *input, t_data *data);
+char	*expand_string(const char *input, t_data *data);
+void	expand_argument(char **arg, t_data *data);
+void	expand_cmd_args(t_cmd *cmd, t_data *data);
+void	expand_file_path(t_file *file, t_data *data);
+void	expand_cmd_files(t_cmd *cmd, t_data *data);
+void	expand_all(t_cmd *cmd, t_data *data);
 void						wait_for_children(t_cmd *cmds, t_data *data,
 								pid_t *pids);
 int							handle_parent_descriptors(int *fd_in, int *fd_pipe,
@@ -131,7 +141,7 @@ char						*get_target_dir(t_data *data);
 char						*search_oldpwd(t_data *data);
 void						update_oldpwd(t_data *data, char *pwd);
 void						update_pwd(t_data *data, char *pwd);
-void						expand_argument(char **args, int i, t_data *data);
+// void						expand_argument(char **args, int i, t_data *data);
 void						expand_file_path(t_file *file, t_data *data);
 void						expand_cmd_files(t_cmd *cmd, t_data *data);
 char						*expand_exit_status(t_data *data);
@@ -187,7 +197,7 @@ int							build_final_string(char *result, char *arg,
 								t_data *data, int final_len);
 int							get_dollar_count(const char *arg, int *i);
 char						*extract_var_name(const char *arg, int *i);
-char						*expand_string(char *arg, t_data *data);
+// char						*expand_string(char *arg, t_data *data);
 char						*ft_substr(char *str, int start, int end);
 t_token						*findlast_token(t_token *list);
 int							is_digit(char c);

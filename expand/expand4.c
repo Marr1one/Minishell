@@ -3,117 +3,240 @@
 /*                                                        :::      ::::::::   */
 /*   expand4.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:13:09 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 20:07:28 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/09 00:08:36 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// Construit la chaîne finale après les expansions à partir
-// de la chaîne d'entrée
-int	build_final_string(char *result, char *arg, t_data *data, int final_len)
-{
-	t_idx	idx;
-	int		error;
 
-	idx.i = 0;
-	idx.j = 0;
+char	*ft_strndup(const char *s, size_t n)
+{
+	size_t	i;
+	size_t	len;
+	char	*dup;
+
+	len = 0;
+	while (s[len] && len < n)
+		len++;
+
+	dup = ft_malloc(len + 1);
+	if (!dup)
+		return (NULL);
+
+	i = 0;
+	while (i < len)
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
+}
+
+int	calc_expanded_len(const char *input, t_data *data)
+{
+	int	i = 0;
+	int	len = 0;
+
 	data->in_quote = 0;
-	while (arg && arg[idx.i])
+	while (input[i])
 	{
-		if (handle_quotes(arg[idx.i], data))
-			result[idx.j++] = arg[idx.i++];
-		else if (arg[idx.i] == '$' && data->in_quote != 2)
+		if (handle_quotes(input[i], data))
 		{
-			error = handle_dollar(result, arg, &idx, data);
-			if (error)
-				return (1);
+			i++;
+			continue;
 		}
-		else
+		if (input[i] == '$' && data->in_quote != 2)
 		{
-			if (idx.j >= final_len)
-				return (1);
-			result[idx.j++] = arg[idx.i++];
+			int	dollar_count = 0;
+			while (input[i] == '$')
+			{
+				dollar_count++;
+				i++;
+			}
+			len += dollar_count / 2;
+			if (dollar_count % 2 == 0)
+			{
+				continue;
+			}
+			if (input[i] == '?')
+			{
+				char *exit_str = ft_itoa(data->exit_status);
+				len += strlen(exit_str);
+				i++;
+			}
+			else if (input[i] &&
+				(isalpha((unsigned char)input[i]) || input[i] == '_'))
+			{
+				int	start = i;
+				while (input[i] &&
+					(isalnum((unsigned char)input[i]) || input[i] == '_'))
+				{
+					i++;
+				}
+				{
+					char *var_name = ft_strndup(input + start, i - start);
+					char *var_value = check_env(data, var_name);
+					if (!var_value)
+						var_value = "";
+					len += strlen(var_value);
+				}
+			}
+			else
+			{
+				len++;
+			}
+			continue;
 		}
+		len++;
+		i++;
 	}
-	printf("dans i %d\n", idx.i);
-	printf("dans j %d\n", idx.j);
-	result[idx.j] = '\0';
-	return (0);
+	return (len);
 }
 
-// Compte les signes dollar consécutifs à partir d'une position donnée
-int	get_dollar_count(const char *arg, int *i)
-{
-	int	count;
 
-	count = 0;
-	while (arg[*i] == '$')
+void	build_expanded_string(char *result, const char *input, t_data *data)
+{
+	int	i = 0;
+	int	j = 0;
+	int k;
+	int	dollar_count;
+	char *exit_str;
+	int	start;
+	int var_len;
+	char *var_name;
+	char *var_value;
+	
+	data->in_quote = 0;
+	exit_str = NULL;
+	while (input[i])
 	{
-		count++;
-		(*i)++;
+		if (handle_quotes(input[i], data))
+		{
+			i++;
+			continue;
+		}
+		if (input[i] == '$' && data->in_quote != 2)
+		{
+			dollar_count = 0;
+			while (input[i] == '$')
+			{
+				dollar_count++;
+				i++;
+			}
+			k = -1;
+			while (++k < dollar_count / 2)
+				result[j++] = '$';
+			if (dollar_count % 2 == 0)
+				continue;
+			if (input[i] == '?')
+			{
+				exit_str = ft_itoa(data->exit_status);
+				k = 0;
+				while (exit_str[k])
+					result[j++] = exit_str[k++];
+				i++;
+			}
+			else if (input[i] &&
+				(isalpha((unsigned char)input[i]) || input[i] == '_'))
+			{
+				start = i;
+				while (input[i] &&
+					(isalnum((unsigned char)input[i]) || input[i] == '_'))
+					i++;
+				var_len = i - start;
+				{
+					var_name = ft_strndup(input + start, var_len);
+					var_value = check_env(data, var_name);
+					if (!var_value)
+						var_value = "";
+					k = 0;
+					while (var_value[k])
+						result[j++] = var_value[k++];
+				}
+			}
+			else
+				result[j++] = '$';
+			continue;
+		}
+		result[j++] = input[i++];
 	}
-	return (count);
+	result[j] = '\0';
 }
 
-static char	*handle_special_var(int *i)
-{
-	char	*var_name;
-
-	(*i)++;
-	var_name = ft_malloc(2);
-	if (!var_name)
-		return (NULL);
-	var_name[0] = '?';
-	var_name[1] = '\0';
-	return (var_name);
-}
-
-// Extrait un nom de variable à partir d'une position donnée dans une chaîne
-char	*extract_var_name(const char *arg, int *i)
-{
-	int		start;
-	int		len;
-	char	*var_name;
-	int		k;
-
-	if (arg[*i] == '?')
-		return (handle_special_var(i));
-	start = *i;
-	while (arg[*i] && (isalnum((unsigned char)arg[*i]) || arg[*i] == '_'))
-		(*i)++;
-	len = *i - start;
-	if (len == 0)
-		return (NULL);
-	var_name = ft_malloc(len + 1);
-	if (!var_name)
-		return (NULL);
-	k = 0;
-	while (k < len)
-	{
-		var_name[k] = arg[start + k];
-		k++;
-	}
-	var_name[len] = '\0';
-	return (var_name);
-}
-
-// Mise en place grace a toute les fonctions
-char	*expand_string(char *arg, t_data *data)
+char	*expand_string(const char *input, t_data *data)
 {
 	char	*result;
 	int		final_len;
-	int		error;
 
-	final_len = calc_final_len(arg, data); // LE PROBLEME VIENT DE LA PAS ASSEX DE PLACE
-	result = ft_malloc(final_len + 1000);
+	if (!input)
+		return (NULL);
+	final_len = calc_expanded_len(input, data);
+	result = ft_malloc(final_len + 1);
 	if (!result)
 		return (NULL);
-	error = build_final_string(result, arg, data, final_len);
-	if (error)
-		return (NULL);
+	build_expanded_string(result, input, data);
 	return (result);
+}
+
+void	expand_argument(char **arg, t_data *data)
+{
+	if (!arg || !(*arg))
+		return ;
+	*arg = expand_string(*arg, data);
+}
+
+void	expand_cmd_args(t_cmd *cmd, t_data *data)
+{
+	int	i;
+	
+	i = 0;
+	if (!cmd || !cmd->args)
+		return ;
+	while (cmd->args[i])
+	{
+		expand_argument(&cmd->args[i], data);
+		i++;
+	}
+}
+
+void	expand_file_path(t_file *file, t_data *data)
+{
+	if (!file)
+		return ;
+	if (file->mode == HEREDOC)
+	{
+		file->path = quoteless_string(file->path);
+		return;
+	}
+	file->path = expand_string(file->path, data);
+}
+
+void	expand_cmd_files(t_cmd *cmd, t_data *data)
+{
+	t_file	*cur;
+
+	cur = cmd->files;
+	while (cur)
+	{
+		expand_file_path(cur, data);
+		cur = cur->next;
+	}
+}
+
+void	expand_all(t_cmd *cmd, t_data *data)
+{
+	t_cmd	*cur;
+	
+	cur = cmd;
+	while (cur)
+	{
+		expand_cmd_args(cur, data);
+		expand_cmd_files(cur, data);
+		cur = cur->next;
+	}
 }
