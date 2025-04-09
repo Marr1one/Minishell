@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   file_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:10:23 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/04 00:05:57 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/09 16:33:34 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_file	*add_file(t_file *list_file, t_token *file_tkn, t_type mode)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:14:55 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/07 15:54:19 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/09 16:33:54 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	calculate_length_without_quotes(char *str)
 {
