@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/09 01:01:33 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/09 15:28:56 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 
 typedef struct s_idx
 {
-	int						i;
-	int						j;
+	int						*i;
+	int						*j;
 }							t_idx;
 
 typedef struct s_malloc_node
@@ -193,8 +193,6 @@ int							handle_dollar_len(const char *arg, int *i,
 int							calc_final_len(const char *arg, t_data *data);
 int							append_var_value(char *result, int *j,
 								char *var_name, t_data *data);
-int							handle_dollar(char *result, char *arg, t_idx *idx,
-								t_data *data);
 int							build_final_string(char *result, char *arg,
 								t_data *data, int final_len);
 int							get_dollar_count(const char *arg, int *i);

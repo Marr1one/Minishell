@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:13:09 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/09 00:08:36 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:54:06 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,135 +37,209 @@ char	*ft_strndup(const char *s, size_t n)
 	return (dup);
 }
 
-int	calc_expanded_len(const char *input, t_data *data)
+int handle_variable_expansion(const char *input, t_data *data, int *i)
 {
-	int	i = 0;
-	int	len = 0;
+    int start;
+    int var_len;
+    char *var_name;
+    char *var_value;
+    int len;
 
-	data->in_quote = 0;
-	while (input[i])
-	{
-		if (handle_quotes(input[i], data))
-		{
-			i++;
-			continue;
-		}
-		if (input[i] == '$' && data->in_quote != 2)
-		{
-			int	dollar_count = 0;
-			while (input[i] == '$')
-			{
-				dollar_count++;
-				i++;
-			}
-			len += dollar_count / 2;
-			if (dollar_count % 2 == 0)
-			{
-				continue;
-			}
-			if (input[i] == '?')
-			{
-				char *exit_str = ft_itoa(data->exit_status);
-				len += strlen(exit_str);
-				i++;
-			}
-			else if (input[i] &&
-				(isalpha((unsigned char)input[i]) || input[i] == '_'))
-			{
-				int	start = i;
-				while (input[i] &&
-					(isalnum((unsigned char)input[i]) || input[i] == '_'))
-				{
-					i++;
-				}
-				{
-					char *var_name = ft_strndup(input + start, i - start);
-					char *var_value = check_env(data, var_name);
-					if (!var_value)
-						var_value = "";
-					len += strlen(var_value);
-				}
-			}
-			else
-			{
-				len++;
-			}
-			continue;
-		}
-		len++;
-		i++;
-	}
-	return (len);
+    start = *i;
+    while (input[*i] && (isalnum((unsigned char)input[*i]) || input[*i] == '_'))
+    {
+        (*i)++;
+    }
+    
+    var_len = *i - start;
+    var_name = ft_strndup(input + start, var_len);
+    var_value = check_env(data, var_name);
+    
+    if (!var_value)
+        var_value = "";
+    
+    len = strlen(var_value);
+    return (len);
 }
 
-
-void	build_expanded_string(char *result, const char *input, t_data *data)
+int process_dollar_expansion(const char *input, t_data *data, int *i)
 {
-	int	i = 0;
-	int	j = 0;
+    int dollar_count;
+    int len;
+    char *exit_str;
+
+    dollar_count = 0;
+    len = 0;
+    while (input[*i] == '$')
+    {
+        dollar_count++;
+        (*i)++;
+	}
+    len += dollar_count / 2;
+    if (dollar_count % 2 == 0)
+        return (len);
+    if (input[*i] == '?')
+    {
+        exit_str = ft_itoa(data->exit_status);
+        len += strlen(exit_str);
+        (*i)++;
+    }
+    else if (input[*i] && (isalpha((unsigned char)input[*i]) || input[*i] == '_'))
+        len += handle_variable_expansion(input, data, i);
+    else
+        len++;
+    return (len);
+}
+
+int calc_expanded_len(const char *input, t_data *data)
+{
+    int i;
+    int len;
+
+    i = 0;
+    len = 0;
+    data->in_quote = 0;
+    while (input[i])
+    {
+        if (handle_quotes(input[i], data))
+        {
+            i++;
+            continue;
+        }
+        if (input[i] == '$' && data->in_quote != 2)
+        {
+            len += process_dollar_expansion(input, data, &i);
+            continue;
+        }
+        len++;
+        i++;
+    }
+    return (len);
+}
+
+void handle_dollar_counting(char *result, const char *input, t_idx *idx, int *dollar_count)
+{
+    int k;
+    
+    *dollar_count = 0;
+    while (input[*(idx->i)] == '$')
+    {
+        (*dollar_count)++;
+        (*(idx->i))++;
+    }
+    
+    k = -1;
+    while (++k < *dollar_count / 2)
+    {
+        result[*(idx->j)] = '$';
+        (*(idx->j))++;
+    }
+}
+
+void handle_exit_or_dollar(char *result, const char *input, t_data *data, t_idx *idx)
+{
+    char *exit_str;
+    int k;
+    
+    if (input[*(idx->i)] == '?')
+    {
+        exit_str = ft_itoa(data->exit_status);
+        k = 0;
+        while (exit_str[k])
+        {
+            result[*(idx->j)] = exit_str[k];
+            (*(idx->j))++;
+            k++;
+        }
+        (*(idx->i))++;
+    }
+    else
+    {
+        result[*(idx->j)] = '$';
+        (*(idx->j))++;
+    }
+}
+
+void process_variable_value(char *result, char *var_value, int *j)
+{
 	int k;
-	int	dollar_count;
-	char *exit_str;
-	int	start;
+    
+    if (!var_value)
+	var_value = "";
+	
+    k = 0;
+    while (var_value[k])
+    {
+		result[*j] = var_value[k];
+        (*j)++;
+        k++;
+    }
+}
+
+void process_dollar_and_variables(char *result, const char *input, t_data *data, t_idx *idx)
+{
+	int dollar_count;
+	int start;
 	int var_len;
 	char *var_name;
 	char *var_value;
 	
-	data->in_quote = 0;
-	exit_str = NULL;
-	while (input[i])
+	handle_dollar_counting(result, input, idx, &dollar_count);
+	if (dollar_count % 2 == 0)
+		return;
+	if (input[*(idx->i)] == '?' || !(input[*(idx->i)] && 
+		(isalpha((unsigned char)input[*(idx->i)]) || input[*(idx->i)] == '_')))
 	{
-		if (handle_quotes(input[i], data))
-		{
-			i++;
-			continue;
-		}
-		if (input[i] == '$' && data->in_quote != 2)
-		{
-			dollar_count = 0;
-			while (input[i] == '$')
-			{
-				dollar_count++;
-				i++;
-			}
-			k = -1;
-			while (++k < dollar_count / 2)
-				result[j++] = '$';
-			if (dollar_count % 2 == 0)
-				continue;
-			if (input[i] == '?')
-			{
-				exit_str = ft_itoa(data->exit_status);
-				k = 0;
-				while (exit_str[k])
-					result[j++] = exit_str[k++];
-				i++;
-			}
-			else if (input[i] &&
-				(isalpha((unsigned char)input[i]) || input[i] == '_'))
-			{
-				start = i;
-				while (input[i] &&
-					(isalnum((unsigned char)input[i]) || input[i] == '_'))
-					i++;
-				var_len = i - start;
-				{
-					var_name = ft_strndup(input + start, var_len);
-					var_value = check_env(data, var_name);
-					if (!var_value)
-						var_value = "";
-					k = 0;
-					while (var_value[k])
-						result[j++] = var_value[k++];
-				}
-			}
-			else
-				result[j++] = '$';
-			continue;
-		}
-		result[j++] = input[i++];
+		handle_exit_or_dollar(result, input, data, idx);
+		return;
 	}
-	result[j] = '\0';
+	start = *(idx->i);
+	while (input[*(idx->i)] && 
+		   (isalnum((unsigned char)input[*(idx->i)]) || input[*(idx->i)] == '_'))
+		(*(idx->i))++;
+	var_len = *(idx->i) - start;
+	var_name = ft_strndup(input + start, var_len);
+	var_value = check_env(data, var_name);
+	process_variable_value(result, var_value, idx->j);
+}
+
+
+void process_regular_char(char *result, const char *input, t_data *data, t_idx *idx)
+{
+    if (handle_quotes(input[*(idx->i)], data))
+    {
+        (*(idx->i))++;
+        return;
+    }
+    if (input[*(idx->i)] == '$' && data->in_quote != 2)
+    {
+        process_dollar_and_variables(result, input, data, idx);
+        return;
+    }
+    
+    result[*(idx->j)] = input[*(idx->i)];
+    (*(idx->i))++;
+    (*(idx->j))++;
+}
+
+void build_expanded_string(char *result, const char *input, t_data *data)
+{
+    int i;
+    int j;
+    t_idx idx;
+    
+    i = 0;
+    j = 0;
+    idx.i = &i;
+    idx.j = &j;
+    data->in_quote = 0;
+    
+    while (input[i])
+    {
+        process_regular_char(result, input, data, &idx);
+    }
+    
+    result[j] = '\0';
 }
 
 char	*expand_string(const char *input, t_data *data)

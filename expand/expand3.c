@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:12:20 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 23:03:05 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:28:47 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,32 +92,3 @@
 // 			result[(*j)++] = var_value[k++];
 // 		return (0);
 // 	}
-// }
-
-// // Gère l'expansion des signes dollar en interprétant les
-// // variables d'environnement ou spéciales
-// int	handle_dollar(char *result, char *arg, t_idx *idx, t_data *data)
-// {
-// 	int		dollar_count;
-// 	char	*var_name;
-// 	int		k;
-// 	int		error;
-
-// 	dollar_count = get_dollar_count(arg, &idx->i);
-// 	k = dollar_count / 2;
-// 	while (k-- > 0)
-// 		result[idx->j++] = '$';
-// 	if (dollar_count % 2 != 0)
-// 	{
-// 		var_name = extract_var_name(arg, &idx->i);
-// 		if (var_name)
-// 		{
-// 			error = append_var_value(result, &idx->j, var_name, data);
-// 			if (error)
-// 				return (1);
-// 		}
-// 		else
-// 			result[idx->j++] = '$';
-// 	}
-// 	return (0);
-// }
