@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/09 15:28:56 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:11:57 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,19 +103,21 @@ typedef struct s_data
 
 extern int					g_signalhook;
 
-
-void	show_files(t_file *list_file);
-void	show_list_cmd(t_cmd *list);
-void	execute_command(t_data *data, t_cmd *cmd);
-char	*ft_strndup(const char *s, size_t n);
-int		calc_expanded_len(const char *input, t_data *data);
-void	build_expanded_string(char *result, const char *input, t_data *data);
-char	*expand_string(const char *input, t_data *data);
-void	expand_argument(char **arg, t_data *data);
-void	expand_cmd_args(t_cmd *cmd, t_data *data);
-void	expand_file_path(t_file *file, t_data *data);
-void	expand_cmd_files(t_cmd *cmd, t_data *data);
-void	expand_all(t_cmd *cmd, t_data *data);
+void						process_regular_char(char *result,
+								const char *input, t_data *data, t_idx *idx);
+void						show_files(t_file *list_file);
+void						show_list_cmd(t_cmd *list);
+void						execute_command(t_data *data, t_cmd *cmd);
+char						*ft_strndup(const char *s, size_t n);
+int							calc_expanded_len(const char *input, t_data *data);
+void						build_expanded_string(char *result,
+								const char *input, t_data *data);
+char						*expand_string(const char *input, t_data *data);
+void						expand_argument(char **arg, t_data *data);
+void						expand_cmd_args(t_cmd *cmd, t_data *data);
+void						expand_file_path(t_file *file, t_data *data);
+void						expand_cmd_files(t_cmd *cmd, t_data *data);
+void						expand_all(t_cmd *cmd, t_data *data);
 void						wait_for_children(t_cmd *cmds, t_data *data,
 								pid_t *pids);
 int							handle_parent_descriptors(int *fd_in, int *fd_pipe,
@@ -176,27 +178,16 @@ t_file						*find_last_node(t_file *node);
 t_file						*find_existing_heredoc(t_file *node);
 char						*read_heredoc(t_data *data, char *delimiter,
 								char *prompt);
-								void	show_tab(char **tab);
+void						show_tab(char **tab);
 void						setup_child_signals(void);
 char						*check_env(t_data *data, char *str);
 int							check_variable_in_env(char *var_name, t_data *data);
-void						handle_heredoc(t_data *data, t_cmd *current_cmd);
 void						expand_all(t_cmd *cmd, t_data *data);
 int							handle_quotes(char c, t_data *data);
 int							is_redirect(char c);
 int							is_space(char c);
-int							len_exit_status(t_data *data);
-int							len_var_value(const char *arg, int *i,
-								t_data *data);
-int							handle_dollar_len(const char *arg, int *i,
-								t_data *data);
-int							calc_final_len(const char *arg, t_data *data);
-int							append_var_value(char *result, int *j,
-								char *var_name, t_data *data);
-int							build_final_string(char *result, char *arg,
-								t_data *data, int final_len);
+
 int							get_dollar_count(const char *arg, int *i);
-char						*extract_var_name(const char *arg, int *i);
 // char						*expand_string(char *arg, t_data *data);
 char						*ft_substr(char *str, int start, int end);
 t_token						*findlast_token(t_token *list);

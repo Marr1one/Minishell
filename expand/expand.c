@@ -6,96 +6,117 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:14:44 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 23:03:19 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:09:31 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*
-** Traite l'expansion d'un argument spécifique
-*/
-// void	expand_argument(char **args, int i, t_data *data)
-// {
-// 	char	*expanded;
+void	handle_dollar_counting(char *result, const char *input, t_idx *idx,
+		int *dollar_count)
+{
+	int	k;
 
-// 	if (ft_strlcmp(args[i], "$?") == 0)
-// 	{
-// 		expanded = expand_exit_status(data);
-// 		args[i] = expanded;
-// 	}
-// 	else
-// 	{
-// 		expanded = expand_string(args[i], data);
-// 		if (expanded == NULL)
-// 			args = create_new_args(args, i);
-// 		else
-// 			args[i] = expanded;
-// 	}
-// }
+	*dollar_count = 0;
+	while (input[*(idx->i)] == '$')
+	{
+		(*dollar_count)++;
+		(*(idx->i))++;
+	}
+	k = -1;
+	while (++k < *dollar_count / 2)
+	{
+		result[*(idx->j)] = '$';
+		(*(idx->j))++;
+	}
+}
 
-// /*
-// ** Traite l'expansion de tous les arguments d'une commande
-// */
-// void	expand_cmd_args(t_cmd *cmd, t_data *data)
-// {
-// 	int	i;
+void	handle_exit_or_dollar(char *result, const char *input, t_data *data,
+		t_idx *idx)
+{
+	char	*exit_str;
+	int		k;
 
-// 	i = 0;
-// 	while (cmd->args && cmd->args[i])
-// 	{
-// 		expand_argument(cmd->args, i, data);
-// 		i++;
-// 	}
-// }
+	if (input[*(idx->i)] == '?')
+	{
+		exit_str = ft_itoa(data->exit_status);
+		k = 0;
+		while (exit_str[k])
+		{
+			result[*(idx->j)] = exit_str[k];
+			(*(idx->j))++;
+			k++;
+		}
+		(*(idx->i))++;
+	}
+	else
+	{
+		result[*(idx->j)] = '$';
+		(*(idx->j))++;
+	}
+}
 
-// /*
-// ** Traite l'expansion du chemin d'un fichier
-// */
-// void	expand_file_path(t_file *file, t_data *data)
-// {
-// 	char	*expanded;
+void	process_variable_value(char *result, char *var_value, int *j)
+{
+	int	k;
 
-// 	if (file->mode == HEREDOC)
-// 	{
-// 		file->path = quoteless_string(file->path);
-// 		return ;
-// 	}
-// 	else
-// 	{
-// 		if (ft_strlcmp(file->path, "$?") == 0)
-// 			expanded = expand_exit_status(data);
-// 		else
-// 			expanded = expand_string(file->path, data);
-// 		file->path = expanded;
-// 	}
-// }
+	if (!var_value)
+		var_value = "";
+	k = 0;
+	while (var_value[k])
+	{
+		result[*j] = var_value[k];
+		(*j)++;
+		k++;
+	}
+}
 
-// //Traite l'expansion de tous les fichiers d'une commande
-// void	expand_cmd_files(t_cmd *cmd, t_data *data)
-// {
-// 	t_file	*current_file;
+void	process_dollar_and_variables(char *result, const char *input,
+		t_data *data, t_idx *idx)
+{
+	int		dollar_count;
+	int		start;
+	int		var_len;
+	char	*var_name;
+	char	*var_value;
 
-// 	current_file = cmd->files;
-// 	while (current_file)
-// 	{
-// 		expand_file_path(current_file, data);
-// 		current_file = current_file->next;
-// 	}
-// }
+	handle_dollar_counting(result, input, idx, &dollar_count);
+	if (dollar_count % 2 == 0)
+		return ;
+	if (input[*(idx->i)] == '?' || !(input[*(idx->i)]
+			&& (isalpha((unsigned char)input[*(idx->i)])
+				|| input[*(idx->i)] == '_')))
+	{
+		handle_exit_or_dollar(result, input, data, idx);
+		return ;
+	}
+	start = *(idx->i);
+	while (input[*(idx->i)] && (isalnum((unsigned char)input[*(idx->i)])
+			|| input[*(idx->i)] == '_'))
+		(*(idx->i))++;
+	var_len = *(idx->i) - start;
+	var_name = ft_strndup(input + start, var_len);
+	var_value = check_env(data, var_name);
+	process_variable_value(result, var_value, idx->j);
+}
 
-// /*
-// ** Fonction principale pour l'expansion de toutes les variables
-// */
-// void	expand_all(t_cmd *cmd, t_data *data)
-// {
-// 	t_cmd	*current_cmd;
-
-// 	current_cmd = cmd;
-// 	while (current_cmd)
-// 	{
-// 		expand_cmd_args(current_cmd, data);
-// 		expand_cmd_files(current_cmd, data);
-// 		current_cmd = current_cmd->next;
-// 	}
-// }
+void	process_regular_char(char *result, const char *input, t_data *data,
+		t_idx *idx)
+{
+	if (input[*(idx->i)] == '\'' || input[*(idx->i)] == '"')
+	{
+		handle_quotes(input[*(idx->i)], data);
+		result[*(idx->j)] = input[*(idx->i)];
+		(*(idx->i))++;
+		(*(idx->j))++;
+		return ;
+	}
+	if (input[*(idx->i)] == '$' && data->in_quote != 2)
+	{
+		process_dollar_and_variables(result, input, data, idx);
+		return ;
+	}
+	result[*(idx->j)] = input[*(idx->i)];
+	(*(idx->i))++;
+	(*(idx->j))++;
+}

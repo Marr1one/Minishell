@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:11:17 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/08 23:08:25 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:09:40 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,35 @@ int	is_space(char c)
 	return (0);
 }
 
-// int	len_exit_status(t_data *data)
-// {
-// 	char	*exit_str;
-// 	int		len;
+void	build_expanded_string(char *result, const char *input, t_data *data)
+{
+	int		i;
+	int		j;
+	t_idx	idx;
 
-// 	exit_str = ft_itoa(data->exit_status);
-// 	if (!exit_str)
-// 		return (0);
-// 	len = ft_strlen(exit_str);
-// 	return (len);
-// }
+	i = 0;
+	j = 0;
+	idx.i = &i;
+	idx.j = &j;
+	data->in_quote = 0;
+	while (input[i])
+	{
+		process_regular_char(result, input, data, &idx);
+	}
+	result[j] = '\0';
+}
 
-// int	len_var_value(const char *arg, int *i, t_data *data)
-// {
-// 	char	*var_name;
-// 	char	*var_value;
-// 	int		len;
+char	*expand_string(const char *input, t_data *data)
+{
+	char	*result;
+	int		final_len;
 
-// 	var_name = extract_var_name(arg, i);
-// 	if (!var_name)
-// 		return (0);
-// 	var_value = check_env(data, var_name);
-// 	if (!var_value)
-// 		var_value = "";
-// 	len = ft_strlen(var_value);
-// 	return (len);
-// }
+	if (!input)
+		return (NULL);
+	final_len = calc_expanded_len(input, data);
+	result = ft_malloc(final_len + 1);
+	if (!result)
+		return (NULL);
+	build_expanded_string(result, input, data);
+	return (result);
+}

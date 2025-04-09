@@ -6,89 +6,66 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:12:20 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/09 15:28:47 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:09:44 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// int	handle_dollar_len(const char *arg, int *i, t_data *data)
-// {
-// 	int	len;
+void	expand_argument(char **arg, t_data *data)
+{
+	if (!arg || !(*arg))
+		return ;
+	*arg = expand_string(*arg, data);
+}
 
-// 	len = 0;
-// 	if (!arg[*i])
-// 		return (1);
-// 	if (arg[*i] == '?')
-// 	{
-// 		len = len_exit_status(data);
-// 		(*i)++;
-// 	}
-// 	else
-// 		len = len_var_value(arg, i, data);
-// 	return (len);
-// }
+void	expand_cmd_args(t_cmd *cmd, t_data *data)
+{
+	int	i;
 
-// int	calc_final_len(const char *arg, t_data *data)
-// {
-// 	int	i;
-// 	int	final_len;
+	i = 0;
+	if (!cmd || !cmd->args)
+		return ;
+	while (cmd->args[i])
+	{
+		expand_argument(&cmd->args[i], data);
+		i++;
+	}
+}
 
-// 	i = 0;
-// 	final_len = 0;
-// 	data->in_quote = 0;
-// 	while (arg[i])
-// 	{
-// 		if (handle_quotes(arg[i], data))
-// 		{
-// 			final_len++;
-// 			i++;
-// 			continue ;
-// 		}
-// 		if (arg[i] == '$' && data->in_quote != 1)
-// 			final_len += handle_dollar_len(arg, &i, data);
-// 		else
-// 			final_len++;
-// 		i++;
-// 	}
-// 	return (final_len);
-// }
+void	expand_file_path(t_file *file, t_data *data)
+{
+	if (!file)
+		return ;
+	if (file->mode == HEREDOC)
+	{
+		file->path = quoteless_string(file->path);
+		return ;
+	}
+	file->path = expand_string(file->path, data);
+}
 
-// int	check_variable_in_env(char *var_name, t_data *data)
-// {
-// 	char	*value;
+void	expand_cmd_files(t_cmd *cmd, t_data *data)
+{
+	t_file	*cur;
 
-// 	value = check_env(data, var_name);
-// 	if (value == NULL)
-// 		return (0);
-// 	return (1);
-// }
+	cur = cmd->files;
+	while (cur)
+	{
+		expand_file_path(cur, data);
+		cur = cur->next;
+	}
+}
 
-// // Ajoute la valeur développée d'une variable dans la chaîne de destination
-// int	append_var_value(char *result, int *j, char *var_name, t_data *data)
-// {
-// 	char	*var_value;
-// 	char	*exit_str;
-// 	int		k;
+void	expand_all(t_cmd *cmd, t_data *data)
+{
+	t_cmd	*cur;
 
-// 	exit_str = NULL;
-// 	if (ft_strcmp(var_name, "?") == 0)
-// 	{
-// 		exit_str = ft_itoa(data->exit_status);
-// 		k = 0;
-// 		while (exit_str[k])
-// 			result[(*j)++] = exit_str[k++];
-// 		return (0);
-// 	}
-// 	else
-// 	{
-// 		if (check_variable_in_env(var_name, data) == 0)
-// 			return (0);
-// 		var_value = check_env(data, var_name);
-// 		if (!var_value)
-// 			var_value = "";
-// 		k = 0;
-// 		while (var_value[k])
-// 			result[(*j)++] = var_value[k++];
-// 		return (0);
-// 	}
+	cur = cmd;
+	while (cur)
+	{
+		expand_cmd_args(cur, data);
+		expand_cmd_files(cur, data);
+		cur = cur->next;
+	}
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:27:02 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/09 01:11:06 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/09 16:14:20 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ int	check_arguments(int argc)
 	return (1);
 }
 
-int		count_without_empty(char **args)
+int	count_without_empty(char **args)
 {
-	int	count;
-	int	i;
-	char **test_args;
+	int		count;
+	int		i;
+	char	**test_args;
 
 	i = 0;
 	count = 0;
@@ -53,8 +53,8 @@ void	skip_empty_args(t_cmd *list_cmd)
 	int		i;
 	int		j;
 	char	**new_args;
-	int c;
-	
+	int		c;
+
 	curr_cmd = list_cmd;
 	while (curr_cmd)
 	{
@@ -67,7 +67,7 @@ void	skip_empty_args(t_cmd *list_cmd)
 		while (curr_cmd->args[i])
 		{
 			if (curr_cmd->args[i][0] != '\0')
-				new_args[j++]	= curr_cmd->args[i];
+				new_args[j++] = curr_cmd->args[i];
 			i++;
 		}
 		new_args[j] = NULL;
