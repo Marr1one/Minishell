@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 15:13:09 by braugust          #+#    #+#             */
-/*   Updated: 2025/04/09 15:54:06 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:54:59 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,13 @@ int calc_expanded_len(const char *input, t_data *data)
     data->in_quote = 0;
     while (input[i])
     {
-        if (handle_quotes(input[i], data))
-        {
-            i++;
-            continue;
-        }
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			handle_quotes(input[i], data);
+			len++;
+			i++;
+			continue;
+		}
         if (input[i] == '$' && data->in_quote != 2)
         {
             len += process_dollar_expansion(input, data, &i);
@@ -206,9 +208,12 @@ void process_dollar_and_variables(char *result, const char *input, t_data *data,
 
 void process_regular_char(char *result, const char *input, t_data *data, t_idx *idx)
 {
-    if (handle_quotes(input[*(idx->i)], data))
+    if (input[*(idx->i)] == '\'' || input[*(idx->i)] == '"')
     {
+        handle_quotes(input[*(idx->i)], data);
+        result[*(idx->j)] = input[*(idx->i)];
         (*(idx->i))++;
+        (*(idx->j))++;
         return;
     }
     if (input[*(idx->i)] == '$' && data->in_quote != 2)
