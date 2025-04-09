@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maissat <maissat@student.42.fr>            +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 19:17:40 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/08 15:27:41 by maissat          ###   ########.fr       */
+/*   Updated: 2025/04/09 16:31:22 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	count_arguments(t_token *list)
 {

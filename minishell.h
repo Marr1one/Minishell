@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:22:35 by maissat           #+#    #+#             */
-/*   Updated: 2025/04/09 16:11:57 by braugust         ###   ########.fr       */
+/*   Updated: 2025/04/09 16:29:00 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,9 @@ typedef struct s_data
 
 extern int					g_signalhook;
 
+void						initialize_data(t_data *data, char **envp);
+int							check_arguments(int argc);
+void						process_command(char *input, t_data *data);
 void						process_regular_char(char *result,
 								const char *input, t_data *data, t_idx *idx);
 void						show_files(t_file *list_file);
